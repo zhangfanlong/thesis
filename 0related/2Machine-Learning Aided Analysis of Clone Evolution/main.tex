@@ -1,0 +1,181 @@
+
+%   dvips -O 2mm,-9mm -T 215mm,280mm 模版.dvi        %成品
+%   E:\2015年\电子学报-杂志\原稿\模板 2015.7.21
+
+%   dvips -O -13mm,-25mm -T 190mm,260mm 模版.dvi      打样
+
+%\documentclass[twoside,draft]{article}  %\陈清华改
+\documentclass[twoside]{article}
+\usepackage{multicol,headrule,ams2la}
+\usepackage{graphics}
+\usepackage{bm}     % 英文黑斜体
+\usepackage{xcolor}
+\usepackage{amssymb}                  % 数学字体、符号
+\usepackage{amsbsy} %公式中黑斜体
+
+\usepackage{graphicx,subfigure} 
+\usepackage{multirow}
+%用法$ \boldsymbol{XX}$ 也可自定义简单用法, 见下面自定义的\pmb
+\graphicspath{{figs/}}      %定义图的存放路径
+%------------------------ Page Format --------------------------
+\columnsep=0.5cm \columnseprule=0pt \footskip=6truemm \headsep 0.2
+true cm \textheight 24.0 true cm \textwidth 18 true cm
+%\parindent 1 true cm
+\topmargin =-3mm
+\oddsidemargin = -0.9cm %1.6 true cm
+\evensidemargin = -0.9cm %1.6 true cm
+
+\def\le{\leq}
+\def\ge{\geq}
+%\def\leq{\leqslant}
+%\def\geq{\geqslant}
+\def\zd{{\rm d}}
+\def\zT{{\rm T}}
+\def\zth{{\rm th}}
+\def\znormal{{\rm normal}}
+\def\ds{\displaystyle}
+\def\dl{\displaystyle}
+\newcommand{\inlinedComment}[2]%{}% EMPTY for submission
+	{\textcolor{#1}{\small\textit{#2}}}
+\newcommand{\ksc}[1]{\inlinedComment{red}{SC says: #1}}
+\newcommand{\zfl}[1]{\inlinedComment{blue}{FL says: #1}}
+
+\graphicspath{{figs/}}      %定义图的存放路径
+
+\setcounter{page}{1} \nofiles
+\renewcommand{\baselinestretch}{1.06}
+%上一行是定义正文行距的, 现在是单倍, 把1.06改成1.4或更大, 行距就加大, 成隔行
+\renewcommand{\arraystretch}{1.03}
+%上一行是定义表格行距的, 也可加大
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\oddhead{{\rm\hfill\protect\small
+The Latex Template of CJE %     单页书眉, 填入论文标题即可, 请尽量把书眉控制在12cm内
+\hfill }}
+\def\evenhead{{\rm \hfill \protect\small\it Chinese Journal of
+Electronics  \rm\hfill 2016}}
+\def\sub#1{\par\vskip1.5\baselineskip\par\centerline{\large\bf
+#1}\par\vskip0.5\baselineskip\par}
+%标题行可用\sub{}
+\def\RE{\par\vskip1.5\kh\par\centerline{\bf
+References}\par\vskip0.5\kh\par}
+\def\REF#1{\par\hangindent\parindent\indent\llap{#1\enspace}\ignorespaces}
+%参考文献可用\REF{[1]}
+\DeclareSymbolFont{lettersA}{U}{txmia}{m}{it}
+\DeclareMathSymbol{\piup}{\mathord}{lettersA}{25}
+\DeclareMathSymbol{\muup}{\mathord}{lettersA}{22}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{proof}{Proof}
+\def\footnoterule{\kern 1mm \hrule width 12cm \kern 2mm}
+\abovedisplayskip=8.0pt plus 2.0pt minus 1.5pt
+\belowdisplayskip=8.0pt plus 2.0pt minus 1.5pt
+ \def\thefootnote{}
+\TagsOnRight
+\def\kh{\baselineskip}
+%\def\pmb#1{\boldsymbol{#1}}
+
+%====================================================================
+\thispagestyle{empty}
+%************************************************************************
+\noindent Chinese Journal of Electronics
+
+\noindent Vol.25, No.1, Jan.\ 2016
+
+\vskip 2cm
+
+\begin{center}\huge\bf
+%这行放入论文标题
+Machine-Learning Aided Analysis of Clone Evolution$^*$
+\end{center}\footnotetext{\footnotesize {Manuscript Received xx xx, xxxx; Accepted xx xx, xxxx.}\ This work is supported
+by the National Natural Science Foundation of China (No.xxxxxxxx).
+%这行放入收、修稿日期及基金资助
+}
+
+\vskip 4mm
+
+\begin{center}\large\rm
+XXX XXX$^{1}$, XXX XXX$^{2}$ and XXX XXX %这行放入作者姓名
+\\\vskip1mm
+{\small(1.~\it XXXX, XXXX, XXXX, XXXX%这行放入作者单位2
+\rm)}
+
+{\small(2.~\it XXXX, XXXX, XXXX, XXXX%这行放入作者单位2
+\rm)}
+
+\footnotetext{\footnotesize \copyright~2016 Chinese Institute
+of Electronics. DOI:10.1049/cje.2016.0X.0XX}
+\end{center}
+
+\begin{multicols}{2}%双栏开始
+
+{\footnotesize\bf Abstract --- {\footnotesize\bf
+%这里放Abstract
+Code clones are similar code fragments appearing in software. As software evolves, code clones may be subjected to changes as well; we term this clone evolution. %Researchers have proposed several methods to detect clones and their associated clone groups, and used clone genealogy and clone patterns to describe their evolution. 
+There have not been many investigations into characteristics of clone evolution. In this paper, we tackle this question by exploring useful information associated with changes of clones during evolution. We focus on three perspectives of clone evolution, ranging from individual clone changes to characterization of clone genealogies. We identify metrics that capture clone changes. With the help of a machine-learning technique called X-means clustering, we establish associations between clone changes and life times of clones. We conducted experiments on the repositories of two open source softwares, {\em ArgoUML} and {\em jEdit}.  Our results show that clones are mostly stable (without any changes) throughout software evolution. For the relatively smaller group of ``unstable'' clones, changes to clones usually happen after several versions of software evolution, and consistent changes (to clone groups) appear more frequently than inconsistent ones. We therefore suggest that developers should pay more attention to clones in relatively longer genealogies, and should consider applying changes consistently to all clones within a clone group when a constituent clone fragment has undergone change. %We believe that these characteristics of clone evolution are helpful for developers to understand and maintain the clones.
+}
+
+\bf Key words --- {\footnotesize\bf
+Code clones; Clone analysis; Clone characteristic;  Clone metrics; Machine learning.}}
+
+
+%\begin{center}{\large\bf I.\ Introduction}\end{center}
+\input{intro}
+
+%\begin{center}{\large\bf II.\ Related Work}\end{center}
+\input{related}
+
+%\begin{center}{\large\bf III.\ Methodology}\end{center}
+\input{method}
+
+%\begin{center}{\large\bf 4.\ Case Study}\end{center}
+\input{case}
+
+%\begin{center}{\large\bf 5. Analysis \& Results}\end{center}
+\input{analyse}
+
+%\begin{center}{\large\bf 6. Discussion}\end{center}
+\input{discuss}
+
+%\begin{center}{\large\bf 7.\ Conclusion}\end{center}
+\input{conc}
+%\begin{center}{\large\bf  Acknowlwdgment}\end{center}
+%This work is supported by a National Natural Science Foundation of China under Grant %No.61173021.
+
+\RE
+
+\footnotesize\rm
+
+\REF{[1]} Roy C K, Cordy J R. A survey on software clone detection research[R]. Technical Report 541, Queen's University at Kingston, 2007. 
+\REF{[2]} Koschke R. Survey of research on software clones[M]. Internat. Begegnungs-und Forschungszentrum f\"{u}r Informatik, 2007.
+\REF{[3]} Kim M, Sazawal V, Notkin D, et al. An empirical study of code clone genealogies[C]//ACM SIGSOFT Software Engineering Notes. ACM, 2005, 30(5): 187-196.
+\REF{[4]} Kapser C, Godfrey M W. " Cloning considered harmful" considered harmful[C]//Reverse Engineering, 2006. WCRE'06. 13th Working Conference on. IEEE, 2006: 19-28.
+\REF{[5]} Inoue K, Higo Y, Yoshida N, et al. Experience of finding inconsistently-changed bugs in code clones of mobile software[C]//Proceedings of the 6th International Workshop on Software Clones. IEEE Press, 2012: 94-95.
+\REF{[6]} Krinke J. Is cloned code more stable than non-cloned code?[C]//Source Code Analysis and Manipulation, 2008 Eighth IEEE International Working Conference on. IEEE, 2008: 57-66.
+\REF{[7]} Roy C K, Zibran M F, Koschke R. The vision of software clone management: Past, present, and future (keynote paper)[C]//Software Maintenance, Reengineering and Reverse Engineering (CSMR-WCRE), 2014 Software Evolution Week-IEEE Conference on. IEEE, 2014: 18-33.
+\REF{[8]} Koschke R, Baxter I, Conradt M, et al. Software clone management towards industrial application[C]//Dagstuhl Seminar: Software Clone Management Towards Industrial Application. 2012.
+\REF{[9]} Roy C K, Cordy J R. NICAD: Accurate detection of near-miss intentional clones using flexible pretty-printing and code normalization[C]//Program Comprehension, 2008. ICPC 2008. The 16th IEEE International Conference on. IEEE, 2008: 172-181.
+\REF{[10]} Kamiya T, Kusumoto S, Inoue K. CCFinder: a multilinguistic token-based code clone detection system for large scale source code[J]. Software Engineering, IEEE Transactions on, 2002, 28(7): 654-670.
+\REF{[11]} Tairas R A. Representation, analysis, and refactoring techniques to support code clone maintenance[D]. The University of Alabama at Birmingham, 2010.
+\REF{[12]} Nguyen H A, Nguyen T T, Pham N H, et al. Clone management for evolving software[J]. Software Engineering, IEEE Transactions on, 2012, 38(5): 1008-1026.
+\REF{[13]} Bettenburg N, Shang W, Ibrahim W, et al. An empirical study on inconsistent changes to code clones at release level[C]//Reverse Engineering, 2009. WCRE'09. 16th Working Conference on. IEEE, 2009: 85-94.
+\REF{[14]} Wang X, Dang Y, Zhang L, et al. Can I clone this piece of code here?[C]//Proceedings of the 27th IEEE/ACM International Conference on Automated Software Engineering. ACM, 2012: 170-179.
+\REF{[15]} Yang J, Hotta K, Higo Y, et al. Classification model for code clones based on machine learning[J]. Empirical Software Engineering, 2014: 1-31.
+\REF{[16]} Qu W, Jia Y, Jiang M. Pattern mining of cloned codes in software systems[J]. Information Sciences, 2014, 259: 544-554.
+\REF{[17]} Rattan D, Bhatia R, Singh M. Software clone detection: A systematic review[J]. Information and Software Technology, 2013, 55(7): 1165-1199
+\REF{[18]} Duala-Ekoko E, Robillard M P. Clonetracker: tool support for code clone management[C]//Proceedings of the 30th international conference on Software engineering. ACM, 2008: 843-846.
+\REF{[19]} Duala-Ekoko E, Robillard M P. Clone region descriptors: Representing and tracking duplication in source code[J]. ACM Transactions on Software Engineering and Methodology (TOSEM), 2010, 20(1): 3.
+\REF{[20]} Bakota T. Tracking the evolution of code clones[M]//SOFSEM 2011: Theory and Practice of Computer Science. Springer Berlin Heidelberg, 2011: 86-98.
+\REF{[21]} Bakota T, Ferenc R, Gyimothy T. Clone smells in software evolution[C]//Software Maintenance, 2007. ICSM 2007. IEEE International Conference on. IEEE, 2007: 24-33.. 
+\REF{[22]} Harder J, Göde N. Cloned code: stable code[J]. Journal of Software: Evolution and Process, 2013, 25(10): 1063-1088. 
+\REF{[23]} Rahman F, Bird C, Devanbu P. Clones: What is that smell?[J]. Empirical Software Engineering, 2012, 17(4-5): 503-530.
+\REF{[24]} Lin Y, Xing Z, Xue Y, et al. Detecting differences across multiple instances of code clones[C]//Proceedings of the 36th International Conference on Software Engineering. ACM, 2014: 164-174.
+\REF{[25]}Mark H, Eibe F, Geoffrey Holmes, Bernhard Pfahringer, Peter Reutemann, Ian H. Witten (2009); The WEKA Data Mining Software: An Update; SIGKDD Explorations, Volume 11, Issue 1.
+\REF{[26]} Pelleg D, Moore A W. X-means: Extending K-means with Efficient Estimation of the Number of Clusters[C]//ICML. 2000, 1.
+%\REF{[27]} Meng Ci, Xiao-hong Su, Tian-tian Wang, et al. A New Clone Group Mapping Algorithm for Extracting Clone Genealogy on Multi-version Software[C]//Instrumentation, Measurement, Computer, Communication and Control (IMCCC), 2013 Third International Conference on. IEEE, 2013: 848-853. 
+
+\end{multicols} %双栏结束
+\end{document}}

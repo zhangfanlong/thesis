@@ -1,33 +1,33 @@
 % !Mode:: "TeX:UTF-8" 
 
-\newcommand{\chinesethesistitle}{局部多孔质气体静压轴承关键技术的研究} %授权书用，无需断行
-\newcommand{\englishthesistitle}{\uppercase{RESEARCH ON KEY TECHNOLOGIES OF PARTIAL POROUS EXTERNALLY PRESSURIZED GAS BEARING}} %\uppercase作用：将英文标题字母全部大写；
-\newcommand{\chinesethesistime}{2010 年~12 月}  %封面底部的日期中文形式
-\newcommand{\englishthesistime}{December, 2010}    %封面底部的日期英文形式
+\newcommand{\chinesethesistitle}{基于机器学习的克隆代码分析和维护方法研究} %授权书用，无需断行
+\newcommand{\englishthesistitle}{\uppercase{RESEARCH ON CODE CLONE ANALYSIS AND MAINTEANCE BASED ON MACHINE LEARNING}} %\uppercase作用：将英文标题字母全部大写；
+\newcommand{\chinesethesistime}{2017 年~7 月}  %封面底部的日期中文形式
+\newcommand{\englishthesistime}{July, 2017}    %封面底部的日期英文形式
 
-\ctitle{局部多孔质气体静压轴承关键技术的研究}  %封面用论文标题，自己可手动断行
+\ctitle{基于机器学习的克隆代码分析和维护方法研究}  %封面用论文标题，自己可手动断行
 \cdegree{\cxueke\cxuewei}
-\csubject{机械制造及其自动化}                 %(~按二级学科填写~)
-\caffil{机电工程学院} %（在校生填所在系名称，同等学力人员填工作单位）
-\cauthor{于冬梅}
-\csupervisor{某某某教授} %导师名字
-\cassosupervisor{副导名}%若没有，请屏蔽掉此句。
-\ccosupervisor{联导名}%若没有，请屏蔽掉此句。
+\csubject{计算机科学与技术}                 %(~按二级学科填写~)
+\caffil{计算机科学与技术学院} %（在校生填所在系名称，同等学力人员填工作单位）
+\cauthor{张凡龙}
+\csupervisor{苏小红教授} %导师名字
+%\cassosupervisor{副导名}%若没有，请屏蔽掉此句。
+%\ccosupervisor{联导名}%若没有，请屏蔽掉此句。
 
 
 \cdate{\chinesethesistime}
 
 \etitle{\englishthesistitle}
 \edegree{\exuewei \ of \exueke}
-\esubject{\emultiline[t]{Mechanical\\ and Automation}}  %英文二级学科名
-\eaffil{School of Mechatronics Engineering}
-\eauthor{Yu Dongmei}                   %作者姓名 （英文）
-\esupervisor{Prof. XXX}       % 导师姓名 （英文）
-\eassosupervisor{Prof. Assosuper}%若没有，请屏蔽掉此句。
-\ecosupervisor{Prof. Cosuper}%若没有，请屏蔽掉此句。
+\esubject{\emultiline[t]{Computer Science\\ and Technology}}  %英文二级学科名
+\eaffil{School of Computer Science and Technology}
+\eauthor{Zhang Fanlong}                   %作者姓名 （英文）
+\esupervisor{Prof. Su Xiaohong}       % 导师姓名 （英文）
+%\eassosupervisor{Prof. Assosuper}%若没有，请屏蔽掉此句。
+%\ecosupervisor{Prof. Cosuper}%若没有，请屏蔽掉此句。
 \edate{\englishthesistime}
 
-\natclassifiedindex{TM301.2}  %国内图书分类号
+\natclassifiedindex{TP315.2}  %国内图书分类号
 \internatclassifiedindex{62-5}  %国际图书分类号
 \statesecrets{公开} %秘密
 
@@ -35,16 +35,24 @@
 \BiAppendixChapter{摘~~~~要}{}
 \fi
 \cabstract{
-摘要是论文内容的高度概括，应具有独立性和自含性，即不阅读论文的全文，就能获得必要的信息。
-摘要应包括本论文的目的、主要研究内容、研究方法、创造性成果及其理论与实际意义。
-摘要中不宜使用公式、化学结构式、图表和非公知公用的符号和术语，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
+克隆代码是存在于软件中的彼此相似的代码片段。研究表明，软件中存在大量的克隆代码，其可能会影响软件质量、可理解性和可维护性。在软件演化的过程中，克隆代码也会着软件进行演化，同时克隆代码也可能发生变化（即一致性变化和不一致变化）。这些变化可能会导致与之相关的克隆缺陷以及额外维护代价，从而降低软件质量。因此，本文在软件演化的基础上研究克隆代码的分析和维护方法，旨在帮助软件开发和维护人员理解和维护克隆代码，帮助提高软件质量和可维护性。
+
+为描述克隆代码随软件系统的演化情况，可以使用克隆家系进行描述这一过程。在演化过程中，克隆代码及其演化过程会表现出来一些特征，本文称之为克隆演化特征。克隆演化特征可以帮助程序开发和维护人员理解克隆代码。因此，为了分析克隆演化特征，本文在提取相应度量值得基础上使用聚类方法从克隆片段、克隆组和克隆家系三个维度进行实证分析。在两个系统上的实证研究发现大部分的克隆代码在演化过程中是稳定的，但也有相当数量的克隆代码发生变化，其中发生一致性变化的克隆比不一致性变化的克隆代码略微多一些。
+
+克隆代码的一致性变化往往会导致额外的维护代价，而遗忘一致性变化通常又会导致克隆缺陷的产生。因此，克隆代码的一致性变化需要引起开发人员和维护人员的关注。本文将克隆代码的一致性变化称为克隆一致性维护需求。鉴于此，为了帮助开发人员和维护人员避免克隆一致性变化及其相关缺陷，本文使用机器学习方法对克隆代码的一致性变化进行预测，分别在克隆代码产生和发生变化时预测克隆代码的一致性维护需求。对于新产生的克隆代码，在复制粘贴时通过提取被复制和被粘贴的克隆代码的两组属性值预测克隆代码的一致性维护需求，可以帮助避免克隆代码。；对于系统中已经存在的克隆代码，在克隆代码发生变化时通过提取三组不同的属性预测其一致性变化需求，可帮助提示程序员注意克隆代码的变化。研究表明本文的预测方法可以有效地预测克隆代码的一致性维护需求，可以帮助避免软件缺陷和额外的维护代价。
+
+为帮助新项目缺少必要的训练数据，同时对跨项目预测中普通机器学习方法无法较好的预测克隆代码一致性维护需求的问题，本文结合深度学习对跨项目的克隆一致性维护需求预测进行了研究。
+
+%%本文研究基于演化的克隆代码分析和维护方法。首先通过结合聚类分析方法提取克隆演化特征，进而得出克隆的一般规律。然后针对克隆一致性变化问题，分别在克隆产生和变化时结合机器学习方法预测克隆代码的一致性维护需求，帮助避免克隆一致性缺陷。最后通过对发生变化的克隆代码进行一致性维护，确保其一致性，降低克隆代码的维护代价。本文研究有较强的实际意义，可以帮助避免克隆代码的相关缺陷，提高软件的质量和可维护性；同时，还可嵌入到软件开发环境中实现边开发、边维护克隆代码。
 }
 
-\ckeywords{关键词~1；关键词~2；关键词~3；……；关键词~6（关键词总共~3~—~6~个，最后一个关键词后面没有标点符号）}
+\ckeywords{克隆代码；克隆分析；克隆维护；机器学习；一致性变化；软件演化}
 
 \eabstract{
-Externally pressurized gas bearing has been widely used in the field of aviation, semiconductor, weave, and measurement apparatus because of its advantage of high accuracy, little friction, low heat distortion, long life-span, and no pollution. In this thesis, based on the domestic and overseas researching……
-
+Code Clone are the simlar code fragments which are introduce by copy-and-paste operstions. 
+The absenence of clones in software may impact software quliaty and maintanence.
+Clones always evolving with software, there are some features which called clone evolutionary charactics. 
+Clone .... can help developer to understand and maintain the clones, which 
 }
 
 \ekeywords{keyword 1, keyword 2, keyword 3, ……, keyword 6 (no punctuation at the end) 英文摘要与中文摘要的内容应一致，在语法、用词上应准确无误。}

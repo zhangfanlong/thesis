@@ -1,0 +1,135 @@
+\begin{center}{\large\bf 3.\ Methodology}\end{center}
+
+\leftline{{\bf 3.1 \ The Framework of clone characteristic analysis}}
+
+Fig.1 is the framework of our clone characteristic analysis with machine learning, which can be divided into:  pre-processing, metric extraction and characteristic analysis. During pre-processing, we build the corresponding clone genecology by linking and relating groups of clones across consecutive versions of the software. At metric extraction, we identify and extract a set of metrics to represent clone fragments, clone groups and clone genealogies respectively. These metrics capture the relevant information about the clones and their evolution. Finally, in characteristic analysis stage, we use machine learning technique to explore the clone evolutionary characteristics from clones and their evolution.
+
+ \vskip 2mm
+\centerline{\includegraphics[width=3.3in]{Fig1} }
+\vskip 1mm
+\centerline{\footnotesize\begin{tabular}{c} Fig.\ 1.\  The Framework of Clone Characteristic Analysis
+\end{tabular}}
+\vskip 0.5\baselineskip%插图结束
+
+\leftline{{\bf3.2 \ Pre-processing }}
+
+In this stage, we aim to build clone genealogies according to the detected clones from consecutive versions software.  We firstly obtain consecutive versions of open source software, % from websites and the version control system subversion, 
+and detect all clones in each software version with NiCad. %, which produces grouped clones by their similarity.
+After that, we use %CRD to describe clones, and 
+build clone genealogies by associating neighboring clone fragments and clone groups. 
+
+{\em Clone detection with NiCad and Representation using CRD (Clone Region Descriptors)}. NiCad % is a clone detection tool, which 
+can find identical clones and near-miss clones efficiently. We use the default configuration to detect all clones from each software version. %It detects clones with two different granularities: functions and blocks. Because {\em block level} is more general (function clones are part of block clones), we use the default configuration of {\em block level} to detect all clones from each software version. The results are kept in XML files, which mark clone fragments with {\em ``Filename + Line No''}, 
+This can group all clone fragments into various clone groups. %, according to their similarity. 
+In order to build clone genealogies, we use a modified version of CRD to describe clone fragments, which is proposed by Duala-Ekoko. 
+A CRD is an abstract description of clone location, which includes the file name, method name, and combines syntactic, structural and lexical information [19]. %We improve CRD with our purpose. 
+We combine CRD, {\em LocationOverlapping} and {\em TextSimilarity} to relate clones in two neighboring versions.   {\em LocationOverlapping} can help to locate the clone in source code [3], and computes an overlapping score between a location of clone fragments in version $i$ and version $i+1$. {\em TextSimilarity} can be used for comparing the similarity of clone fragments, which is defined in NiCad [9]. It computes the percentage of common code lines for two clone fragments. 
+
+%We improve the CRD prototype for our purpose, which are defined in previous work [27].
+
+{\em Mapping clone group and building clone genealogy}. %In order to build a clone genealogy, 
+We map all the clone fragments and clone groups between two consecutive versions. %The mapping algorithm is called CRD-based Clone Group Mapping Algorithm. 
+Given two adjacent versions {\em $v_i$} and {\em $v_{i+1}$}, we compare (using CRD, as desribed earlier) each clone fragment in {\em $v_i$} against each clone fragment in {\em $v_{i+1}$}, and produces pairs of mapping clone fragments, such that for each pair, (1) the first clone fragment comes from {\em $v_i$} and the second {\em $v_{i+1}$}, and (2) the clone groups  can also be mapped with matching clone fragments. %The details of the algorithm are described in our previous work [25]. 
+Next, we can build clone genealogies for the software based on the mapping clone groups.  %After clone group mapping, w
+
+We can describe clone group changes during its evolution as {\em ``clone pattern''}. More formally, each clone group (called CG) can contain several clone fragments (called CFs). Consider a clone group that exists in two neighboring versions. Let {\em srcCG} denote the clone group in the former version, and {\em destCG} denote the clone group in the latter version. Changes from {\em srcCG} to {\em destCG} are described by clone patterns, and they become the metrics associated with {\em destCG}. %(and not {\em srcCG}). 
+The clone patterns are defined by Kim[3], which are given as follows: %Interested readers can refer to [25] for details.  
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\item {Static}: no change in clone fragment  (number and content).
+\item {Same}: no change in number of clone fragment, but the  content of fragment may change.
+\item {Add}: number of clone fragment increases.
+\item {Subtract}: number of clone fragment decreases.
+\item {Consistent Change}:  all clone fragments change consistently.
+\item {Inconsistent Change}: clone fragments change inconsistently.
+\item {Split}: inconsistent change beyond a threshold, causing the clone group to split into two clone groups.
+\end{itemize}
+
+Fig.2 gives an example of clone genealogy and clone patterns. In this example, the clone genealogy is constructed from 5 versions of the software. 
+From version {\em i} to {\em i+1}, the clone group is enlarged with two new clone fragments, so its associated clone pattern is {\em add}. In the next version change, the clone group is split into two groups, which have different clone patterns (one is {\em subtract}, and the other is {\em consistent change}). From version {\em i+2} to {\em i+3}, clone patterns are {\em sub} and {\em inconsistent change} respectively. In the last version, clone patterns are {\em add} and {\em sub} respectively.
+
+ \vskip 2mm
+\centerline{\includegraphics[width=3.0in]{Fig2} }
+\vskip 1mm
+\centerline{\footnotesize\begin{tabular}{c} Fig.\ 2.\  An Example of Clone Genealogy[3]% \\ Capturing the Evolution of Code Clones 
+\end{tabular}}
+\vskip 0.5\baselineskip%插图结束
+
+\leftline{{\bf3.3 \ Clone Metrics}}
+
+As typically done in machine learning, we represent a clone by a vector of features, which are called {\em clone metrics}. These features are extracted from clone fragments, clone groups and clone genealogies. 
+
+{\em The metrics for clone fragment}. A clone fragment gives an {\em individual} perspective of clones. %, which are code fragments in software. 
+During its life, the fragment can be modified by the developer, especially during software maintenance. %Further, clone fragment can change drastically. 
+Thus, we consider as metrics the number of times the clone changes and the change made from last version. Therefore, the metrics for clone fragment in version $i$ are as follow:
+
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\item {Clone Life}: number of versions which the clone fragment exists in software so far (until version i).
+\item {Ischanged}:	equals 1 if the Clone fragment in version i is changed from the last version (version i-1); 0 otherwise.
+\item {Change Times}:	number of times the clone fragment changed so far (up till version i) in the evolution.  
+\end{itemize}
+
+{\em The metrics for clone group}. Clone group offers a {\em regional} perspective of clones, where the region is defined by the group. %Here, clones from one version of software are organized into clone groups.
+For a clone group% found in a version of the software
+, it is important to capture the length of its life so far. %During evolution, a 
+Clone group may change from last version to the current version. This change is called {\em clone pattern}, %Clone patterns for the group 
+which can give us a change summary throughout evolution. We therefore extract life and clone patterns as clone group  in version $i$ metrics as follow:
+
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\item {Group Life}: number of versions which clone group exists in software till version $i$.
+\item {Static}:	all clone fragments in group are static from last version.
+\item {Same}:	clone group undergoes a ``same'' pattern change from  last version.
+\item {Add}: clone group undergoes an ``add'' pattern change from last version.
+\item {Subtract}: clone group undergoes a ``subtract'' pattern change from last version.
+\item {Consistent Change}: clone group undergoes a ``consistent change'' pattern from last version.
+\item {Inconsistent Change}: clone group undergoes an ``inconsistent change'' pattern from last version.
+\item {Split}: clone group undergoes a ``split'' pattern change from last version.
+\end{itemize}
+
+{\em The metrics for clone genealogy}. Clone genealogy provides a {\em global} perspective of the clones, capturing the entire clone evolution occurring in all versions. %There are lots of clone genealogies in a piece of software. 
+%We extract the {\em genealogy life} and the {\em number of clone patterns} to represent clone genealogy. 
+{\em Genealogy life} is an important metric for clone genealogy.
+As clone genealogy describes how this clone group changed(clone pattern) throughout its life,  %As these changes can tell us about the genealogy change history, 
+we capture the {\em genealogy life} and the {\em number of clone patterns} which clone genealogy had experienced in its whole life. Therefore, the metrics include the following:
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\item Genealogy  Life: number of versions which clone genealogy exists in software.
+\item Static Number: number of ``static'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item Same Number: number of ``same'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item Add Number: number of ``add'' pattern which all clone groups belonging to this genealogy have experienced  in its life.
+\item Subtract Number: number of ``subtract'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item Consistent Number: number of ``consistent pattern'' which all clone groups belonging to this genealogy have experienced in its life.
+\item Inconsistent Number: number of ``inconsistent pattern'' which all clone groups belonging to this clone genealogy have experienced in its life.
+\item Split Number: number of ``split'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\end{itemize}
+
+\leftline{{\bf3.4 \ Clone Characteristics Mining}}
+
+In order to mine clone characteristics, %from the clones and their evolution, we use WEKA to analyze the clone entities, which are: clone fragments, clone groups and clone genealogies. 
+we divide this mining task into two subtasks. First, we obtain the statistics about the occurrences of metrics in each of these clone entities, and investigate the characteristics of these clone entities. Second, we use WEKA to cluster these clone entities. In this subtask, our main goal is to characterize the timing aspects of clone changes during software evolution. Specifically, we aim to determine the time during evolution when clone changes begin to take place. %To this end, we employ tools in WEKA to perform clustering of clone entities that include time elements. 
+
+Employing WEKA for this task involves two parts: First, we generate a vector named ``clone vector'' with all the metrics (including timing metrics) for each clone entity. Second, we use WEKA to cluster these vectors, and investigate the results obtained from clustering. %Let's elaborate further. 
+
+ {\em Generating clone vectors}. For each clone fragment, group and genealogy, its vector is an $m$ dimensional vector: {$V$= {($v_1$, $v_2$, $...$, $v_m$)}}, where $v_i$ features a specific metric mentioned in the previous subsection. When we generate vectors for all clones, we obtain a clustering vector space X for all clones, which can be defined by {$X$= {($x_1$, $ x_2$, $...$, $ x_n$)}}, where $n$ is the number of clones. %We take the clones from the three perspectives: clone fragment, clone group and clone genealogy. We also have three clone vectors for all of them, which indicate three different levels. 
+ Take the clone group as example, one clone group yields an 8-dimensional vector {$V$= ($v_1$, $v_2$,$...$,$ v_8$)}, where $v_i$ (for all 1$\le$$i$$\leq$8) is a metric of this clone group.
+  
+ {\em Clones are clustered by WEKA}. WEKA is a machine learning tools for data mining.
+ We take clones as data and generate corresponding vectors instead of clones, and then use WEKA to analyze all the vectors (all the clones) to get clone characteristics. %WEKA implements lots of methods to analyze the data, such as clustering, classify, associate roles, etc. 
+We apply {\em X-means Clustering} algorithm on the vector space X for clone fragments, groups and genalogies. {\em X-means clustering} is a variation of {\em k-means}; the latter aims to partition $n$ vectors into prior-specified $k$ number of clusters such that each vector belongs to the cluster the mean of which is nearest to the vector. With {\em K-means}, we need to determine the number of clusters before clustering. However, for the case of clones analysis, it is difficult to determine the number of clusters required. Therefore, {\em X-means clustering} is deployed. 
+
+X-means clustering is known to be an efficient algorithm that searches the space of cluster locations and the number of clusters required to optimize the Bayesian Information Criteria measure[26]. %It can determine the number of cluster automatically. 
+Given a set of vectors(clones) $X$={($x_1$,$x_2$,$...$,$x_n$)}, where each $x_i$ is a $d$-dimensional real vector(metrics). X-means clustering aims to partition these $n$ vectors into $k$ clusters $C$={($C_1$,$C_2$,$...$,$C_k$)} so as to minimize the within-cluster sum of squares (WCSS) (%sum of distance functions of each point in the cluster to the K center
+sum of distance functions of each point in the cluster to its cluster center). We only specify the range value of $K$. {\em X-means clustering} can efficiently search for the best $K$ from the range. It starts with the lowest value of the given $K$ range, and continues to increment this value until the upper of range. During this process, X-means clustering computes the scores for each $K$ with a model selection criterion. It chooses the best score of $K$ to output. For each $K$, x-means clustering uses the iterative refinement technique. Firstly, it assigns each vector to the cluster whose mean yields the least within-cluster sum of squares (WCSS). Second, it calculates the new means to be the centroids of the vectors in the new clusters. The algorithm converges when the assignments no longer change.
+It use the posterior probabilities to score this $K$ with Bayesian Information Criterion.
+
+%We use all the metrics --- including especially the ``Life'' metrics - to generate the corresponding clone vectors, analyze all these clones to get our conclusions. Details are given in the next section.

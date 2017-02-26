@@ -1,0 +1,27 @@
+\begin{center}{\large\bf 4.\ Case Study}\end{center}
+
+%\leftline{{\bf3.1 \ Case Study}}
+In this section, we present our case study. 
+We briefly describe the open source software systems which are the subjects of our experiment, and describe the experiment steps to explore clone characteristics in three different clone perspectives. 
+
+We pick two open source softwares as our experimental softwares: {\em ArgoUML} and {\em jEdit}. Both of them are built using Java which have undergone more than 10 rounds of evolutions. {\em ArgoUML} is the leading open source UML modeling tool and includes support for all standard UML 1.4 diagrams. {\em jEdit} on the other hand is an open source project developing an editor for programmer; characterized by easy to use interfaces that resembles that of many prevalent text editors.
+
+Table 1 depicts clone-aspects of these two software (or rather, their repositories). Specifically, we consider $14$ and $22$ versions respectively.  For each software, we list the first (start) version of this experiment, as well as the last (End) version. Column ``Clone Fragment'' lists the number of clone fragments collected from each software (all versions included). Similarly, ``Clone Group'' and ``Clone Genealogy'' are the number of clone groups and clone genealogies collected, respectively. 
+
+{\tabcolsep=2.5pt 
+\scriptsize
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\multicolumn{7}{c}{\bf Table 1.\ The Open Sources Software for Experiments}\\ \hline
+\multirow{2}{*}{Projects}&\multirow{2}{*}{Versions}&Start&End&Clone&Clone&Clone\\ 
+&&Version&Version&Fragment&Group&Genealogy\\ \hline
+ArgoUML&14&0.20.0&0.34.0&25422&7012&1036\\ \hline
+jEdit&22&3.0.0&5.0.0&6636&2256	&237\\ \hline
+\end{tabular}
+\end{center}}
+
+In order to explore clone evolutionary characteristics, we divide clones into three perspectives: clone fragment, group and genealogy. Firstly, we conduct experiments on clone fragment. Here, we explore and investigate clone fragment change from one version to another, as well as change times in the history of clone fragment. Secondly, clone group has some clone patterns during software evolution. Here, we are interested to determine the kind of clone patterns (such as consistent change, inconsistent change, etc.) which do (or do not) occur significantly frequent (or infrequent). Lastly, clone genealogy experiment, which provides a global view of the softwares. 
+
+In each experiment, we use two methods to analyze clones: the first is a statistical method to analyze clones, and the second uses X-means clustering method to analyze clones deeply.  
+
+
