@@ -34,12 +34,12 @@
 
 \mainmatter\defaultfont\sloppy\raggedbottom
 
-\include{body/introduction}
-\include{body/characteristic}
-\include{body/cpprediction}
-\include{body/changeprediction}
-\include{body/crossprediction}
-\include{body/conclusion} 
+\input{body/introduction}
+\input{body/characteristic}
+\input{body/copyprediction}
+\input{body/changeprediction}
+\input{body/empiricalprediction}
+\input{body/conclusion} 
 
 %参考文献
 \defaultfont
@@ -48,8 +48,8 @@
 \addcontentsline{toe}{chapter}{\bfseries  References} % 参考文献加入到英文目录
 \addtolength{\bibsep}{-0.8em}
 %\nocite{*}  %若将此命令屏蔽掉，则未引用的文献不会出现在文后的参考文献列表中。
-\bibliography{reference}
-%\include{appendix/appA}    % 附录
+\bibliography{reference.bib}
+\include{appendix/appA}    % 附录
 \include{appendix/publications}    % 所发文章
 \include{appendix/Authorization}   % 承诺
 \include{appendix/acknowledgements}% 致谢
