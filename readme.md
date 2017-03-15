@@ -303,4 +303,3 @@ Google code项目已经停滞2年，也许诸位先驱都已毕业?
 ## 附
 
 - [论文排版乱象杂谈](http://yanshuo.name/cn/2015/10/equation/)
-
