@@ -133,43 +133,94 @@
 克隆组映射后，可以使用演化模式描述克隆组在两个版本之间的变化，即\emph{``Clone Pattern''}。假设存在于两个相邻版本中的一个克隆组，使用\emph{srcCG}表示前一版本中的克隆组，\emph{destCG}表示后一版本中的克隆组，从\emph{srcCG}到\emph{destCG}的变化由克隆模式描述。接下来通过遍历所有版本之间的映射的克隆组可以构建系统中的克隆家系。
 
 
-\BiSubsection{提取阶段}
-{ Extracting Clone Metrics}
+\BiSection{提取阶段}
+{Extracting Clone Metrics}
 
-正如在机器学习中通常所做的那样，我们使用特征向量表示克隆代码，并将之称为{\em 克隆度量}。 这些特征分别从克隆片段、克隆组和克隆家系中进行提取。
+正如在机器学习中通常所做的那样，我们将使用度量值表示克隆代码，并将之称为\emph{克隆代码度量}。如前文所述，本文将从三个角度提取度量值表示克隆代码，即克隆片段、克隆组和克隆家系。
 
-{\em 克隆片段的度量}：克隆片段给出了克隆代码本身的一些特征。在克隆代码片段的生命期间，克隆代码片段可以由开发人员修改，特别是在软件维护期间。因此，克隆片段在演化过程中可能发生变化，也可能发生多次变化。因此，我们将克隆变化的次数和从上一版本中是否发生了视为度量。 因此，版本$ i $中克隆片段的度量标准如下：
+\BiSubsection{克隆片段度量}
+{Clone Metrics for Clone Fragment}
+
+克隆片段度量给出了克隆代码本身的一些特征。在克隆片段的生命期间，克隆片段可能被程序人员开发人员修改（特别是在软件维护期间）。因此，克隆片段在演化过程中会发生变化，并且可能发生不止一次的变化。因此，本文将克隆代码的变化次数和从上一版本演化到此版本时是否发生了变化视为克隆代码的度量。 因此，在某一软件版本$V_ i $中的克隆代码片段表示如下：
 \begin{itemize}
-\item {Clone Life}: number of versions which the clone fragment exists in software so far (until version i).
-\item {Ischanged}:	equals 1 if the Clone fragment in version i is changed from the last version (version i-1); 0 otherwise.
-\item {Change Times}:	number of times the clone fragment changed so far (up till version i) in the evolution.  
+\item
+克隆寿命（Clone Life）：截止到当前版本$V_ i $，克隆片段$CF$所经历的所有的版本数量称之为克隆寿命。
+%\item {Clone Life}: number of versions which the clone fragment exists in software so far (until version i).
+\item
+是否发生变化（Ischanged）：软件版本$V_ i $中的克隆片段$CF$是否在上一版本到这一版本演化时发生了变化，若发生变化则取值为$1$，否则取值为$0$。
+%\item {Ischanged}:	equals 1 if the Clone fragment in version i is changed from the last version (version i-1); 0 otherwise.
+\item
+变化次数（Change Times）：截止到当前版本$V_ i $，克隆片段$CF$在其演化过程中所发生的变化次数。
+%\item {Change Times}:	number of times the clone fragment changed so far (up till version i) in the evolution.  
 \end{itemize}
 
-{\em 克隆组的度量值}。克隆组提供克隆组的一些区域性特征。这里的克隆组是指在同一版本中的克隆代码所组织成的克隆组。对于在软件版本中发现的克隆组，最重要的是捕捉其寿命长度。在进化过程中，大部分的克隆组会从上一个版本演化为当前版本，仅有少部分新产生的克隆代码。为了描述这种变化，Kim将之称为{\em clone pattern}，即克隆组的演化模式。演化模式可以给我们克隆组在进化过程中的变化进行总结。因此，我们将版本$ i $ 中克隆组的寿命和克隆模式提取为度量，如下所示：
+\BiSubsection{克隆组度量}
+{Clone Metrics for Clone Group}
+
+克隆组提供了克隆代码的一些区域性特征。由于本文所使用的克隆演化模式均是针对克隆组的演化情况，因此本文也需要从克隆组的角度分析克隆代码的演化情况。
+%这里的克隆组是指在同一版本中的克隆代码所组织成的克隆组。
+对于某一个克隆组，本文最先提取的度量是克隆寿命。克隆寿命不但揭示了其在系统中存在的时间长短，也与克隆演化模式息息相关。在克隆组进行演化的过程中，克隆模式更是从演化的角度揭示了克隆组的变化情况。因此，我们将版本$V_i $ 中克隆组的寿命和克隆模式提取为度量值，如下所示：
 \begin{itemize}
-\item {Group Life}: number of versions which clone group exists in software till version $i$.
-\item {Static}:	all clone fragments in group are static from last version.
-\item {Same}:	clone group undergoes a ``same'' pattern change from  last version.
-\item {Add}: clone group undergoes an ``add'' pattern change from last version.
-\item {Subtract}: clone group undergoes a ``subtract'' pattern change from last version.
-\item {Consistent Change}: clone group undergoes a ``consistent change'' pattern from last version.
-\item {Inconsistent Change}: clone group undergoes an ``inconsistent change'' pattern from last version.
-\item {Split}: clone group undergoes a ``split'' pattern change from last version.
+\item
+克隆寿命（Group Life）：截止到当前版本$V_ i $，克隆组$CG$所经历的所有的版本数量称之为克隆寿命。
+%\item {Group Life}: number of versions which clone group exists in software till version $i$.
+\item
+静态（Static）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为静态模式。
+%\item {Static}:	all clone fragments in group are static from last version.
+\item
+相同（Same）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为相同模式。
+%\item {Same}:	clone group undergoes a ``same'' pattern change from  last version.
+\item
+增加（Add）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为增加模式。
+%\item {Add}: clone group undergoes an ``add'' pattern change from last version.
+\item
+减少（Subtract）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为减少模式。
+%\item {Subtract}: clone group undergoes a ``subtract'' pattern change from last version.
+\item
+一致性变化（Consistent Change）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为一致性变化模式。
+%\item {Consistent Change}: clone group undergoes a ``consistent change'' pattern from last version.
+\item
+不一致变化（Inconsistent Change）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为不一致变化模式。
+%\item {Inconsistent Change}: clone group undergoes an ``inconsistent change'' pattern from last version.
+\item
+分裂（Split）：克隆组$CG$从上一版本演化到$V_ i $时，其演化模式为分裂模式。
+%\item {Split}: clone group undergoes a ``split'' pattern change from last version.
 \end{itemize}
 
-{\em 克隆家系度量}。克隆家系可以提供克隆演化的全局视角，可以捕获发生在所有版本中的整个克隆进化过程的特征。一个克隆组在所有的版本中的演化情况即是一个克隆家系，因此一个软件系统中有很多个克隆家系。我们提取了{\em  克隆寿命}和{\em 克隆模式数量}来表示克隆家系。首先{\em 克隆寿命}是克隆家系的重要指标，它描述了克隆家系在系统中存在的时间。然后，克隆家系还描述了这个克隆组在整个生命中如何改变（克隆模式），从而因为这些改变可以告诉我们关于克隆家系变化的历史。因此，我们捕获克隆家系在其整个生命中经历的{\em 克隆寿命}和{\em 克隆模式的数量}。 因此，度量标准包括以下内容：
+\BiSubsection{克隆家系度量}
+{Clone Metrics for Clone Genealogy}
+
+克隆家系可以提供一个软件中克隆代码演化的全局视角，从而可以帮助我们捕获所有版本中的整个克隆代码演化的特征。如前文所述，一个克隆组在所有的版本中的演化过程即是一个克隆家系，因此一个软件系统中有很多个克隆家系。对于每一个克隆家系，本文提取了\emph{克隆寿命}和\emph{克隆模式数量}度量来表示克隆家系。\emph{克隆寿命系}的重要指标，它描述了克隆家系在系统中生存的时间。克隆家系描述了这个克隆组在整个生命中如何演化（克隆模式），从而通过这些信息可以告诉我们关于克隆家系变化的历史。因此，本文提取了克隆家系在其整个生命中经历的\emph{克隆寿命}和\emph{克隆模式数量}，如下所示：
+
 \begin{itemize}
-\item Genealogy  Life: number of versions which clone genealogy exists in software.
-\item Static Number: number of ``static'' pattern which all clone groups belonging to this genealogy have experienced in its life.
-\item Same Number: number of ``same'' pattern which all clone groups belonging to this genealogy have experienced in its life.
-\item Add Number: number of ``add'' pattern which all clone groups belonging to this genealogy have experienced  in its life.
-\item Subtract Number: number of ``subtract'' pattern which all clone groups belonging to this genealogy have experienced in its life.
-\item Consistent Number: number of ``consistent pattern'' which all clone groups belonging to this genealogy have experienced in its life.
-\item Inconsistent Number: number of ``inconsistent pattern'' which all clone groups belonging to this clone genealogy have experienced in its life.
-\item Split Number: number of ``split'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item
+克隆家系寿命（Genealogy  Life）：克隆家系整个演化过程中所经历的软件版本的数量。
+%\item Genealogy  Life: number of versions which clone genealogy exists in software.
+\item
+静态模式数量（Static Number）：克隆家系在整个演化过程中所经历的静态模式的数量。
+%\item Static Number: number of ``static'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item
+相同模式数量（Same Number）：克隆家系在整个演化过程中所经历的相同模式的数量。
+%\item Same Number: number of ``same'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item
+增加模式数量（Add Number）：克隆家系在整个演化过程中所经历的增加模式的数量。
+%\item Add Number: number of ``add'' pattern which all clone groups belonging to this genealogy have experienced  in its life.
+\item
+减少模式数量（Subtract Number）：克隆家系在整个演化过程中所经历的减少模式的数量。
+%\item Subtract Number: number of ``subtract'' pattern which all clone groups belonging to this genealogy have experienced in its life.
+\item
+一致性变化模式数量（Consistent Number）：克隆家系在整个演化过程中所经历的一致性变化模式的数量。
+%\item Consistent Number: number of ``consistent pattern'' which all clone groups belonging to this genealogy have experienced in its life.
+\item
+不一致变化模式数量（Inconsistent Number）：克隆家系在整个演化过程中所经历的不一致变化模式的数量。
+%\item Inconsistent Number: number of ``inconsistent pattern'' which all clone groups belonging to this clone genealogy have experienced in its life.
+\item
+分裂模式数量（Split Number）：克隆家系在整个演化过程中所经历的分裂模式的数量。
+%\item Split Number: number of ``split'' pattern which all clone groups belonging to this genealogy have experienced in its life.
 \end{itemize}
 
-\BiSubsection{克隆演化特征挖掘}{Clone Characteristics Mining}
+\BiSection{克隆演化特征挖掘}
+{Clone Characteristics Mining}
 
 为了从克隆代码及其进化中挖掘克隆特征，我们使用WEKA中的聚类方法来分析不同的克隆实体，分别是：克隆片、克隆组和克隆家系。我们将这个挖掘任务分成两个子任务。第一，我们对获得的每个克隆实体中的度量进行统计，并且分析这统计分析所表现出来的克隆特征。第二，我们使用WEKA对这些克隆实体进行聚类。在这个子任务中，我们的主要目标是聚类分析在软件演化过程中克隆代码的寿命以及变化的情况。具体来说，我们的目标是确定克隆变化在克隆演化中所发生的时间以及变化。为此，我们在WEKA中使用工具来对包含时间元素的克隆实体进行聚类。在这个子任务中，使用WEKA完成此任务也涉及两个部分：首先，我们为每一个克隆实体生成一个“克隆演化向量”，其中包含每个克隆实体的所有度量（包括时间度量）。第二，我们使用WEKA聚类这些向量，并从聚类获得的结果中分析并获取克隆演化特征。让我们进一步对其进行阐述。
 
