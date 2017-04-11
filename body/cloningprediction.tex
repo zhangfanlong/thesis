@@ -97,8 +97,8 @@
 
 本文基于机器学习的一致性维护需求预测方法如图~\ref{framwork3}所示，可分为两个阶段：训练阶段和预测阶段。训练阶段通过收集和分析软件中的复制粘贴实例，生成训练数据集并构建预测器。本文使用克隆检测工具软件中检测克隆代码，并通过构建克隆家系识别复制粘贴实例。然后，提取两组度量值表示该复制粘贴实例。预测阶段通过监测复制粘贴活动，使用机器学习方法构建和训练预测器，并使用训练好的模型对其进行一致性维护预测。在使用已构建好的模型时，可将该模型嵌入到软件开发环境中。首先在软件开发环境中实时监测复制粘贴操作；然后识别所导致的克隆代码并提取相应度量值；最后将所提取的表示复制粘贴实例的度量值输入到已训练好的机器学习模型中，预测其一致性维护需求。根据预测结果提醒程序开发人员采取进一步的维护和操作。
 
-\BiSection{训练阶段}
-{Trainning Step}
+\BiSection{克隆实例收集和表示}
+{Collecting and Representation of Clone Cloning Instance}
 
 模型训练阶段通过收集复制粘贴实例，构建并训练一致性维护需求的机器学习模型。该阶段可划分为三个子步骤：收集复制粘贴实例、属性提取和模型训练。
 
@@ -228,7 +228,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429\\
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
-\textbf{Project}&\textbf{Threshold}&\textbf{Recommendation Rate(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
+\textbf{Project}&\textbf{Threshold}&\textbf{RR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	74.61&	95.91&	92.85\\

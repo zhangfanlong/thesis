@@ -12,80 +12,87 @@
 
 \BiSection{克隆代码变化时一致性维护需求}
 {Clone Changing Consistency-Requirement}
-%{\em clone fragment}是一段代码片段，类似于另一段代码片段\cite{koschke2007survey}。克隆片段在软件中大量存在，出于各种原因，最明显源自于复制和粘贴操作。
-%复制和粘贴操作是重用来自软件的现有代码和引入丰富的克隆片段的最显着的方式。克隆在软件中的存在引起了克隆是否可以不利地影响软件质量的问题，从Fowler等人开始识别一些克隆为“坏气味”\cite{fowler2009refactoring}。克隆研究团体自此辩论是否改变一组克隆不一致可能导致软件缺陷，以及是否一致改变克隆的要求可能导致额外的维护成本。研究一致/不一致的克隆更改发现：如果一组克隆中的克隆片段需要一致地更改，并且开发人员忘记这样做，则可能会在软件进化的后期引入缺陷\cite{bettenburg2009empirical} \cite {juergens2009code}。另一方面，当不需要克隆组内的一致改变时，开发人员可能不必要花费时间来验证和尝试维持克隆一致性，导致额外的软件维护开销\cite{aversano2007clones} \cite{barbour2011late}。
 
-%这项工作旨在开发一种方法 {\em 警告开发人员需要在克隆中执行一致的更改以减少克隆和一般的可维护性成本}。{\em 预测当克隆组中的一个克隆片段已修改时，克隆组需要进行天气一致性更改。} \textcolor {blue}{\em 预测天气克隆组的更改需要一致性或克隆组中克隆片段之一的更改。}具体来说，当开发人员修改作为其他代码的克隆的一段代码时，我们的方法将进行其预测，并向开发人员提供两种可能的警告：是（1）有需要，还是（2）不需要以检查组内的其他克隆的更新。因此，这可以帮助避免“克隆一致性缺陷”，保存一致性验证时间，这反过来可以提高克隆可维护性和软件可重用性。
+\BiSubsection{一致性变化实例}
+{An Example of Clone Consistent Change }
 
-图~\ref{}~描述了克隆片段的变化可以导致克隆组中的相似变化的情况。这些克隆片段位于{\em jEdit}的开放源代码Java存储库中。在图~\ref{}~中，两个克隆片段位于项目的版本$ 3.1.0 $中。它们在版本$ 3.2.0 $之前进行了类似的修改。具体地，在版本$ 3.1.0 $中的第9-12行和第15行的克隆片段在随后的版本中被修改。在第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发者删除了声明语句到下一个版本。
-如图~\ref{}~所示，两个修改的代码仍然是克隆，并且在版本$ 3.2.0 $中形成克隆组的一部分，表明{\em 一致的克隆更改}的情况。如果程序员通过一些克隆管理工具没有发现这种对一致性改变的需要，它将引入克隆一致性缺陷。
+%{\em clone fragment}是一段代码片段，类似于另一段代码片段\cite{koschke2007survey}。克隆片段在软件中大量存在，出于各种原因，最明显源自于复制和粘贴操作。复制和粘贴操作是重用来自软件的现有代码和引入丰富的克隆片段的最显着的方式。
+克隆代码在软件中的存在和变化可能会影响软件质量的问题，因此Fowler等人将克隆代码视为“Bad Smell”\cite{fowler2009refactoring}。而研究人员也同样认为克隆代码的一致性变化可能会导致软件缺陷，同时维持克隆代码的一致性也会导致额外的维护代价。研究发现如果一组克隆中的克隆片段需要一致地更改，并且开发人员忘记这样做，则可能会在软件进化的后期引入缺陷\cite{bettenburg2009empirical} \cite {juergens2009code}。另一方面，当不需要克隆组内的一致改变时，开发人员可能不必要花费时间来验证和尝试维持克隆一致性，导致额外的软件维护开销\cite{aversano2007clones} \cite{barbour2011late}。
 
+图~\ref{co-change}~描述了克隆片段的变化引发的克隆组的一致性变化的例子。这些克隆代码片段来自于系统{\em jEdit}。在图~\ref{cg1}中，两个克隆片段存在于$ 3.1.0 $版本中，它们在版本$ 3.2.0 $之前进行了相似的修改。具体地，在版本$ 3.1.0 $中的第9-12行和第15行的克隆片段在随后的版本中被修改。在第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发者删除了声明语句到下一个版本。如图~\ref{cg2}~所示，两个被修改的代码片段仍然是克隆代码，仍存在于同一克隆组中（版本$ 3.2.0 $中），即克隆组$CG$发生了{\em  一致性变化模式}。如果程序员没有对上述的克隆代码进行一致性维护，这将会导致克隆代码的一致性缺陷。
 
 \begin{figure}[htbp]
 \centering
 \subfigure{\label{cg1}}\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in one clone group in version $3.1.0$]{\subfigure[版本$ 3.1.0 $中一个克隆组中的两个克隆片段]{\includegraphics[width=0.4\textwidth]{Fig4-1examplea.eps}}}
+\subfigure[Two clone fragments in one clone group in version $3.1.0$]{\subfigure[版本$ 3.1.0 $中一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{Fig4-1examplea.eps}}}
 \subfigure{\label{cg2}}\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in clone group in version $3.2.0$]{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.4\textwidth]{Fig4-1exampleb.eps}}}
-\bicaption[cg]{}{打高尔夫球的人}{Fig.$\!$}{An example of consistent change from real world}\vspace{-1em}
+\subfigure[Two clone fragments in clone group in version $3.2.0$]{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{Fig4-1exampleb.eps}}}
+\bicaption[co-change]{}{jEdit中的一致性变化的例子}
+{Fig.$\!$}{An Example of Consistent Change from Real World}
+\vspace{-1em}
 \end{figure}
 
+因此，本章旨在提供一种方法可以 {\em 帮助开发人员在克隆代码变化时预测克隆代码的一致性变化，从而以避免克隆缺陷和减少其维护代价}。具体来说，当开发人员修改作为其他代码的克隆的一段代码时，本文方法将对其进行预测，并向开发人员提供两种可能的警告：（1）需要一致性维护，（2）不需要一致性维护。因此，这可以帮助避免“克隆一致性缺陷”，保存一致性验证时间，这反过来可以提高克隆可维护性和软件可重用性。
 
-当克隆组中的{\em 至少一个/}克隆对需要进行类似的更改时，我们称克隆组满足{\em clone consistency-requirement}。如果可以在该对中的一个克隆改变时预测该需求，则可以采取适当的管理动作以避免一致性缺陷，导致软件维护成本的增加。另一方面，当克隆组中的克隆的{\bf none}需要一致的更改时，我们说克隆组是{\em consistency-free}。在克服一致性 - 需求预测的这个方向上做出的相关工作，其启发了当前的工作，由Wang 等人在\cite{wang2012can} \cite{wang2014predicting}中进行。在这项工作中，如果其生成的代码克隆在软​​件进化历史中经历一致的变化，他们将代码克隆操作定义为“一致性维护需求”。
-他们的目的是自动预测代码是否克隆操作需要一致性维护{\em at the time}当执行复制和粘贴操作时。他们采用贝叶斯网络机器学习技术来开发和训练预测模型\cite{friedman1997bayesian}。他们的预测器建立有以下两类输入：（1）代码的句法特征及其复制和粘贴对应物和（2）代码及其复制和粘贴对应物的物理上下文。在两个开源项目和两个大型内部项目上测试，他们表明他们的预测器能够推荐开发人员执行超过50\%的克隆操作，在这四个科目中精度至少为94\%；此外，通过警告开发人员只有13到40个\%的代码克隆，它还能够避免37到72 \%的一致性维护所需的代码克隆。
 
-虽然Wang 等人旨在在复制和粘贴时间执行预测，当克隆被修改时，我们在软件生命周期中在{\em 几乎任何时间}执行预测。因此，我们的技术可以应用于已建立项目中的现有克隆，而不是形成新克隆（通过复制和粘贴）。为了实现这一点，我们需要知道修改的代码所属的克隆组的存在。{\em 克隆组}是一组软件中的一组克隆，已知通过一些相似性度量是相似的。为了训练预测器，在软件进化过程中研究克隆组的演变是自然的。为此，我们调整{\em 克隆系谱}的概念，正如Kim等人很好地解释的那样\cite{kim2005empirical}。克隆系谱描述了克隆的进化，并定义了各种{\em 克隆模式}以描述组中的克隆是如何从早期版本的项目中更改的。我们假设，如果一个克隆被如此修改，如果克隆组需要在未来一致的变化，其克隆组对预测有影响。因此，我们建立了基于三类投入的预测变量，其中两个变量来自Wang等人的工作。最后一个捕获克隆系谱的特征，称为{\em 进化属性}。这三种属性的组合提供了克隆组的整体视图;进化属性的存在使得预测器能够被定制到单个软件仓库。
-我们通过WEKA \cite{hall2009weka}开发和构建了一个贝叶斯网络作为预测器，并对三个软件项目的预测能力进行了实验。
-我们的实验表明：预测器执行稳定的精确度和召回，对于克隆一致性要求和无一致性的预测，精度范围在70\%到80\%之间，其召回率在63\%和83\%之间。 {\em {我们的实验表明：预测变量的精确度和回忆率对于一致性要求和自由变化实例具有每个存储库的稳定范围;并且为了保持一致性，精度范围在70到80\%之间，其召回率在63和89\%之间。}}此外，每个属性集以其自身的方式对预测能力作出肯定贡献，并且这些属性集中的任何属性集的缺失都可能不利地影响预测器的回忆能力。 {我们的方法可以集成在IDE中以维护克隆更改，这可以避免克隆一致性缺陷。}
 
-本文的贡献如下：
-\begin {itemize}
-\item 我们提出一种方法来预测克隆组中发生克隆变化所致的一致变化的需要。
-\item 我们基于与克隆系谱相关的信息来识别一组新的属性用于预测。结果表明，这套属性对预测变量的回忆能力有积极影响。
-\item 我们通过对四个开源项目的评估来证明这种预测的可行性。结果表明，我们的方法可以有效预测克隆组的一致变化，具有良好的精度和合理的回忆，并可以帮助提高软件的可靠性通过预测性克隆维护的可重用性。
-\end {itemize}
+
+%当克隆组中的{\em 至少一个/}克隆对需要进行类似的更改时，我们称克隆组满足{\em clone consistency-requirement}。如果可以在该对中的一个克隆改变时预测该需求，则可以采取适当的管理动作以避免一致性缺陷，导致软件维护成本的增加。另一方面，当克隆组中的克隆的{\bf none}需要一致的更改时，我们说克隆组是{\em consistency-free}。在克服一致性 - 需求预测的这个方向上做出的相关工作，其启发了当前的工作，由Wang 等人在\cite{wang2012can} \cite{wang2014predicting}中进行。在这项工作中，如果其生成的代码克隆在软​​件进化历史中经历一致的变化，他们将代码克隆操作定义为“一致性维护需求”。
+%他们的目的是自动预测代码是否克隆操作需要一致性维护{\em at the time}当执行复制和粘贴操作时。他们采用贝叶斯网络机器学习技术来开发和训练预测模型\cite{friedman1997bayesian}。他们的预测器建立有以下两类输入：（1）代码的句法特征及其复制和粘贴对应物和（2）代码及其复制和粘贴对应物的物理上下文。在两个开源项目和两个大型内部项目上测试，他们表明他们的预测器能够推荐开发人员执行超过50\%的克隆操作，在这四个科目中精度至少为94\%；此外，通过警告开发人员只有13到40个\%的代码克隆，它还能够避免37到72 \%的一致性维护所需的代码克隆。
+
+%虽然Wang 等人旨在在复制和粘贴时间执行预测，当克隆被修改时，我们在软件生命周期中在{\em 几乎任何时间}执行预测。因此，我们的技术可以应用于已建立项目中的现有克隆，而不是形成新克隆（通过复制和粘贴）。为了实现这一点，我们需要知道修改的代码所属的克隆组的存在。{\em 克隆组}是一组软件中的一组克隆，已知通过一些相似性度量是相似的。为了训练预测器，在软件进化过程中研究克隆组的演变是自然的。为此，我们调整{\em 克隆系谱}的概念，正如Kim等人很好地解释的那样\cite{kim2005empirical}。克隆系谱描述了克隆的进化，并定义了各种{\em 克隆模式}以描述组中的克隆是如何从早期版本的项目中更改的。我们假设，如果一个克隆被如此修改，如果克隆组需要在未来一致的变化，其克隆组对预测有影响。因此，我们建立了基于三类投入的预测变量，其中两个变量来自Wang等人的工作。最后一个捕获克隆系谱的特征，称为{\em 进化属性}。这三种属性的组合提供了克隆组的整体视图;进化属性的存在使得预测器能够被定制到单个软件仓库。
+%我们通过WEKA \cite{hall2009weka}开发和构建了一个贝叶斯网络作为预测器，并对三个软件项目的预测能力进行了实验。
+%我们的实验表明：预测器执行稳定的精确度和召回，对于克隆一致性要求和无一致性的预测，精度范围在70\%到80\%之间，其召回率在63\%和83\%之间。 {\em {我们的实验表明：预测变量的精确度和回忆率对于一致性要求和自由变化实例具有每个存储库的稳定范围;并且为了保持一致性，精度范围在70到80\%之间，其召回率在63和89\%之间。}}此外，每个属性集以其自身的方式对预测能力作出肯定贡献，并且这些属性集中的任何属性集的缺失都可能不利地影响预测器的回忆能力。 {我们的方法可以集成在IDE中以维护克隆更改，这可以避免克隆一致性缺陷。}
+
+%本文的贡献如下：
+%\begin {itemize}
+%\item 我们提出一种方法来预测克隆组中发生克隆变化所致的一致变化的需要。
+%\item 我们基于与克隆系谱相关的信息来识别一组新的属性用于预测。结果表明，这套属性对预测变量的回忆能力有积极影响。
+%\item 我们通过对四个开源项目的评估来证明这种预测的可行性。结果表明，我们的方法可以有效预测克隆组的一致变化，具有良好的精度和合理的回忆，并可以帮助提高软件的可靠性通过预测性克隆维护的可重用性。
+%\end {itemize}
 
 %本文组织如下：前提条件见第2节。在那里，我们解释代码克隆类型，克隆系谱和克隆更改。第3节详细介绍了我们的一致性克隆变化预测训练的方法。第4节描述了我们通过对四个项目的实验进行的评估。第5节讨论相关工作。我们简要介绍代码克隆研究和缺陷预测。第6节讨论对有效性的威胁。我们总结并指出第7节中的未来工作。
 %
 
-\BiSection{背景知识}{PRELIMINARIES}
+%\BiSection{背景知识}{PRELIMINARIES}
 
-我们将类似的克隆片段集合在一个软件中以形成{\em a clone group}。通常有四种方法将克隆分组，在这项工作中，我们考虑类型3克隆策略：
-\begin {itemize}
-\item {\em Type-1} clone是一个精确的克隆;即，克隆组中的所有克隆是相同的，没有任何修饰，除了在代码布局和注释的差异。
-\item {\em Type-2} clone是一个语法相同的克隆;即，组中的所有克隆在语法上是相同的，仅在标识符，类型，文字和方法的名称上不同。
-\item {\em Type-3} clone是一个语法上相似的克隆;即，组中的所有克隆具有进一步的差异，使得可以通过插入，删除和替换语句从同一组中的另一个克隆获得一个克隆。
-\item {\em Type-4} clone是一个语义相似的克隆;即，克隆组内的所有克隆具有相同的功能。
-\end {itemize}
+%我们将类似的克隆片段集合在一个软件中以形成{\em a clone group}。通常有四种方法将克隆分组，在这项工作中，我们考虑类型3克隆策略：
+%\begin {itemize}
+%\item {\em Type-1} clone是一个精确的克隆;即，克隆组中的所有克隆是相同的，没有任何修饰，除了在代码布局和注释的差异。
+%\item {\em Type-2} clone是一个语法相同的克隆;即，组中的所有克隆在语法上是相同的，仅在标识符，类型，文字和方法的名称上不同。
+%\item {\em Type-3} clone是一个语法上相似的克隆;即，组中的所有克隆具有进一步的差异，使得可以通过插入，删除和替换语句从同一组中的另一个克隆获得一个克隆。
+%\item {\em Type-4} clone是一个语义相似的克隆;即，克隆组内的所有克隆具有相同的功能。
+%\end {itemize}
 
-随着软件从一个版本演变为另一个版本，组中的各个克隆可能经历变化。对于在类似上下文中和/或具有类似功能的克隆，它们的改变也可以是类似的，并且因此它们可以在多个版本中保持在同一组内。我们说这样一个克隆组在软件进化过程中经历{\em 一致的变化}。克隆组的变化和进化也有其他可能的模式。为了描述各种克隆进化，Kim 等提出一个克隆系谱模型，并正式定义克隆组的变化模式\cite{}。虽然他们的工作考虑类型1和类型2克隆，Saha等人提出了在系谱内自动提取精确和接近丢失的克隆的框架，从而使原始克隆系谱适应于处理3型克隆\cite{}（Saha2011）。在我们的工作中，我们使用克隆检测工具{\em NiCad}来检测来自软件库的克隆。这里，如果两个（或更多个）克隆片段足够相似，则它们形成克隆组。在{\em NiCad}中，这种相似性度量用UPI（代表{\em unique percentage items}）表示。UPI根据代码的百分比定义了两个克隆片段之间的{\em 差异}。例如，值为$ 0.3$的UPI表示这两个克隆片段中的30\%不同;换句话说，它们中的70\%具有相同的代码行。
-在这项工作中，{\em  我们设置一个阈值$tau-{CG}$为$0.3$形成克隆组};即，如果UPI $(c_1, c_2)- 0.3$，两个克隆片段$ c_1 $和$ c_2 $被视为属于同一克隆组。}
+%随着软件从一个版本演变为另一个版本，组中的各个克隆可能经历变化。对于在类似上下文中和/或具有类似功能的克隆，它们的改变也可以是类似的，并且因此它们可以在多个版本中保持在同一组内。我们说这样一个克隆组在软件进化过程中经历{\em 一致的变化}。克隆组的变化和进化也有其他可能的模式。为了描述各种克隆进化，Kim 等提出一个克隆系谱模型，并正式定义克隆组的变化模式\cite{}。虽然他们的工作考虑类型1和类型2克隆，Saha等人提出了在系谱内自动提取精确和接近丢失的克隆的框架，从而使原始克隆系谱适应于处理3型克隆\cite{}（Saha2011）。在我们的工作中，我们使用克隆检测工具{\em NiCad}来检测来自软件库的克隆。这里，如果两个（或更多个）克隆片段足够相似，则它们形成克隆组。在{\em NiCad}中，这种相似性度量用UPI（代表{\em unique percentage items}）表示。UPI根据代码的百分比定义了两个克隆片段之间的{\em 差异}。例如，值为$ 0.3$的UPI表示这两个克隆片段中的30\%不同;换句话说，它们中的70\%具有相同的代码行。
+%在这项工作中，{\em  我们设置一个阈值$tau-{CG}$为$0.3$形成克隆组};即，如果UPI $(c_1, c_2)- 0.3$，两个克隆片段$ c_1 $和$ c_2 $被视为属于同一克隆组。}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width = 0.4\textwidth]{Fig4-2gena.eps}
-\bicaption[cg4]{}{一个克隆系谱的例子}{Fig.$\!$}{An example of clone genealog}\vspace{-1em}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics[width = 0.4\textwidth]{Fig4-2gena.eps}
+%\bicaption[cg4]{}{一个克隆系谱的例子}{Fig.$\!$}{An example of clone genealog}%\vspace{-1em}
+%\end{figure}
 
-通过检查组成克隆在这两个相应组中的位置，软件版本号$ j + 1 $中的克隆组可以与较早版本$ j $中的一些相应克隆组相关。
-Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite{} {Kim2005}。图~\ref{}~是显示克隆组的进化和在相邻版本中跨代码的相似性度量的使用的{\em 克隆系谱}。另一方面，相应克隆组（来自两个相邻版本）之间的各种变化模式的定义基于克隆系谱探索的目的进行适应。两个值得注意的模式吸引了很多研究团体的兴趣：{\em 一致的变化}和{\em 不一致的变化}。在\cite{}Saha2011中，这些被清楚地描述如下：
+%通过检查组成克隆在这两个相应组中的位置，软件版本号$ j + 1 $中的克隆组可以与较早版本$ j $中的一些相应克隆组相关。
+%Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite{} {Kim2005}。图~\ref{}~是显示克隆组的进化和在相邻版本中跨代码的相似性度量的使用的{\em 克隆系谱}。另一方面，相应克隆组（来自两个相邻版本）之间的各种变化模式的定义基于克隆系谱探索的目的进行适应。两个值得注意的模式吸引了很多研究团体的兴趣：{\em 一致的变化}和{\em 不一致的变化}。在\cite{}Saha2011中，这些被清楚地描述如下：
 
-\begin{quote}
-{\bf 一致性更改}：版本$ j $中的克隆组$ G $中的所有克隆片段已经在主题克隆检测工具设置的最小行/令牌号中一致地更改，因此所有克隆片段在版本$ j + 1 $中的克隆组$ G'$的一部分。
-{\bf 不一致的更改}：版本$ j $中的克隆组$ G $中的所有克隆片段未一致更改。对于允许添加和删除线的3型克隆的情况，特定克隆类的所有克隆片段仍然可以在下一版本$ j + 1 $中形成相同的克隆类，即使一个或多个片段该类已更改不一致。
-\end{quote}
+%\begin{quote}
+%{\bf 一致性更改}：版本$ j $中的克隆组$ G $中的所有克隆片段已经在主题克隆检测工具设置的最小行/令牌号中一致地更改，因此所有克隆片段在版本$ j + 1 $中的克隆组$ G'$的一部分。
+%{\bf 不一致的更改}：版本$ j $中的克隆组$ G $中的所有克隆片段未一致更改。对于允许添加和删除线的3型克隆的情况，特定克隆类的所有克隆片段仍然可以在下一版本$ j + 1 $中形成相同的克隆类，即使一个或多个片段该类已更改不一致。
+%\end{quote}
 
 %\begin {quote}
 %{\bf不一致的更改}：由于软件版本$ j $中的克隆组$ G_j $已经演变为版本$ j + 1 $中的克隆组$ G_ {j + 1} $。如果{\ em $ G_j $}中的所有组成的克隆片段都持续发生变化，$ G_ {j + 1} $被标记为{\em 不一致的变化}，并且$ G_ {j} $中的一些克隆片段可能从$ G_ {j + 1} $。
 %在这里，我们应该注意，对于允许添加和删除线的类型-3克隆。 （这里{\em  $ G_j $}和{\em  $ G_ {j + 1} $}是版本{\em  j}和{\em  j + 1}中的同一个克隆组{\em  G}。
 %\end {quote}
 
-前面提供的图~\ref{}~描述了项目{\em  jEdit}中的一个变化示例。此外，完全合理的是，在软件版本之间保持一致性的克隆组可能提供类似的功能，如果不管理改变一致性（从而导致克隆不同步），软件缺陷可能会蠕变。我们称之为{\em consistency-defects}。因此，当软件开发人员或维护人员更改当前版本的软件中的一段代码时，他们知道是否存在任何代码克隆是一个好的做法，并且考虑是否需要将更改传播到这些克隆。如果一些克隆需要一致地改变，我们说这些克隆满足{\em consistency-requirement。}另一方面，如果没有克隆需要一致地改变，我们说他们是{\em  一致性要求自由}，或{\em  一致性}简称。
-当然，克隆组中一致性要求的知识将为软件维护者提供潜在的一致性缺陷的早期警告，提高软件维护的质量。同时，关于无一致性克隆更改的知识可以保存软件维护人员不执行一致的验证，并增强他们更改克隆时的信心。这可以帮助提高克隆的可维护性和软件可重用性。
+%前面提供的图~\ref{}~描述了项目{\em  jEdit}中的一个变化示例。此外，完全合理的是，在软件版本之间保持一致性的克隆组可能提供类似的功能，如果不管理改变一致性（从而导致克隆不同步），软件缺陷可能会蠕变。我们称之为{\em consistency-defects}。因此，当软件开发人员或维护人员更改当前版本的软件中的一段代码时，他们知道是否存在任何代码克隆是一个好的做法，并且考虑是否需要将更改传播到这些克隆。如果一些克隆需要一致地改变，我们说这些克隆满足{\em consistency-requirement。}另一方面，如果没有克隆需要一致地改变，我们说他们是{\em  一致性要求自由}，或{\em  一致性}简称。
+%当然，克隆组中一致性要求的知识将为软件维护者提供潜在的一致性缺陷的早期警告，提高软件维护的质量。同时，关于无一致性克隆更改的知识可以保存软件维护人员不执行一致的验证，并增强他们更改克隆时的信心。这可以帮助提高克隆的可维护性和软件可重用性。
 
-因此，我们如何帮助开发人员或维护者决定一段代码中的更改是否具有{\em 一致性要求}？如果在克隆发生变化时我们能够预测这种需求，我们可以避免或至少减轻引入一致性缺陷。
+%因此，我们如何帮助开发人员或维护者决定一段代码中的更改是否具有{\em 一致性要求}？如果在克隆发生变化时我们能够预测这种需求，我们可以避免或至少减轻引入一致性缺陷。
 
-\BiSection{方法}{METHODOLOGY}
+\BiSubsection{变化时一致性维护需求}
+{Changing Consistency-Requirement}
 
 我们提出了两对克隆片段之间的“一致变化”的正式定义，如下所示：
 \\
@@ -139,8 +146,8 @@ Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite
 
 基于这些变化模式的新定义，我们构建克隆家谱从软件版本化历史。回想一下家谱，克隆组连接以反映进化克隆软件版本历史记录。作为我们的定义“一致变化”与Kim等人定义的不同。和 Saha等人，我们构建的克隆系谱也将不同。
 
-\BiSubsection{需求定义} {Clone Change Instances and Consistency-Requirement}
-\label {sec：requirement}
+%\BiSubsection{需求定义} {Clone Change Instances and Consistency-Requirement}
+%\label {sec：requirement}
 
 回想一下，当目前版本中对克隆进行修改时，我们的目标是预测克隆一致性变化的需要。因此，在进行预测时，我们需要鉴定作为预测目标的那些克隆组。当然，并非所有克隆​​组都是预测目标。例如，当克隆组不经历从当前版本到下一版本的更改时，不必对此克隆组预测预测。我们将那些作为预测目标的克隆组称为{\em {\bf change instances}}。
 变更实例是某些版本$ j $中的克隆组，其特征在于其组成克隆中的一些将经历对版本$ j + 1 $的修改。
@@ -161,9 +168,9 @@ Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite
 这是正式定义如下：\\
 
 \begin {definition} [{\bf Consistency-Requirement（Free）}]
-  \label {defn-4}
-  {\em 
-    软件版本$ j $中的变更实例$ G $满足{\bf consistency-requirement }条件，如果软件版本$ k $中有克隆组$ G'$，$ k> j $，这样（1）在$ G中至少有一对克隆'$可在克隆谱系中映射到$ G $中的一对克隆，和（2）$ G'$拥有“一致的变化模式”。当$ G $不满足一致性要求时，我们说它是{\bf 一致性要求自由}，或简称为{\em consistency-free}。 
+\label {defn-4}
+{\em 
+软件版本$ j $中的变更实例$ G $满足{\bf consistency-requirement }条件，如果软件版本$ k $中有克隆组$ G'$，$ k> j $，这样（1）在$ G中至少有一对克隆'$可在克隆谱系中映射到$ G $中的一对克隆，和（2）$ G'$拥有“一致的变化模式”。当$ G $不满足一致性要求时，我们说它是{\bf 一致性要求自由}，或简称为{\em consistency-free}。 
   }
 \end {definition}
 
@@ -173,20 +180,21 @@ Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite
 \noindent
 \textbf {研究问题：} {\em 鉴于克隆组中的克隆$ G $已被修改（因此$ G $是一个更改实例），确定$ G $是否满足一致性要求或一致性。 } \\
 
-然而，我们对一致变化模式的定义确保了组内的克隆保持密切相似，通过这一点，我们可以推断克隆最终经历了一致的变化。
+%然而，我们对一致变化模式的定义确保了组内的克隆保持密切相似，通过这一点，我们可以推断克隆最终经历了一致的变化。
 
-通过将克隆组模式分类为一致的变化模式和不一致的变化模式以及克隆系谱的可用性，我们将变化实例的一致性要求的这种预测转换为分类问题。为此，对分类算法的输入是两类数据，一个捕获关于克隆组$ G $的信息，另一个捕获关于对$ G $中的克隆所做的改变的信息。然后执行分类以确定在系谱中连接到$ G $的一些未来克隆组中是否将发生一致的变化模式。
+%通过将克隆组模式分类为一致的变化模式和不一致的变化模式以及克隆系谱的可用性，我们将变化实例的一致性要求的这种预测转换为分类问题。为此，对分类算法的输入是两类数据，一个捕获关于克隆组$ G $的信息，另一个捕获关于对$ G $中的克隆所做的改变的信息。然后执行分类以确定在系谱中连接到$ G $的一些未来克隆组中是否将发生一致的变化模式。
 
-我们应用贝叶斯网络学习技术来解决它。贝叶斯网络是表示一组随机事件及其条件依赖性的概率图形模型。形式上，它是有向无环图，使得其节点表示随机事件，并且其边表示两个节点（事件）之间的条件依赖性;未连接的两个节点表示有条件地彼此独立的两个事件。与每个节点相关联的是概率函数，其从与节点父事件相关联的值计算节点表示的事件的概率。
-我们将广告读者提到\cite{} {Pearl1985}了解详情。 {注意，贝叶斯网络作为我们的分类没有特殊的原因。这个模型在分类问题中非常流行。还有一些机器方法来完成这项任务，如SVM，设计树等。我们不知道哪一个更好。 }
+%我们应用贝叶斯网络学习技术来解决它。贝叶斯网络是表示一组随机事件及其条件依赖性的概率图形模型。形式上，它是有向无环图，使得其节点表示随机事件，并且其边表示两个节点（事件）之间的条件依赖性;未连接的两个节点表示有条件地彼此独立的两个事件。与每个节点相关联的是概率函数，其从与节点父事件相关联的值计算节点表示的事件的概率。
+%我们将广告读者提到\cite{} {Pearl1985}了解详情。 {注意，贝叶斯网络作为我们的分类没有特殊的原因。这个模型在分类问题中非常流行。还有一些机器方法来完成这项任务，如SVM，设计树等。我们不知道哪一个更好。 }
 
-\BiSubsection{框架} {Framework}
-我们的方法可以分为两个步骤：构建步骤和预测步骤。在构建步骤中，我们首先从软件存储库收集所有{\em 更改实例}以构建和训练贝叶斯网络。在预测步骤中，开发人员可以使用我们构造的贝叶斯网络来预测一致性要求。我们的预测过程的框架如图~\ref{}~所示。
+\BiSection{克隆变化时一致性维护需求预测框架} 
+{The Framework of Clone Changing Consistency-Requirement}
+我们的方法可以分为两个步骤：构建步骤和预测步骤。在构建步骤中，我们首先从软件存储库收集所有{\em 更改实例}以构建和训练贝叶斯网络。在预测步骤中，开发人员可以使用我们构造的贝叶斯网络来预测一致性要求。我们的预测过程的框架如图~\ref{framework4}~所示。
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.4\textwidth]{Fig4-3framework.eps}
-\bicaption[fa4]{}{一个克隆系谱的例子}{Fig.$\!$}{The framework of consistent clone change prediction}\vspace{-1em}
+\includegraphics[width = 0.8\textwidth]{Fig4-3framework.eps}
+\bicaption[framework4]{}{一个克隆系谱的例子}{Fig.$\!$}{The framework of consistent clone change prediction}\vspace{-1em}
 \end{figure}
 
 在构建步骤中，我们从考虑的主题软件的存储库收集所有一致和不一致的更改实例，并构建和训练贝叶斯网络模型以预测克隆一致性要求和无一致性。具体来说，我们使用NiCad来检测软件版本中的所有克隆，并通过在相邻版本的克隆组之间进行映射来构建克隆系谱。之后，我们为每个克隆组提取三组属性，用于训练和测试模型。在构建预测模型时，我们采用WEKA包提供的贝叶斯网络实现。接下来，在预测步骤中，开发人员可以使用我们的模型进行预测{（{\ sffamily这只是一致性需求预测，关于无一致性预测如何？}}
@@ -198,25 +206,29 @@ Kim等人已经优雅地指定了相邻版本的组之间的克隆的映射\cite
 
 具体来说，在构建贝叶斯网络模型时，我们从克隆组中提取三组属性：代码属性，上下文属性和进化属性。同时，还将记录关于特定克隆变化的信息。通过它们，贝叶斯网络将被训练以给出克隆改变相对于其克隆组的一致性要求（和免费）的概率。
 
-\BiSubsection {构造预测模型}{}
-预测模型构建包括以下三个子步骤：
+\BiSection {克隆变化实例收集与表示}
+{Collection and Representation for Clone Change Instances}
 
-\BiSubsubsection {\bf 收集克隆更改实例}{Collecting Clone Change Instances} 
-我们基于整个软件仓库中提供的信息构建和训练我们的预测模型。具体来说，通过从存储库的整个历史构建克隆系谱，我们能够提取关于在每个版本的软件可用的代码克隆的历史数据。虽然我们遵循在\cite {}{Kim2005}中提供的方法来构建克隆系谱，但是我们不同于他们在我们收集的克隆组模式中的工作，如在~\ ref {sec：requirement}~中详细描述的。
+\BiSubsection {\bf 收集克隆更改实例}
+{Collecting Clone Change Instances} 
 
-(1){\bf 检测代码克隆和构建克隆系谱} 我们使用NiCad检测所有克隆，并形成克隆组，从每个版本的实验软件。接下来，我们{\em 映射}克隆组之间的每对相邻版本构建克隆系谱。具体来说，我们首先为每个克隆片段生成一个{\em clone region descriptor} $ \mathit {CRD} $ - 其细节在\cite {}{Duala2010}中描述。然后我们使用称为{\em 基于CRD的克隆组映射算法}的映射算法来映射两个连续版本之间的所有克隆片段和克隆组。基于地图结果，我们为软件库建立克隆系谱。这个工作的细节可以在\cite{} {Ci2013}中找到。
+我们基于整个软件仓库中提供的信息构建和训练我们的预测模型。具体来说，通过从存储库的整个历史构建克隆系谱，我们能够提取关于在每个版本的软件可用的代码克隆的历史数据。虽然我们遵循在\cite {}{Kim2005}中提供的方法来构建克隆系谱，但是我们不同于他们在我们收集的克隆组模式中的工作，如在~\ref{sec：requirement}~中详细描述的。
+
+(1){\bf 检测代码克隆和构建克隆系谱} 我们使用NiCad检测所有克隆，并形成克隆组，从每个版本的实验软件。接下来，我们{\em 映射}克隆组之间的每对相邻版本构建克隆系谱。具体来说，我们首先为每个克隆片段生成一个{\em clone region descriptor} $ \mathit {CRD} $ - 其细节在\cite {}{Duala2010}中描述。然后我们使用称为{\emph 基于CRD的克隆组映射算法}的映射算法来映射两个连续版本之间的所有克隆片段和克隆组。基于地图结果，我们为软件库建立克隆系谱。这个工作的细节可以在\cite{} {Ci2013}中找到。
 
 (2){\bf 收集更改实例和标识克隆模式}.对于每个克隆组，我们确定其克隆模式。这需要检查该克隆组与其直接前趋者（如由克隆系谱提供的）之间的一致变化。一致变化的实际计算在定义~\ref {defn-1}~中指定。接下来，克隆组将被它拥有的改变模式标记（如定义~\ ref{defn-2}~中所指定）。
 
 最后，我们从模式标记的克隆组中识别{\em 更改实例}。此外，对于每个变化实例，我们提取与在该实例上已经进行的修改的种类有关的信息。
 
-\BiSubsubsection {\bf 特征提取}{Extracting Change Instance Attributes} 
+\BiSubsection {\bf 特征提取}
+{Extracting Change Instance Attributes} 
 
 在模型训练中，每个变化实例由它们表示属性。我们从每个克隆实例中选择了三组属性作为贝叶斯网络模型的输入。这三组捕获克隆组的三个不同方面。它们是代码属性，上下文属性和进化属性。
 前两组与Wang等人提供的类似。 \cite{} {Wang2014}，而最后一个属性集是新添加的，旨在捕获克隆进化属性。
 
 （1）{Code attributes}
 这些属性捕获组中代码克隆的特征。属性类似于\cite{} {Wang2012}中收集的属性。主要区别在于它们的计算：Wang et al。 从两个代码聚集的属性：复制和粘贴代码。这里，我们计算每个属性的平均值，当需要时。因此，我们的属性包括代码行的平均数，参数的平均数，调用调用的平均数。此外，我们有：
+
 \begin{itemize}
 \item Clone Group Size: 
 The number of code fragments in the clone group.
@@ -295,7 +307,6 @@ For instance, suppose that from the clone genealogy, we discover that a clone gr
 We then compare the {\em changes} in the average number of \verb+if+ statements (one of the clone attributes) between two successive versions: versions $i$ and $i+1$, $\cdots$, versions  $j-1$ and $j$. 
 This returns to us a series containing positive and negative numbers.
 We then record the total number of positives and negatives, forming two summaries associated with \verb+if+statements.
-
 \end{itemize}
 
 \noindent
@@ -308,19 +319,26 @@ The change of this clone group from the current version to the immediate next.
 We capture this change for each important syntactic construct.
 \end{itemize}
 
-\BiSubsubsection {\bf  训练}{Training} 
+\BiSection {训练与预测}
+{Training and Predicting} 
+
+\BiSubsection {训练}
+{Training} 
 对于每个主题知识库，我们通过收集其变化实例的属性来构建训练数据集。所需的最后一个准备工作是与每个实例关联其一致性 - 要求/无一致性指示，如定义~\ref{defn-4}~中定义。 其中一些将用于训练模型，其他将被用作预测验证的基础真理。最后，形成的数据集将提供给WEKA以开发用于预测的贝叶斯网络模型。在训练模型中，贝叶斯网络的节点表示属性，边缘是属性之间的条件依赖性。
 
-\BiSubsection {\bf  预测}{Prediction} 
 
+\BiSubsection {预测}
+{Predicting} 
 在此步骤中，当现有克隆组发生更改时，软件维护人员可以使用我们的预测变量来预测克隆一致性。如图~\ref{}~所示，我们的方法可以集成到一个IDE，如eclipse，可以保持克隆在开发阶段的变化。运行预测变量需要跟踪克隆在软件进化及其变化中的支持。一旦检测到克隆更改，该工具将提取与此更改实例相关的所有属性，预测其一致性要求，并通知开发人员。
 根据预测，开发者因此可以根据需要一致地保持克隆。
 
 这需要IDE提供两个基本功能。第一个功能要求开发人员跟踪克隆及其关联的克隆组，第二个功能需要IDE监控克隆的更改。当开发人员可以跟踪和监视代码克隆时，预测变量可以预测克隆发生变化时一致性要求的可能性。 {\emph {跟踪克隆和监控克隆更改}。首先，我们跟踪克隆及其在IDE中的更改。 \underline {CRD的方法}可以应用于跟踪克隆及其更改。 \emph {提取更改克隆属性和预测一致性要求。}当克隆发生更改时，我们从其关联的克隆组中提取属性。之后，我们将这些数据放入我们的训练模型中，以预测这种一致性要求。 \emph {向开发人员发出警告信号}。我们的预测器将提供描述此更改实例需要一致性要求的概率的分数（介于0和1之间）。这将有助于开发人员考虑是否更改同一组中的克隆。
 
-\BiSection{实验结果和分析}{EXPERIMENTS}
+\BiSection{实验结果和分析}
+{EXPERIMENTS}
 
-\BiSubsection{设置}{Methodology}
+\BiSubsection{实验设置}
+{Methodology}
 
 我们对四个开源的仓库进行了实验项目。表~\ref {}提供了这些项目的详细信息。从表中可以看出，每个项目有数百个更改实例，范围从159到1040个，项目{\em  jEdit}是最小的存储库。其中，满足一致性要求（即，导致克隆组在未来一致的改变）的改变实例的数量显示在列3中，而列2反映了一致性要求自由的改变实例的数量 ，do {\em not }导致任何一致的更改）。
 更改满足一致性要求的实例需占用33\%\~\% 5\%到74 \%的所有更改实例。
@@ -333,53 +351,49 @@ We capture this change for each important syntactic construct.
 ~\multirow{3}{*}{\textbf{Project}}& \multicolumn{2}{c}{\textbf{Number (Percentage) of Change Instances}} & \multirow{3}{*}{\textbf{Total}}\\ 
  \cline{2-3}
  ~& \textbf{Consistency-} &\textbf{Meeting} & ~\\
-
  &\textbf{Requirement Free}&\textbf{Consistency-Requirement}&\\
 \midrule[1pt]
 ArgoUML&288(67.45\%)&139(32.55\%)&427\\
-\hline
 jEdit&78(49.06\%)&81(50.94\%)&159\\
-\hline
 jFreeChart&452(43.46\%)&588(56.54\%)&1040\\
-\hline
 Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
 
-表~\ ref{}~显示从三个项目收集的变更实例的大小的统计信息。中间列显示收集的至少一半的更改实例的大小为2。因此，虽然克隆是丰富的，但它们对系统的引入并不猖獗。{\em  ArgoUML}和{\em jFreeChart}确实有一些超大克隆组; 这些预期在数量上是小的，并且克隆的尺寸也小。
+%表~\ ref{}~显示从三个项目收集的变更实例的大小的统计信息。中间列显示收集的至少一半的更改实例的大小为2。因此，虽然克隆是丰富的，但它们对系统的引入并不猖獗。{\em  ArgoUML}和{\em jFreeChart}确实有一些超大克隆组; 这些预期在数量上是小的，并且克隆的尺寸也小。
 
-\begin{table}[htbp]
-\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics of the size of clone change instances}
-\vspace{0.5em}\centering\wuhao
-\begin{tabular}{ccccc}
-\toprule[1.5pt]
-\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
-\midrule[1pt]
-ArgoUML&427&7.5.9271&	26.22377&2\\ \hline
-jEdit&159&	2.46541&	0.9125&2\\ \hline
-jFreeChart&1040&	7.85288&	26.92378&2\\ \hline
-Tuxguitar&354&	3.40395	&3.45232&2\\ 
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
+%\begin{table}[htbp]
+%\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics of the size of clone change instances}
+%\vspace{0.5em}\centering\wuhao
+%\begin{tabular}{ccccc}
+%\toprule[1.5pt]
+%\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+%\midrule[1pt]
+%ArgoUML&427&7.5.9271&	26.22377&2\\ \hline
+%jEdit&159&	2.46541&	0.9125&2\\ \hline
+%jFreeChart&1040&	7.85288&	26.92378&2\\ \hline
+%Tuxguitar&354&	3.40395	&3.45232&2\\ 
+%\bottomrule[1.5pt]
+%\end{tabular}
+%\end{table}
 
-表~\ref{}描述了更改实例的年龄的统计信息。如前所述，变更实例的年龄是自成立以来所经历的软件版本控制的数量（从$ 0 $计算）。一般来说，更改实例的年龄较小。考虑到变更实例的性质，他们将在当前版本中进行一些代码更改，这个统计数据显示大多数克隆组开始在早期体验代码更改。因此，我们尽可能早地执行一致性要求可满足性的预测变得更相关。
+%表~\ref{}描述了更改实例的年龄的统计信息。如前所述，变更实例的年龄是自成立以来所经历的软件版本控制的数量（从$ 0 $计算）。一般来说，更改实例的年龄较小。考虑到变更实例的性质，他们将在当前版本中进行一些代码更改，这个统计数据显示大多数克隆组开始在早期体验代码更改。因此，我们尽可能早地执行一致性要求可满足性的预测变得更相关。
 
-\begin{table}[htbp]
-\bicaption[dffhg1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics on ages of clone change instances}
-\vspace{0.5em}\centering\wuhao
-\begin{tabular}{ccccc}
-\toprule[1.5pt]
-\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
-\midrule[1pt]
-ArgoUML&427&2.09368&2.33078&1\\ \hline
-jEdit&159&4.48428&3.64371&3\\ \hline	
-jFreeChart&1040&4.93462&4.99543&3\\ \hline	
-Tuxguitar&354&1.5565&1.50294&1\\ \hline	
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
+%\begin{table}[htbp]
+%\bicaption[dffhg1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics on ages of clone change instances}
+%\vspace{0.5em}\centering\wuhao
+%\begin{tabular}{ccccc}
+%\toprule[1.5pt]
+%\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+%\midrule[1pt]
+%ArgoUML&427&2.09368&2.33078&1\\ \hline
+%jEdit&159&4.48428&3.64371&3\\ \hline	
+%jFreeChart&1040&4.93462&4.99543&3\\ \hline	
+%Tuxguitar&354&1.5565&1.50294&1\\ \hline	
+%\bottomrule[1.5pt]
+%\end{tabular}
+%\end{table}
 
 我们使用WEKA包建立和培训贝叶斯网络预测模型。WEKA是一个非常灵活和易于使用的数据挖掘工具，包含几种分类/预测方法。在构建我们的模型中，我们选择{\em K2}用于学习网络结构的算法，并且一旦结构已经被学习，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。贝叶斯网络中的父节点的最大数目被设置为$ 4 $，以便适应属性之间的可能的依赖性，同时不过度消耗模型构造所需的过多的存储器和时间。对于每个克隆更改实例，模型将输出一个值，即其{\em consistency-requirement}的概率。接近$ 1 $的概率值意味着由改变实例经历的当前改变满足{\em consistency-requirement}准则的可能性很高。另一方面，更接近$ 0 $的值意味着这个变化实例很可能是{\em consistency-requirement free}。
 
@@ -387,9 +401,11 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 
 类似于\cite{} {Wang2012}中的工作，我们从三个不同的角度评估我们的预测的质量。首先，{\em 有效性实验}：我们利用从三个项目中的每一个提取的所有属性来训练和测试模型，并评估预测的质量。第二，{\em 属性集实验}：我们评估三个贡献属性集中的每一个对预测质量的影响。最后，{\em 跨项目实验}：当使用从其他项目提取的数据构建预测模型时，我们评估项目的预测质量。
 
-我们在具有Intel（R）Core（TM）i5-4210M CPU @ 2.60GHz和8G RAM的桌面上运行我们的实验。每个实验花费不到一分钟的模型构建，交叉验证少于5分钟。大多数实验时间花费在数据准备，包括家谱建构和克隆变化实例收集，其范围在5至30分钟之间。然而，我们注意到，在实践中，克隆系谱构建和变更实例收集将逐步执行，随着软件发展到新版本。因此，数据准备的开销将不是实际问题。
+%我们在具有Intel（R）Core（TM）i5-4210M CPU @ 2.60GHz和8G RAM的桌面上运行我们的实验。每个实验花费不到一分钟的模型构建，交叉验证少于5分钟。大多数实验时间花费在数据准备，包括家谱建构和克隆变化实例收集，其范围在5至30分钟之间。然而，我们注意到，在实践中，克隆系谱构建和变更实例收集将逐步执行，随着软件发展到新版本。因此，数据准备的开销将不是实际问题。
 
-\BiSubsection{一致性实验}{Consistency-Requirement Experiment}
+\BiSubsection{一致性实验}
+{Consistency-Requirement Experiment}
+
 在本实验中，我们计算以下三个指标来评估我们的模型的一致性要求的可预测性：
 \begin{itemize}
 \item \textbf{Warning Rate (WR)}: 
@@ -405,7 +421,8 @@ This assesses the effectiveness of the model in discovering all change instances
 It is computed as the ratio of the number of {\em correct} predictions of change instances meeting consistency-requirement to total number of change instances meeting consistency-requirement (i.e., ground truth).
 \end{itemize}
 
-\BiSubsubsection{全属性组实验}{Effectiveness Experiment}
+\BiSubsubsection{全属性组实验}
+{Effectiveness Experiment}
 
 在这个实验中，我们为四个项目中的每一个构建不同的模型。每当模型预测变化实例满足一致性要求时，它也提供关于该预测的有效性的概率。 因此，我们可以对该概率值设置阈值，使得我们接受该预测是有效的（仅当相关联的概率值至少等于阈值时）。在这种情况下，模型将认为测试中的变更实例满足一致性要求，并向开发人员发出警告。
 
@@ -454,18 +471,20 @@ It is computed as the ratio of the number of {\em correct} predictions of change
 
 虽然阈值的变化确实影响精度和召回，它对召回的影响比对精度。这意味着，创建的模型在提供中相当稳定，但可以进一步改进其回忆能力。这意味着开发人员可以非常自信地依赖于预测变量的警告，但可能需要其他方法来帮助进一步识别预测变量保持沉默的情况。一个简单的改进是建立模型以预测和警告一致性无需要求的更改实例，从而减少更改实例的数量，没有任何警告（如Wang等人在\cite{}{Wang2014}中所做的）。然而，仍需进一步调查以提高召回率。
 
-\BiSubsubsection{属性组实验}{Attribute Set Experment}
+\BiSubsubsection{属性组实验}
+{Attribute Set Experiment}
 
 本实验是为了确定三者的影响而进行的属性集对训练模型的预测能力。我们对相同的软件存储库进行了实验，但{\em 排除了每个实验的三个属性集合。}表~\ ref{}~显示分别剥离代码属性，上下文属性和进化属性的结果。然后将这些结果中的每一个与具有存在的所有属性（列3至5）获得的结果进行比较。
 
 正如上面的文章，我们使用{三组属性}来预测一致性 - 退休。 为了研究属性组的贡献，我们分别删除每个组（除了当前的变化），其命名为：{\em without code，without context，without evolution}。 我们不会删除当前的更改，因为我们将使用此更改来预测每个实验的一致性要求。 对于每个实验，我们固定阈值从0.9到0.5，并查看精度和回忆如何变化。 我们还使用WEKA来评估我们的预测与10折交叉验证。
 
 \begin{table}[htbp]
-\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{The Significance of each attribute set}
+\bicaption[table1]{}{符合研究生院绘图规范的表格}
+{Table$\!$}{The Significance of each attribute set}
 \vspace{0.5em}\centering\wuhao
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
-\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{|c|}{\textbf{All(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Code(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Context(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Evolution(\%)}}\\
+\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{c}{\textbf{All(\%)}}&\multicolumn{3}{c}{\textbf{Without Code(\%)}}&\multicolumn{3}{c}{\textbf{Without Context(\%)}}&\multicolumn{3}{c}{\textbf{Without Evolution(\%)}}\\
 \cline{3-14}
 &&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}\\
 \midrule[1pt]
@@ -498,7 +517,8 @@ Tuxguitar&0.5&	83.33&	79.32&	88.97&	83.33&	77.63&	87.07&	84.18&	76.85&	87.07&	79
 
 此外，我们采用属性选择函数来获得可以用于执行预测的属性的最佳子集。获得的子集根据不同的实验数据（即，不同的软件库）而变化。然后，我们将这些结果与通过使用完整属性集获得的结果进行比较。结果一致地显示所有属性可以比子集属性更好地预测。虽然一些属性可能对实验结果没有显着贡献，但也没有一个具有不利影响。然而，保留这些属性很重要，因为它们的贡献对其他存储库可能变得重要。
 
-\BiSubsubsection{交叉验证实验}{Cross-Projects Experment}
+\BiSubsubsection{交叉验证实验}
+{Cross-Projects Experiment}
 
 为了确保我们的方法可以用于新项目，或者没有足够一致/不一致的更改实例的项目。 使用这样少的数据，我们不能建立有效的预测器。 因此，在最后一个实验中，我们确定使用来自其他软件仓库的数据训练的模型是否可用于预测不同软件存储库的一致性要求满足度。因此，在三个主题仓库中，在本实验中，我们轮流使用来自两个仓库的数据来训练预测模型，并在第三仓库中使用该模型进行预测。表~\ ref {}~描述了实验结果。
 
@@ -545,7 +565,8 @@ Tuxguitar&0.5&	83.33&	79.32&	88.97&	83.33&	77.63&	87.07&	84.18&	76.85&	87.07&	79
 
 我们的建议如下：在开始软件开发时，我们要求开发人员在创建克隆组时，一直检查一致性要求。跨项目模型可以用于在这一点上谨慎地辅助或由Wang等人建立的模型。 \cite{} {Wang2014}可以在执行复制和粘贴操作时使用。后来，随着软件通过几个版本发展，我们建议通过逐步减少跨项目数据的数量和增加自己的存储库中的数据量来重新训练模型。
 
-\BiSubsection{一致性自由}{Consistency-Requirement Free Experiment}
+\BiSubsection{一致性自由}
+{Consistency-Requirement Free Experiment}
 在本实验中，我们计算以下三个指标，用于评估我们的模型的一致性无需求的可预测性：
 \begin{itemize}
 \item \textbf{Recommendation Rate (RR)}: 
@@ -558,12 +579,14 @@ This assesses the effectiveness of the model in discovering all change instances
 It is computed as the ratio of the number of {\em correct} predictions of change instances to be consistency-free to total number of change instances meeting the requirement of consistency-free(i.e., ground truth).
 \end{itemize}
 
-\BiSubsubsection{全属性组实验}{Effectiveness Experiment}
+\BiSubsubsection{全属性组实验}
+{Effectiveness Experiment}
 
 在本实验中，模型预测变更实例满足一致性要求空闲，它还提供了关于此预测有效性的概率。由于预测器可以推断克隆变化实例是无一致性的概率，因此我们可以对该报告的概率设置阈值，使得我们接受预测是有效的{仅当相关联的概率值不大于或等于阈值。在这种情况下，模型将给予测试下的变化的置信度满足一致性要求free。开发人员可以自由地更改克隆。在这个实验中，我们监测阈值设置在不同的值，从0.01到0.20，以研究其对预测的有效性的影响。表~\ ref{}~描述了我们对四个软件仓库的预测的有效性。表中的每一行指示在特定阈值下的预测的质量。此外，我们使用交叉验证$ 10 $ -folds来训练和测试我们的预测变量。
 
 \begin{table}[htbp]
-\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{EFFECTIVENESS OF PREDICTORS ON FOUR OPEN SOURCE PROJECTS}
+\bicaption[table1]{}{符合研究生院绘图规范的表格}
+{Table$\!$}{EFFECTIVENESS OF PREDICTORS ON FOUR OPEN SOURCE PROJECTS}
 \vspace{0.5em}\centering\wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
@@ -609,7 +632,8 @@ It is computed as the ratio of the number of {\em correct} predictions of change
 
 总之，我们的方法产生的模型提供了一个稳定的预测，合理的精度和召回，给软件开发商带来了对模型产生的推理的回应的信心。一个简单的改进是建立模型以预测和警告一致性无需要求的更改实例，从而减少更改实例的数量，没有任何警告（如Wang等人在\cite{} {Wang2014}中所做的）。然而，仍需进一步调查以提高召回率。
 
-\BiSubsubsection{属性组实验}{Attribute Set Experment}
+\BiSubsubsection{属性组实验}
+{Attribute Set Experiment}
 为了评估所选择的三个属性集的影响，我们进行了类似于段落~\ref {}~中所呈现的实验。该实验用于确定三个属性集对训练模型的预测能力的影响。我们对相同的软件存储库进行了实验，但每个实验都排除了三个属性集之一。
 表~\ref{}显示了当与所有属性存在（{列3}）时获得的结果相比，当三个属性集中的一个被省略时（{列4到6}），我们的预测的有效性。然后将这些结果中的每一个与所有存在的属性（第3至5列）获得的结果进行比较。
 
