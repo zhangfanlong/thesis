@@ -16,10 +16,68 @@
 \BiSubsection{相关定义}
 {The Related Definitions}
 
+我们说一个{\ em一致的变化}发生在两个克隆片段，如下所示：
+
+\begin{definition}[{\bf Consistent Change}]  
+%\label{defn-1}
+Given that two clone fragments $CF_1$, $CF_2$ are modified to $CF'_1$ and $CF'_2$ respectively. 
+We say this modification between $CF_1$ and $CF_2$ is a {\em\bf consistent change\/} if for some very small threshold $\tau$, 
+  \[
+  \begin{array}[t]{lr}
+    \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\}~(1) \\
+    \multicolumn{2}{c}{| ~\mathit{textSim}(CF_1,CF'_1)  ~-~ \mathit{textSim}(CF_2,CF'_2) ~| ~< ~ \tau~(2)}
+  \end{array}
+  \]
+More specifically, if they only satisfy condition 1, we call this as {\bf \em type-1 consistent change}, and if both condition 1 and 2 as {\bf \em type-2 consistent change}.
+\end{definition}
+
+上述{\ em type-1一致性更改\ /}的约束表示{\ em both} $ CF_1 $和$ CF_2 $已被修改。
+而且，{\ em type-2一致的变化\ /}规定不仅需要对这两个片段进行更改;而且对这两个这些片段做出的这些改变也非常相似，赋予了非常小的阈值$ \ tau $。
+由于不同的情况，我们使用克隆和变更操作因此不同的一致变化。
+对于克隆操作，我们的目标是避免将来由于克隆片段的一致变化而导致额外的维护成本。
+对于不断变化的操作，我们的目的是为了避免由于与将来克隆组中其他克隆片段的一致性导致的克隆缺陷。
+伴随着克隆片段的更改，因此更改绑定到包含这些片段的克隆组上的更改模式，我们称之为{\ em一致的更改模式}。
+当组中的克隆片段被修改时，我们还使用这种“一致的变化”作为克隆组变更模式的标准。具体来说，
+
+\begin{definition}[{\bf Consistent Change Pattern}] 
+%\label{defn-2}
+A clone group $CG'$ in software version $j+1$ possesses {\em\bf type-1 or 2 consistent change pattern} if there exists a pair of clones $CF'_1,$ and $CF'_2$  in $CG'$ which are mappable to a pair of clones $CF_1$ and $CF_2$ in a clone group $CG$ in version $j$ such that modification of code pairs from $(CF_1,CF_2)$ to $(CF'_1,CF'_2)$ is a type-1 or 2 consistent change. 
+\end{definition}
+
+具有这两个克隆一致的模式，我们可以理解克隆系列中相邻版本之间的克隆组的更改。
+记住我们的预测任务是预测克隆克隆和更改操作的克隆一致性。
+因此，我们从而在克隆克隆系谱中进行克隆克隆和这些操作的更改实例的定义。 具体来说，因此，我们首先要根据克隆系谱提供这些操作，如下，要采用我们的预测工作，我们给两个不同的
+
+\begin{definition}[{\bf Clone Instance}] 
+%\label{defn-3}
+Clone Cloning Instance: A clone group $CG$ in version $j$ is clone cloning instance if $CG$ is the root node in $CGE$. We supposed that $CG$ was created by cloning operation(copy and paste), and begin its evolution as a $CGE$ graph.
+
+Clone Changing Instance: A clone group $CG$ in version $j$ is a {\bf clone changing instance} if at least one clone group $CG'$ in version $j+1$ which is connected to $CG$ in the clone genealogy was modified. 
+
+Clone Instance: We call clone cloning and changing instance as {\bf clone instance}.
+\end{definition}
+
+假设{\ em克隆实例链接到一致的更改将导致额外的维护成本和克隆缺陷，当组中的一致性失败。}
+具体来说，对于克隆克隆实例，我们在其未来演进中采用{\ em type-1一致性变化}作为由此类型1改变引起的维护成本的标准。
+同时，对于克隆更改实例，我们在其未来演进中采用{\ em type-2一致的变化}作为由此类型2变化引起的缺陷可能性的标准。
+因此，我们尝试预测克隆实例的一致性，以避免克隆在不同克隆时间的一致的维护成本和一致的缺陷。
+我们一致将这两个要求作为{\ em克隆一致性要求}提供如下，\\
+
+\begin{definition}[{\bf Clone Consistency-Requirement}] 
+% \label{defn-4}
+A clone instance $CG$ in software version $j$ satisfies {\bf consistency-requirement\/} condition if there is a clone group $CG'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $CG'$ that is mappable in clone genealogy to a pair of clones in $CG$, and (2) $CG'$ possesses ``consistent change pattern''. When $CG$ does not satisfy consistency-requirement, we say that it is {\bf consistency-requirement free\/}, or simply {\em consistency-free\/} for short. \\
+We employed the type-1 consistent change pattern for clone cloning instance, and type-2 for changing instance.
+\end{definition}
+
+最终，我们可以提供我们的预测任务{\ em鉴于克隆或更改的克隆实例，确定此克隆实例是否满足一致性要求或免费。 }
+通过上述克隆更改定义及其一致性要求，我们将克隆和更改实例的一致性要求预测任务转换为分类问题。
+这个问题可以通过下一节将提供的机器学习方法来解决。
+
 
 
 \BiSubsection{克隆代码一致性维护需求}
 {Clone Consistency-Requirement}
+
 在实际的软件开发过程中，程序人员不仅仅会通过复制粘贴活动创建新的克隆代码；同时，软件中也存在的大量的克隆代码，并且在软件开发过程中会对其进行修改。因此，仅仅在复制粘贴时或者仅仅在克隆代码变化时进行一致性维护是不够的，需要结合软件开发过程同时在这两个时刻进行一致性需求维护。
 其次，上述方法中，本文仅仅使用到了贝叶斯网络作为预测模型，尽管取得了可以接受的效果。但是，在机器学习领域中，仍然存在着其它的机器学习方法，能否将一致性预测应用到其它的机器学习方法中对克隆代码进行一致性需求预测，是否存在一个统一的模型，在两种情况下都取得较好的实验效果是另一个值得研究的问题。
 最后，如何将克隆代码一致性维护需求预测与软件开发过程相结合，并选择合适的时刻进行克隆一致性维护预测，并如何将其嵌入到软件开发环境中实现边开发边预测的效果。
