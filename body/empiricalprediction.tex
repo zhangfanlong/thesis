@@ -117,17 +117,20 @@ We employed the type-1 consistent change pattern for clone cloning instance, and
 在我们的表现预测中，我们考虑五种不同的学习方法如下：\textcolor{red}{\em 贝叶斯网络分类器\cite{friedman1997bayesian}，本机贝叶斯分类器\cite{john1995estimating}，支持向量机分类器\cite{platt199912} K-Nearest Neighbors classifier \cite{aha1991instance}和决策树分类器\cite{quinlan2014c4}}。
 我们执行和比较所有这五种机器学习方法，以帮助开发人员选择一种克隆和改变实际预测的一般技术。
 
-\BiSection{克隆实例收集}
+\BiSection{克隆实例收集与表示}
 {The Framework for Clone Consistency-Requirement base on Machine Learning}
 
+\BiSubsection{克隆实例收集}
+{Collecting Clone Instances}
 
-1.1Collecting
 收集克隆实例的目的是生成预测模型的训练数据。所有的克隆实例都可以从软件仓库的克隆系谱中获得。我们按照Kim et.al \cite {kim2005empirical}提出的方法构建软件的所有克隆系谱，我们还克隆了克隆组与1型和2型变化模式的克隆变化模式，应用于单独克隆克隆和更改实例。具体来说，为了从软件库中构建克隆系谱，我们首先使用NiCad \cite{roy2008nicad}从每个版本的软件仓库中检测出所有克隆片段和组。然后，我们将每个两个相邻软件版本之间的所有克隆组映射，以识别克隆组在这两个版本中的所有克隆进化关系。 并且还可以揭示克隆组的克隆变化模式。对于一对映射的克隆组，我们可以通过计算此映射中的克隆片段的类型1和2一致变化中来确定类型1和类型-2的克隆更改模式克隆组。然后，克隆组将被其拥有的变化模式标记（如定义}中所述）。具体来说，我们首先为每个克隆片段生成一个{\em 克隆区域描述符} $ \mathit {CRD} $，其细节在\cite{Duala2010}中描述。然后我们使用一个称为{\em CRD的克隆组映射算法}的映射算法来映射两个连续版本之间的所有克隆片段和克隆组。根据地图结果，我们为软件仓库构建了克隆谱系。此工作的详细信息可以在\cite{Ci2013}中找到。对于每个克隆组，我们确定其克隆模式。这需要检查此克隆组与其直接前身之间的一致变化（由克隆谱系提供）。一致变化的实际计算在定义\ref {defn-1}中指定。
 接下来，克隆组将被它拥有的改变模式标记（如定义\ref {defn-2}中所述）。
 
 可以通过遍历软件的所有克隆系谱来完成所有克隆克隆和更改实例的收集任务（定义\ref {defn-3}）。对于克隆克隆实例，如果克隆组仅具有两个克隆片段，则可以通过检查是否可以将任何克隆片段映射到先前软件版本中的某些代码片段来确认被复制和粘贴的代码。如果有一个映射，则该克隆片段是复制的代码，另一个是粘贴的代码。如果没有人映射，随机的可以看起来是复制的代码。如果克隆组有多个克隆片段，我们似乎是这个克隆组，包括多个克隆克隆实例。\footnote{幸运的是，大多数克隆组只有两个片段，所以这个决定不会影响我们的克隆预测。}
 
-1.2 Representing
+\BiSubsection{克隆实例表示}
+{Representing Clone Instances}
+
 应用机器学习方法来预测克隆一致性，我们使用向量属性代替克隆实例，而不是直接使用代码片段或克隆组。因此，从克隆片段和克隆组中提取不同的属性集，以捕获克隆克隆实例和更改实例的相关信息。我们使用两个属性集的代码和上下文适应克隆克隆实例，这是由Wang等人预测的。 \cite{wang2014predicting}。
 同时，我们选择了代码和上下文属性集以及克隆更改实例的进化属性集，这是Zhang等人预测的结果。 \cite{zhang2016predicting}。
 
@@ -141,35 +144,34 @@ We employed the type-1 consistent change pattern for clone cloning instance, and
 克隆组的特征，包括{\em 克隆组年龄，克隆模式数，模式当前，克隆更改摘要和更改信息。}
 {\em clone group age, number of clone patterns, current of pattern, summaries of clone changes and change information.}
 
-1.3predicting
+
+
+\BiSection{机器学习方法介绍}
+{The Brief Introduction of Employed Machine Learning Methods}
+
+
+
+\BiSection{训练和预测}
+{predicting}
+
 对于每个主题软件仓库，我们通过提取克隆克隆和更改实例的所有相应属性来构建两个不同的训练数据集。这个预测任务是一个监督的学习工作，所以最后的准备工作是将每个实例与一致性要求/一致性指示相关联 - 如定义\ref {defn-4}所定义。使用这些标记的数据集，我们可以用预测任务的一些特定的机器学习方法来构建我们的预测变量。在我们的工作中，我们的目标是通过更多的机器学习方法来预测这个问题，以探索我们的研究问题，因此在我们的实验中，我们将为克隆克隆和更改实例构建和训练机器学习方法的多个预测因子。
 
 当克隆克隆和更改实例发生时，我们打算为开发人员提供克隆一致性要求的这些预测因子。如图所示，这些预测变量可以集成到一个IDE中，如eclipse，可以帮助开发人员在开发阶段维护克隆的克隆和变化。这需要追踪克隆克隆和更改的其他要求，这可以由IDE支持。已经超出了我们的研究范围。当开发人员克隆或更改克隆片段时，已使用提取的属性生成克隆克隆或更改实例，并引用此实例。相关预测器将预测其一致性要求，并根据需要通知开发人员采取措施维护此代码克隆。
 
-\BiSection{机器学习方法}
-{Research Problem}
-dsfdg
-
 \BiSection{插件实现}
 {Research Problem}
+
 
 \BiSection{实验结果与分析}
 {Research Problem}
 
-
 \begin{table*}[ht]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
 \caption{The four open source projects for experiments}
-\label{projects}
+\label{allprojects}
 \centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-~\multirow{3}{*}{\textbf{Project}}& \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Cloning Instances}} &  \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Changing Instances}} \\ 
+~\multirow{3}{*}{\textbf{Project}}& \multicolumn{3}{c}{\textbf{Number (Percentage) of Cloning Instances}} &  \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Changing Instances}} \\ 
  \cline{2-7}
 ~&\textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}& \textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}\\
 ~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&\\
@@ -182,9 +184,38 @@ jFreeChart&	2013(59.80\%)&	1353(40.20\%)&	3366&452(43.46\%)&588(56.54\%)&1040\\
 \hline
 Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 \hline
-%MORE&	 &	 &	&&&\\\hline
+
 \end{tabular}
 \end{table*}
+
+%%\begin{table*}[ht]
+%%%% increase table row spacing, adjust to taste
+%%%\renewcommand{\arraystretch}{1.3}
+%%% if using array.sty, it might be a good idea to tweak the value of
+%%% \extrarowheight as needed to properly center the text within the cells
+%%\caption{The four open source projects for experiments}
+%%\label{projects}
+%%\centering
+%%%% Some packages, such as MDW tools, offer better commands for making tables
+%%%% than the plain LaTeX2e tabular which is used here.
+%%\begin{tabular}{|c|c|c|c|c|c|c|}
+%%\hline
+%%~\multirow{3}{*}{\textbf{Project}}& \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Cloning Instances}} &  \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Changing Instances}} \\ 
+%% \cline{2-7}
+%%~&\textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}& \textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}\\
+%%~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&\\
+%%\hline
+%%ArgoUML&	2574(77.07\%)&	766(22.93\%)&	3340&288(67.45\%)&139(32.55\%)&427\\
+%%\hline
+%%jEdit&560(88.47\%)&	73(11.53\%)&	633&78(49.06\%)&81(50.94\%)&159\\
+%%\hline
+%%jFreeChart&	2013(59.80\%)&	1353(40.20\%)&	3366&452(43.46\%)&588(56.54\%)&1040\\
+%%\hline
+%%Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
+%%\hline
+%MORE&	 &	 &	&&&\\\hline
+%%\end{tabular}
+%%\end{table*}
 
 为了解决我们的研究问题，我们对{四}开源项目进行了实验。
 表\ref{projects}显示了这些项目的细节，用于克隆克隆和更改状态。从该表可以看出，克隆克隆实例的数量范围为633到3666个，更改实例的范围为159到1040个，项目{\em jEdit}是最小的存储库。具体来说，列3和列6中列出了满足一致性要求的两个类型克隆实例（即，导致将来克隆组一致变化）的数量，而第2列和第5列反映了克隆实例的数量是一致性要求免费的（即，{\em not \/}将导致任何一致的变化）。
@@ -198,7 +229,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 
 与\cite{wang2014predicting} \cite{zhang2016predicting}中执行的作品类似，我们从两个不同的角度评估我们的预测的有效性。首先，{\em  效果实验\/}：我们利用不同机器学习方法从四个项目中提取的所有属性来训练和测试模型，并评估预测的质量。
 第二，{\em 属性集实验\/}：我们用不同的机器学习方法评估三个贡献属性集中的每一个对预测质量的影响。
-\textcolor{red}{为了评估每个预测的有效性，我们采用了{\em Accuracy，Recall和F-Measure}的三个度量。}
+\textcolor{red}{为了评估每个预测的有效性，我们采用了{\em Percision，Recall和F-Measure}的三个度量。}
 
 在我们的案例研究中，采用五种机器学习方法来探索这四个项目的这些预测的有效性。我们没有意图改进这些方法来适应这种一致性要求的预测。
 因此，我们使用包装WEKA来建立和训练我们所有需要的预测模型与不同的机器学习方法。WEKA是一种非常灵活且易于使用的数据挖掘工具，其中包含大量的分类/预测方法\cite{hall2009weka}。
@@ -225,7 +256,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 \hline
 {\textbf{Metric}}&{\textbf{Method}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
 \hline
-\multirow{5}{*}{Accuracy}
+\multirow{5}{*}{Percision}
 &{BayesNet}&0.935&0.889&0.883&	0.831\\
 &{Native}&	0.886&	0.871&	0.869&	0.793\\
 &{SVM}&0.958&	0.924&0.906&0.888\\
@@ -266,7 +297,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 \cline{3-14}
 &&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}~\\
 \hline
-\multirow{5}{*}{Accuracy}
+\multirow{5}{*}{Percision}
 &BayesNet&	0.935&	0.912&	0.917&		0.889&	0.885&	0.83&		0.883&	0.808&	0.903&		0.831&	0.811&	0.843\\
 &Native&	0.886&	0.866&	0.877&		0.871&	0.865&	0.832&		0.869&	0.755&	0.873&		0.793&	0.747&	0.824\\
 &SVM&	0.958&	0.928&	0.942&		0.924&	0.924&	0.909&		0.906&	0.819&	0.906&		0.888&	0.834&	0.873\\
@@ -322,7 +353,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 \hline
 {\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
 \hline
-\multirow{5}{*}{Accuracy}
+\multirow{5}{*}{Percision}
 &{BayesNet}&0.724&	0.686&	0.791&0.72\\
 &{Native}& 0.734&	0.696	&0.778&	0.729\\
 &{SVM}&0.744	&0.704&0.793	&0.733\\
@@ -364,7 +395,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429&91(25.71\%)&263(74.29\%)&354\\
 %%&&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}~\\
 &&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Con}&\textbf{Evo}~\\
 \hline
-\multirow{5}{*}{Accuracy}
+\multirow{5}{*}{Percision}
 &BayesNet&	0.724&	0.737&	0.712&	0.727&		0.686&	0.698&	0.673&	0.654&	0.791&	0.76&	0.773&	0.76&		0.72&	0.686&	0.672&	0.727\\
 &Native&	0.734&	0.743&	0.693&	0.723&		0.696&	0.662&	0.636&	0.676&	0.778&	0.756&	0.731&	0.747&		0.729&	0.7	&0.69&	0.719\\
 &SVM&	0.744&	0.737&	0.736&	0.758&		0.704&	0.749&	0.687&	0.642&		0.793&	0.742&	0.769&	0.775&		0.733&	0.678&	0.726&	0.699\\
