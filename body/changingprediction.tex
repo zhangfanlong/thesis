@@ -587,13 +587,13 @@ It is computed as the ratio of the number of {\em correct} predictions of change
 \begin{table}[htbp]
 \bicaption[table1]{}{符合研究生院绘图规范的表格}
 {Table$\!$}{EFFECTIVENESS OF PREDICTORS ON FOUR OPEN SOURCE PROJECTS}
-\vspace{0.5em}\centering\wuhao
+\vspace{0.5em}
+\centering
+\wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 \textbf{Project}&\textbf{Threshold}&\textbf{RR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
-
 \midrule[1pt]
-\hline
 \multirow{5}{*}{ArgoUML}
 &0.01&	51.99&	83.33&	64.24\\
 &0.05&	60.42&	82.95&	74.31\\
@@ -621,7 +621,6 @@ It is computed as the ratio of the number of {\em correct} predictions of change
 &0.1&	9.89&	54.29&	20.88\\
 &0.15&	12.15&	48.84&	23.08\\
 &0.2&	13.28&	48.94&	25.27\\
-\hline
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
@@ -640,8 +639,11 @@ It is computed as the ratio of the number of {\em correct} predictions of change
 如上文所述，我们使用{三组属性}来预测一致性 - 退出。为了研究属性组的贡献，我们分别删除每个组（除了当前的变化），其命名为：{\em without code，without context，without evolution}。我们不会删除当前的更改，因为我们将使用此更改来预测每个实验的一致性要求。 对于每个实验，我们固定阈值从0.9到0.5，并查看精度和回忆如何变化。我们还使用WEKA来评估我们的预测与10折交叉验证。
 
 \begin{table}[htbp]
-\bicaption[sdfj1]{}{符合研究生院绘图规范的表格}{Table$\!$}{The Significance of each attribute set}
-\vspace{0.5em}\centering\wuhao
+\bicaption[sdfj1]{}{符合研究生院绘图规范的表格}{Table$\!$}
+{The Significance of each attribute set}
+\vspace{0.5em}
+\centering
+\wuhao
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{|c|}{\textbf{All(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Code(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Context(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Evolution(\%)}}\\
@@ -672,7 +674,6 @@ ArgoUML&0.2&	67.45&	80.21&	80.21&	62.53&	82.77&	76.74&	65.81&	78.65&	76.74&	62.7
 jEdit&0.2&	39.62&	69.84&	56.41&	37.11&	76.27&	57.69&	38.36&	70.49&	55.13&	32.70&	76.92&	51.28\\
 jFreeChart&0.2&	36.06&	80.53&	66.81&	32.98&	80.17&	60.84&	34.13&	79.72&	62.61&	35.87&	78.02&	64.38\\
 Tuxguitar&0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15.82&	55.36&	34.07\\
-\hline
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
@@ -683,19 +684,21 @@ Tuxguitar&0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15
 虽然一些属性可能对实验结果没有显着贡献，但它们都不具有对手影响。因此，我们建议保留构建预测模型中的所有属性，因为一些属性可能会对一些尚未被探索的存储库有重要的贡献。
 
 \BiSubsubsection{交叉验证实验}
-{Cross-Projects Experment}
+{Cross-Projects Experiment}
 为了确保我们的方法可以用于新项目，或者没有足够一致/不一致的更改实例的项目。 使用这样少的数据，我们不能建立有效的预测器。 因此，
 
 在这个实验中，我们探讨使用跨项目在预测一致性要求免费的有效性。我们确定使用来自其他软件存储库的数据进行训练的模型是否可用于预测不同软件存储库的一致性要求满足度。四个主题知识库，在这个实验中，具体来说，我们轮流使用来自三个存储库的数据来训练预测模型，并使用模型预测剩余存储库中克隆更改的一致性要求。
-表~\ref{}~描述了实验结果。
+表~\ref{changecrossfree}~描述了实验结果。
 
 \begin{table}[htbp]
-\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{The results of cross-project experiment}
-\vspace{0.5em}\centering\wuhao
+\bicaption[changecrossfree]{}{项目交叉实验结果}
+{Table$\!$}{The Results of Cross-Project Experiment}
+\vspace{0.5em}
+\centering
+\wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 {\textbf{Project}}&{\textbf{Threshold}}&{\textbf{RR(\%)}}&{\textbf{Precision(\%)}}&{\textbf{Recall(\%)}}\\
-
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	6.09&	73.08&	6.60\\
@@ -724,7 +727,6 @@ Tuxguitar&0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15
 &0.1&	42.37&	26.67&	43.96\\
 &0.15&	46.61&	26.67&	48.35\\
 &0.2&	49.72&	26.14&	50.55\\
-\hline
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
