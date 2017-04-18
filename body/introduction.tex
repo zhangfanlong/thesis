@@ -101,7 +101,7 @@
 
 \BiSubsection{克隆代码检测}
 {Code Clone Detection }
-
+\label{clonedetection}
 克隆检测是指从软件中检测并报告克隆代码的位置的研究。相对于克隆代码研究的其他技术而言，克隆检测技术相对成熟。
 
 \BiSubsubsection{克隆检测方法}
@@ -133,10 +133,10 @@
 
 不同的克隆检测方法和检测工具各有其优缺点，分别适合检测不同类型的克隆代码，对同一类型的克隆代码的检测效果也不尽相同。如何针对具体的应用，选择合适的克隆检测方法和工具是困扰开发人员的一个问题。因此，
 研究人员对主流的克隆检测方法及其检测工具进行了评估研究，以期为用户选择方法和工具提供指导性的建议\cite{bellon2007comparison}\cite{rattan2013software}\cite{roy2009comparison}\cite{svajlenko2014evaluating}。%%Bellon对6个克隆检测工具进行了评估，分别对比了查准率、查全率以及时间和空间等性能\cite{bellon2007comparison}。Rattan通过使用一种标准的系统文献综述方法，详细分析了克隆检测方面的213篇文献，并对不同的检测方法进行了评估分析，并给出了未来的研究方向\cite{rattan2013software}。此外，Roy重点分析了检测工具的使用技术和适用环境，对克隆检测工具的检测效果进行了详细的对比，对帮助用户选择和使用克隆检测工具有重要的指导意义\cite{roy2009comparison}\cite{svajlenko2014evaluating}。
-本文也对目前较为主流的克隆检测工具和方法支持的克隆类型和检测效果等进行了评估，评估结果如表~\ref{clonedetection}~所示。其中，检测效果采用“较好”、“一般”和“较差”三种级别来评估：“较好”是指可以较好地支持该类型克隆代码；“一般”是指可以支持检测该类型克隆代码，但效果不佳；“较差”是指可以检测少部分的该类型克隆代码；对未支持的克隆类型未列出。
+本文也对目前较为主流的克隆检测工具和方法支持的克隆类型和检测效果等进行了评估，评估结果如表~\ref{detectionevaluation}~所示。其中，检测效果采用“较好”、“一般”和“较差”三种级别来评估：“较好”是指可以较好地支持该类型克隆代码；“一般”是指可以支持检测该类型克隆代码，但效果不佳；“较差”是指可以检测少部分的该类型克隆代码；对未支持的克隆类型未列出。
 
 \begin{table}[htbp]
-\bicaption[clonedetection]{}{主流克隆检测方法与工具评估}
+\bicaption[detectionevaluation]{}{主流克隆检测方法与工具评估}
 {Table$\!$}{Evaluation for popular clone detection methods and tools}
 \vspace{0.5em}
 \centering
