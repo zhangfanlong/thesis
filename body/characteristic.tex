@@ -340,12 +340,15 @@ X-means聚类是一种高效的聚类算法，可以通过自动搜索并确定�
 \BiSubsection{实验设置}
 {Experiment Step}
 
-在本节中，首先简要描述了所使用的开源软件系统，并描述了从三个不同的克隆代码视角探索克隆演化特征的实验步骤。本文选择两个开源软件作为我们的实验系统：分别为\em{ ArgoUML}和\em{  jEdit}。它们都是使用Java语言开发的软件，并且它们都经历了超过10个版本的演化。%\em{ ArgoUML}是一个领先的开源UML建模工具，包括对所有标准UML 1.4图的支持。\em{ jEdit}是另一个开源项目，是程序员开发所使用的编辑器，其特点是具有易于使用的接口，类似于许多流行的文本编辑器。
-表~\ref{statisticsofcluster}描述了这两个实验系统的基本信息情况。本文分别考虑$14 $和$22$版本。对于每个软件，我们列出此实验的第一个版本（开始）和最后版本（结束）。列“克隆片段”列出从每个软件收集的克隆片段的数量（包括所有版本）。类似地，“克隆组”和“克隆家系”分别是收集的克隆组和克隆家系的数量。
+在本节中，首先简要描述了所使用的开源实验系统，并描述了从三个不同克隆视角挖掘克隆演化特征的实验步骤。
+
+选择两个开源软件作为本章的实验系统：分别为{ArgoUML}和{ jEdit}，两个开源系统都至少经历了10个版本的演化。%\em{ ArgoUML}是一个领先的开源UML建模工具，包括对所有标准UML 1.4图的支持。\em{ jEdit}是另一个开源项目，是程序员开发所使用的编辑器，其特点是具有易于使用的接口，类似于许多流行的文本编辑器。都是使用Java语言开发的软件
+表~\ref{statisticsofcluster}描述了这两个实验系统的基本信息。从表中第2-4列可以看出，{ArgoUML}经历了$14 $个版本的演化（起始和结束版本分别为$0.20.0$和$0.34.0$），{ jEdit}经历了$22$个版本的演化（起始和结束版本分别为$3.0.0$和$5.0.0$）。表中第5-6列则给出了实验系统的克隆实体数量（克隆聚类空间大小）。其中，“Clone Fragment”列出了所聚类的克隆片段的数量，“Clone Group”和“Clone Genealogy”分别是所聚类的克隆组和克隆家系数量。
 
 \begin{table}[htbp]
 \bicaption [statisticsofcluster]{}{两个开源软件实验系统信息}
-{Table$\!$}{The Two Open Sources Experiments Software for }
+{Table$\!$}{The information of two open sources experimental projects }
+%{Table$\!$}{The Two Open Sources Experiments Software for }
 \vspace{0.5em}
 \centering 
 \wuhao
@@ -360,19 +363,21 @@ jEdit&22&3.0.0&5.0.0&6636&2256	&237\\
 \end{tabular}
 \end{table}
 
-为了探索克隆代码演化特征，我们将克隆演化特征分析分为三个不同的视角，即克隆片段、克隆组和克隆家系。在克隆片段的实验中，探讨和研究克隆片段从一个版本到另一个版本的变化情况，以及克隆片段的历史变化情况和存在系统中的时间。 然后，在克隆组实验中，研究了克隆组在软件进化过程中的演化模式，并重点分析了克隆代码的一致性和不一致变化。最后在克隆家系的实验中，从全局的角度分析了系统中克隆代码及其演化过程。在每个实验中，我们使用两种方法分析克隆：第一种是使用统计方法分析克隆，第二种使用\em{X-means}聚类方法深入分析克隆代码。
+本章实验可以分为三个部分，从克隆片段、克隆组和克隆家系三个不同的视角挖掘和分析克隆代码的演化特征，即克隆片段实验、克隆组实验和克隆家系实验。在克隆片段实验中，重点分析克隆片段在演化过程中的变化情况。 在克隆组实验中，分析克隆组在演化过程中的克隆演化模式情况，并重点分析了克隆代码的一致性和不一致变化模式。在克隆家系的实验中，从全局的角度分析了系统中全部克隆代码的演化规律，重点讨论了克隆代码的稳定性以及一致性变化问题。
+
+在每个实验中，本文均使用两种方法分析和挖掘克隆代码的演化特征：统计分析和聚类分析。第一种统计分析每种克隆实体的度量值，进而发现一些基本的演化特征。第二种是聚类分析方法，使用{X-means}分别聚类每一种克隆实体，并根据聚类结果深入挖掘克隆代码的演化特征。
 
 \BiSubsection{克隆片段实验}
 {Clone Fragment Experiment}
 
-克隆片段是指软件中存在的真实的代码片段， 在其生命周期内，克隆片段可能会被开发人员修改（特别是在软件维护期间）。为帮助分析克隆片段在其演化过程中的变化情况，本文提取了虑克隆片段的三个度量，分别是{\em Clone Life、Ischanged、Change Times}。 
-%这些将帮助我们了解克隆如何在其演化过程中的变化情况。
+克隆片段是指软件中存在的真实的代码片段， 在其生命周期内，克隆片段可能会被开发人员修改。克隆片段实验中考虑克隆片段的三个度量值，分别是{\em Clone Life、Ischanged、Change Times}，上述度量值将帮助了解克隆片段在其演化过程中的真实变化情况。
 
-本文首先对克隆片段变化情况进行了统计分析（度量值），分析结果如表~\ref{cfstaargouml}和表~\ref{cfstajedit}所示。从表中可以看出，大多数克隆片段在它们的演化过程中并不会发生变化（在{\em ArgoUML}中为$24327$次，在{\em  jEdit}中为$5885$次）。同时， 只有仅仅一小部分克隆片段在演化中发生了变化（在{\em  ArgoUML}为$1095$次，{\em jEdit}为$751$次）。值得注意的是，在变化的克隆代码中仍有极少数的克隆片段其生命周期中改变了不止一次。 因此可以得出结论：{\em 克隆片段在其生命期间中非常稳定（大多数克隆片段从不改变）；但仍有不少克隆代码片段发生了变化，在发生变化的克隆代码不会非常频繁地变化，仅有少量的频繁发生变化。}
+首先，对克隆片段变化次数进行了统计分析，分析结果如表~\ref{cfstaargouml}~和表~\ref{cfstajedit}~所示。从表中可以看出，大多数克隆片段在演化过程中并不会发生变化（未发生变化的克隆片段数量在{ArgoUML}中为$24327$个，在{\em  jEdit}中为$5885$）。同时 只有仅仅一小部分克隆片段在演化过程中发生了变化（{ArgoUML}为$1095$个，{jEdit}为$751$个）。值得注意的是，在发生变化的克隆片段中有极少数的克隆片段被改变了不止一次，其数量随着改变次数的增大而减少。 因此可以得出结论：{克隆片段在其生命期间是十分稳定的（大多数克隆片段从未发生变化），但依然存在一定数量的克隆代码片段发生了变化；且在发生变化的克隆片段中，克隆变化不会频繁地发生，仅有极少量的克隆代码会频繁的发生变化。}
 
 \begin{table}[htbp]
-\bicaption[cfstaargouml]{}{ArgoUML中克隆片段的变化统计信息}
-{Table$\!$}{Clone Fragment  Change Statistic of ArgoUML}
+\bicaption[cfstaargouml]{}{ArgoUML中克隆片段的变化情况统计}
+{Table$\!$}{The statistic of clone fragment change for ArgoUML}
+%{Table$\!$}{Clone Fragment  Change Statistic of ArgoUML}
 \vspace{0.5em}
 \centering
 \wuhao
@@ -387,8 +392,9 @@ Total&24327&\multicolumn{3}{c}{1095} \\
 \end{table}
 
 \begin{table}[htbp]
-\bicaption[cfstajedit]{}{jEdit中克隆片段的变化统计信息}
-{Table$\!$}{Clone Fragment Change Statistic of jEdit}
+\bicaption[cfstajedit]{}{jEdit中克隆片段的变化情况统计}
+{Table$\!$}{The statistic of clone fragment change for jEdit}
+%{Table$\!$}{Clone Fragment Change Statistic of jEdit}
 \vspace{0.5em}
 \centering
 \wuhao
@@ -402,12 +408,12 @@ Total&5885&\multicolumn{7}{c}{751}   \\
 \end{tabular}
 \end{table}
 
-随后，本文使用X-means方法对克隆片段进行聚类分析，实验结果如表~\ref{cfcluargouml}和~\ref{cfclujedit}所示。{\em ArgoUML}和{\em jEdit}两个开源软件中，Cluster0是所有克隆片段中数量最小的，该Cluster中的克隆代码从上一个版本演化到此版本时发生了变化，将这些克隆称为{\em changed clone}。从表中可以看到{\em 在所有的克隆代码中很少发生变化的克隆片段，同时对于发生变化的克隆代码，发生变化的时刻往往是当它们在系统中存在一段时间后}。根据``{\em isChanged}''列，我们可以看到对于{\em  ArgoUML}中的Cluster1和3和{\em  jEdit}中的Cluster1、2和3，所有的克隆片段都没有发生变化。这意味着{\em 大多数克隆片段在其演化的过程中是稳定的}。{\em ArgoUML}和{\em jEdit}中的Cluster3是完全没有发生变化的克隆片段，根据其寿命发现它们在软件中存在的寿命极短 。这表明{\em 刚刚出现在系统中的克隆是“极其”稳定的（它们在短时间内不会发生变化）}。因此，我们应该更多地关注{\em 克隆片段存在几个版本，因为他们更容易发生变化。}
+随后，使用X-means方法对克隆片段进行聚类分析，实验结果如表~\ref{cfcluargouml}~和~\ref{cfclujedit}~所示。X-means聚类将{ArgoUML}和{jEdit}的克隆代码片段分成4个Cluster：即Cluster0--Cluster4。本文根据聚类结果分别统计了四个Cluster的度量值信息，即平均值（Mean）、标准差（Standard Deviation，SD）和中位数（Median）。从表中可以看出，在{ArgoUML}和{jEdit}两个开源软件中，Cluster0的克隆片段中数量最少，该Cluster中的克隆代码在其演化的过程中发生过变化（Change Times约等于1），本文将这些克隆片段称为{changed}克隆片段。因此，{在所有的克隆代码片段中仅有少量的克隆代码片段发生过变化，同时相对于未发生变化的克隆代码（Cluster3，ischanged和Change Times均为0），发生变化的时刻往往是其存在于系统中一段时间后（对比Clone Life}。除此之外，根据``{isChanged}''列可以看出，在系统{ArgoUML}中的Cluster1、Cluster3和系统{jEdit}中的Cluster1、Cluster2和Cluster3中，所有的克隆片段都没有发生变化，它们的数量占到克隆片段数量的多数。这意味着{大多数的克隆片段在其演化的过程中是稳定的，不会发生变化}。最后，系统{ArgoUML}和{jEdit}中的Cluster3是完全没有发生变化的克隆片段，根据其寿命发现它们在软件中存在的时间极短 。这表明{刚刚出现在系统中的克隆是极其稳定的（在短时间内不会发生变化）}。因此，我程序开发人员应该更多地关注{那些已经存在系统中一段时间（存在几个版本）的克隆代码片段，因为它们更容易发生变化。}
 
 
 \begin{table}[htbp]
 \bicaption[cfcluargouml]{}{ArgoUML中克隆片段的聚类结果}
-{Table$\!$}{Clone Fragment Clustering Results of ArgoUML}
+{Table$\!$}{Clustering results of clone fragment for ArgoUML}
 \vspace{0.5em}
 \centering
 \footnotesize
@@ -430,7 +436,7 @@ Cluster 3&18435(73\%)&1.094&0.292&1	&0	&0	&0	&0	&0	&0\\
 
 \begin{table}[htbp]
 \bicaption[cfclujedit]{}{jEdit中克隆片段的聚类结果}
-{Table$\!$}{Clone Fragment Clustering Results of jEdit}
+{Table$\!$}{Clustering results of clone fragment for jEdit}
 \vspace{0.5em}
 \centering
 \footnotesize
@@ -495,13 +501,14 @@ Cluster 3&	3441(66\%)	&1.175	&0.3780&1	&0	&0	&0	&0	&0	&0\\
 %%\end{tabular}
 %%\end{table}
 
-综上所述，只有少数的克隆代码片段在软件演化过程中会发生变化。 这些变化的克隆所经历的的变化往往通常发生在它们在系统中存在一段时间之后经历变化。
+综上所述，只有少数的克隆代码片段在软件演化过程中会发生变化，同时这些克隆片段所经历的变化通常发生在它们在系统中存在一段时间之后。
 
 \BiSubsection{克隆组实验}
 {Clone Group Experiment} 
 
-{\em Clone Fragment}实验仅仅可以提供克隆片段本身的变化属性，而通过对{\em Clone Group}进行分析则提供了一个较大的角度分析克隆代码的演化情况。 %在软件演化的上下文中。每个版本的软件都有很多克隆组。
-在克隆组实验中，将研究克隆组在演化过程中的克隆演化模式，从而揭示克隆代码的演化特征。
+{克隆片段}实验仅提供了克隆片段本身的变化情况，而通过对{克隆组}进行实验分析则可以提供了克隆代码以克隆组为单位的变化情况。 在克隆组实验中，通过统计和聚类克隆组在演化过程中的克隆演化模式，从而揭示克隆代码的演化特征。
+
+如表~\ref{cgstaargouml}~和~\ref{cgstajedit}~所示，本文首先计算克隆组拥有某种{\em Clone Pattern}的克隆组的数量。本文使用“Present”和“Absent”来标识克隆组是否具有某种克隆模式。同时，本文非正式地将克隆模式“静态”模式和“相同”模式称为{\em 稳定的克隆演化模式（Stable Clone Evolutionary Pattern）}，其它的克隆模式称为{\em 动态的克隆模式（Dynamic Clone  Evolutionary Pattern）}。对这两个实验系统，{\em 大多数的克隆组（比例72 \% - 85 \%）具有有稳定的克隆模式，只有一小部分克隆组\footnote{ jEdit中的克隆模式非常小。 （2）克隆组可以有多个度量，包括分配给一个组的“Add”和“Subtract”。}（其比例小于5 \%）具有动态的克隆模式（即克隆组有动态模式相关联，例如添加，减去，拆分，一致/不一致的改变）。}另外，从表中可以看出，{\em 在ArgoUML和jEdit中仍然有数百个克隆组具有一致和不一致变化模式。这应该引起程序开发人员的注意，因为这种变化模式-- 特别是不一致的变化-- 可能会导致克隆相关的克隆缺陷。在系统{\em  jEdit}中，{\em 发生一致变化模式的克隆组要多于不一致变化；同时在ArgoUML中，一致变化的克隆组的数目也比不一致变化多}。因此，相比于不一致变化，{\em 克隆组中的一致性变化更容易发生在软件系统中}。
 
 \begin{table}[htbp]
 \bicaption[cgstaargouml]{}{ArgoUML中克隆组的变化统计信息}
@@ -540,7 +547,12 @@ Percentage	&79.3\%	&85.20\%	&1.99\%	&1.60\%	&6.21\%	&1.82\%	&0.84\%\\
 \end{tabular}
 \end{table}
 
-如表~\ref{cgstaargouml}和~\ref{cgstajedit}所示，本文首先计算克隆组拥有某种{\em Clone Pattern}的克隆组的数量。本文使用“Present”和“Absent”来标识克隆组是否具有某种克隆模式。同时，本文非正式地将克隆模式“静态”模式和“相同”模式称为{\em 稳定的克隆演化模式（Stable Clone Evolutionary Pattern）}，其它的克隆模式称为{\em 动态的克隆模式（Dynamic Clone  Evolutionary Pattern）}。对这两个实验系统，{\em 大多数的克隆组（比例72 \% - 85 \%）具有有稳定的克隆模式，只有一小部分克隆组\footnote{ jEdit中的克隆模式非常小。 （2）克隆组可以有多个度量，包括分配给一个组的“Add”和“Subtract”。}（其比例小于5 \%）具有动态的克隆模式（即克隆组有动态模式相关联，例如添加，减去，拆分，一致/不一致的改变）。}另外，从表中可以看出，{\em 在ArgoUML和jEdit中仍然有数百个克隆组具有一致和不一致变化模式。这应该引起程序开发人员的注意，因为这种变化模式-- 特别是不一致的变化-- 可能会导致克隆相关的克隆缺陷。在系统{\em  jEdit}中，{\em 发生一致变化模式的克隆组要多于不一致变化；同时在ArgoUML中，一致变化的克隆组的数目也比不一致变化多}。因此，相比于不一致变化，{\em 克隆组中的一致性变化更容易发生在软件系统中}。
+表~\ref{cgcluargouml}和~\ref{cgclujedit}给出了克隆组聚类分析的结果。从表中可以看出，Cluster1的克隆组的数量最多（在{\em ArgoUML}中比例占71\%，在{\em jEdit}系统中占79\%）。Cluster0的克隆组相对比较稳定（克隆组具有稳定的克隆模式，并且没有动态的克隆模式），并且具有相对较长的寿命。因此，{\em 大多数的克隆组是非常稳定的，也具有相对较长的寿命（在两个软件中大约5个版本）}。同时从表中还可以看出大多数的{\em 不一致变化模式}出现在Cluster0中，并且仅仅占用很小的比例（{\em ArgoUML}中的4\%，在{\em jEdit}中只有1\%）。因此可以得出结论{\em 不一致变化模式在克隆组中不会频繁发生}。另外，{\em  一致性变化模式（Consistent Change Pattern）}仅发生在Cluster2中，所包含的克隆组的生命寿命相对较长，但相比于Cluster0短一些。值得注意的是，Cluster0和Cluster2都是动态克隆组，因为这些克隆组都具有动态的克隆演化模式。因此得出结论，{\em  动态的克隆演化模式往往会发生在较为长寿的克隆组中，但是它们的数量非常小}。
+
+从Cluster0 和Cluster2中克隆组的绝对数量上看，具有一致性变化模式的克隆组（Cluster2）的数量大于具有不一致变化模式的克隆组数量（Cluster0）。这意味着{\em 一致性变化模式相比于不一致性变化模式更容易发生}。因此，本文建议：{\em 在检测到克隆片段已经发生变化时开发人员应该考虑执行一致性变化的可能性}。
+
+同时，从Cluster3中可以看出有相当一部分的克隆组具有极短的寿命（刚刚出现在系统中），因此其没有相关的克隆演化模式。这也意味着{\em 不需要考虑在克隆组刚刚创建的初始版本克隆组中的更改的影响}。
+
 
 \begin{table}[htbp]
 \bicaption[cgcluargouml]{}{ArgoUML中克隆组的聚类结果}
@@ -665,12 +677,6 @@ Cluster3	&Mean	&0.997&	0&	0	&0.003&0.036	&0	&0.039	&0.013\\
 %%\bottomrule[1.5pt]
 %%\end{tabular}
 %%\end{table}
-
-表~\ref{cgcluargouml}和~\ref{cgclujedit}给出了克隆组聚类分析的结果。从表中可以看出，Cluster1的克隆组的数量最多（在{\em ArgoUML}中比例占71\%，在{\em jEdit}系统中占79\%）。Cluster0的克隆组相对比较稳定（克隆组具有稳定的克隆模式，并且没有动态的克隆模式），并且具有相对较长的寿命。因此，{\em 大多数的克隆组是非常稳定的，也具有相对较长的寿命（在两个软件中大约5个版本）}。同时从表中还可以看出大多数的{\em 不一致变化模式}出现在Cluster0中，并且仅仅占用很小的比例（{\em ArgoUML}中的4\%，在{\em jEdit}中只有1\%）。因此可以得出结论{\em 不一致变化模式在克隆组中不会频繁发生}。另外，{\em  一致性变化模式（Consistent Change Pattern）}仅发生在Cluster2中，所包含的克隆组的生命寿命相对较长，但相比于Cluster0短一些。值得注意的是，Cluster0和Cluster2都是动态克隆组，因为这些克隆组都具有动态的克隆演化模式。因此得出结论，{\em  动态的克隆演化模式往往会发生在较为长寿的克隆组中，但是它们的数量非常小}。
-
-从Cluster0 和Cluster2中克隆组的绝对数量上看，具有一致性变化模式的克隆组（Cluster2）的数量大于具有不一致变化模式的克隆组数量（Cluster0）。这意味着{\em 一致性变化模式相比于不一致性变化模式更容易发生}。因此，本文建议：{\em 在检测到克隆片段已经发生变化时开发人员应该考虑执行一致性变化的可能性}。
-
-同时，从Cluster3中可以看出有相当一部分的克隆组具有极短的寿命（刚刚出现在系统中），因此其没有相关的克隆演化模式。这也意味着{\em 不需要考虑在克隆组刚刚创建的初始版本克隆组中的更改的影响}。
 
 综上所述，克隆组在整个进化中通常是非常稳定的。动态的克隆演化模式可能发生在克隆组存在一段时间之后，但是也仅仅只有一小部分。当开发人员更改特定的克隆片段时，建议他们也考虑整个克隆组内克隆代码片段的更改，即确定是否需要在整个组中进行一致性变化。
 
