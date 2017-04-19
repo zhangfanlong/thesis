@@ -193,8 +193,10 @@
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.8\textwidth]{Fig4-3framework.eps}
-\bicaption[framework4]{}{一个克隆系谱的例子}{Fig.$\!$}{The framework of consistent clone change prediction}\vspace{-1em}
+\includegraphics[width = 0.8\textwidth]{framework4.pdf}
+\bicaption[framework4]{}{一个克隆系谱的例子}
+{Fig.$\!$}{The framework for clone changing consistency-requirement prediction based on Bayesian network}
+\vspace{-1em}
 \end{figure}
 
 在构建步骤中，我们从考虑的主题软件的存储库收集所有一致和不一致的更改实例，并构建和训练贝叶斯网络模型以预测克隆一致性要求和无一致性。具体来说，我们使用NiCad来检测软件版本中的所有克隆，并通过在相邻版本的克隆组之间进行映射来构建克隆系谱。之后，我们为每个克隆组提取三组属性，用于训练和测试模型。在构建预测模型时，我们采用WEKA包提供的贝叶斯网络实现。接下来，在预测步骤中，开发人员可以使用我们的模型进行预测{（{\ sffamily这只是一致性需求预测，关于无一致性预测如何？}}

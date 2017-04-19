@@ -103,13 +103,13 @@ We employed the type-1 consistent change pattern for clone cloning instance, and
 \BiSection{基于机器学习的克隆代码一致性需求预测框架}
 {The Framework for Clone Consistency-Requirement base on Machine Learning}
 
-为了解决我们克隆一致性的研究问题，我们首先提供了一个执行这一一致性要求预测的框架。我们的预测过程的框架如图~\ref{5framework}所示。我们的克隆一致性预测包括三个步骤：收集步骤，代表步骤和预测步骤。{\em 收集步骤\/}旨在收集克隆和更改的所有克隆实例，可用于使用机器学习方法来训练预测模型。在此步骤中，可以通过构建和遍历软件存储库的克隆系谱来收集所有克隆实例。在\emph{ 表示步骤\/}中，我们表示所有克隆实例，其中包含参考克隆实例周围环境的所有必需信息的属性集。接下来，在{\em 预测步骤\/}中，我们首先使用所选机器学习技术构建和训练预测模型，然后预测克隆克隆和更改操作的克隆一致性要求。具体来说，当开发人员通过复制和过去操作进行克隆时，预测器可以警告天气，此克隆实例将来会引起类型1的一致性变化，并且开发人员可以确定拒绝或接受此克隆。同时，当开发人员更改组中的克隆片段时，预测器可以警告这种变化的实例是否会在将来引起类型2的一致性变化，并且开发人员可以考虑在组中一致地维护克隆。
+为了解决我们克隆一致性的研究问题，我们首先提供了一个执行这一一致性要求预测的框架。我们的预测过程的框架如图~\ref{framework5}~所示。我们的克隆一致性预测包括三个步骤：收集步骤，代表步骤和预测步骤。{\em 收集步骤\/}旨在收集克隆和更改的所有克隆实例，可用于使用机器学习方法来训练预测模型。在此步骤中，可以通过构建和遍历软件存储库的克隆系谱来收集所有克隆实例。在\emph{ 表示步骤\/}中，我们表示所有克隆实例，其中包含参考克隆实例周围环境的所有必需信息的属性集。接下来，在{\em 预测步骤\/}中，我们首先使用所选机器学习技术构建和训练预测模型，然后预测克隆克隆和更改操作的克隆一致性要求。具体来说，当开发人员通过复制和过去操作进行克隆时，预测器可以警告天气，此克隆实例将来会引起类型1的一致性变化，并且开发人员可以确定拒绝或接受此克隆。同时，当开发人员更改组中的克隆片段时，预测器可以警告这种变化的实例是否会在将来引起类型2的一致性变化，并且开发人员可以考虑在组中一致地维护克隆。
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.8\textwidth]{Fig5-1framework.pdf}
-\bicaption[5framework]{}{基于机器学习的克隆代码一致性需求预测框架}
-{Fig.$\!$}{The Framework for Clone Consistency-Requirement base on Machine Learning}
+\includegraphics[width = 0.9\textwidth]{framework5.pdf}
+\bicaption[framework5]{}{克隆代码一致性维护需求预测实证研究框架}
+{Fig.$\!$}{The framework for empirical study on clone consistency-requirement prediction }
 \vspace{-1em}
 \end{figure}
 
