@@ -13,92 +13,150 @@
 鉴于此，在第三章和第四章研究的基础上，本章统一了克隆代码创建时和变化时的克隆代码一致性变化和维护需求定义，并使用五种不同的机器学习方法进行克隆一致性维护需求预测实证研究，并与软件开发过程相结合预测克隆一致性需求。首先通过构建软件系统的克隆家系来收集系统中所有的克隆实例（克隆创建实例和克隆变化实例），并提取不同的属性值表示不同的克隆实例。然后，使用五种不同的机器学习方法，分别在克隆创建时和变化时预测克隆代码的一致性维护需求。最后，结合软件开发过程，设计并实现了克隆代码一致性维护需求预测插件（CCRP），并可以嵌入到集成开发环境eclipse中预测克隆代码一致性需求。本章在四个开源软件系统上进行了实证研究，实验结果表明本文所提取的属性值可以适用于不同的机器学习方法上，且支持向量机方法更适合于克隆代码的一致性维护需求预测中。本章基于eclipse所实现的插件，可以帮助开发人员在软件开发过程中预测克隆代码的一致性，降低克隆代码导致的额外的维护代价，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
 %支持向量机方法具有最好的实验效果。
 
+
+
 \BiSection{克隆代码一致性维护需求}
 {Clone Consistency-Requirement}
 
-\BiSubsection{相关定义}
-{The Related Definitions}
+\BiSubsection{研究问题}
+{Research Problem}
 
-我们说一个{\ em一致的变化}发生在两个克隆片段，如下所示：
+在软件开发过程中，通过复制粘贴操作复用既有代码已经成为一种常见的软件开发手段，但是也会向软件系统中引入大量的克隆代码。这些新创建的克隆代码以及系统已经存在的克隆代码并不是静止不变的，会随着软件系统演化。在演化过程中，克隆片段片段可能会被软件开发员修改而发生变化，并可能进一步引发克隆组的一致性变化。克隆代码的一致性变化问题会影响软件质量和可维护性，原因在于：程序开发人员需要对发生变化的克隆进行一致性维护，会导致额外的一致性维护代价。而遗忘克隆的一致性变化，更会会导致克隆不一致缺陷，从而进一步增加软件的维护代价。
 
-\begin{definition}[{\bf Consistent Change}]  
-%\label{defn-1}
-Given that two clone fragments $CF_1$, $CF_2$ are modified to $CF'_1$ and $CF'_2$ respectively. 
-We say this modification between $CF_1$ and $CF_2$ is a {\em\bf consistent change\/} if for some very small threshold $\tau$, 
-  \[
-  \begin{array}[t]{lr}
-    \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\}~(1) \\
-    \multicolumn{2}{c}{| ~\mathit{textSim}(CF_1,CF'_1)  ~-~ \mathit{textSim}(CF_2,CF'_2) ~| ~< ~ \tau~(2)}
-  \end{array}
-  \]
-More specifically, if they only satisfy condition 1, we call this as {\bf \em type-1 consistent change}, and if both condition 1 and 2 as {\bf \em type-2 consistent change}.
-\end{definition}
+为了解决此问题，本文的第三章和第四章分别在克隆代码创建时和变化时，基于贝叶斯网络对克隆代码的一致性维护需求进行了预测，并取得了不错的预测效果。上述方法中仅仅使用了贝叶斯网络作为预测模型，但是在机器学习领域中仍然存在着其它的机器学习方法。因此，这启发了本章对克隆一致性预测的深入研究。首先，能否将克隆代码的一致性维护需求预测应用到其它的机器学习方法中。然后，在这些机器学习方法中，能否为开发人员确定一种通用的机器学习方法，可以同时应用于克隆创建时和克隆变化时的一致性需求预测中。 最后，对于两个不同的预测时刻（创建时和变化时），如何在软件开发过程帮助程序开发人员选择合适的预测时间，并达到最好的预测效果。更为重要的是，上述克隆一致性维护预测研究尚未与软件开发过程相结合，不能帮助程序开发人员在开发时预测克隆代码的一致性。
 
-上述{\ em type-1一致性更改\ /}的约束表示{\ em both} $ CF_1 $和$ CF_2 $已被修改。
-而且，{\ em type-2一致的变化\ /}规定不仅需要对这两个片段进行更改;而且对这两个这些片段做出的这些改变也非常相似，赋予了非常小的阈值$ \ tau $。
-由于不同的情况，我们使用克隆和变更操作因此不同的一致变化。
-对于克隆操作，我们的目标是避免将来由于克隆片段的一致变化而导致额外的维护成本。
-对于不断变化的操作，我们的目的是为了避免由于与将来克隆组中其他克隆片段的一致性导致的克隆缺陷。
-伴随着克隆片段的更改，因此更改绑定到包含这些片段的克隆组上的更改模式，我们称之为{\ em一致的更改模式}。
-当组中的克隆片段被修改时，我们还使用这种“一致的变化”作为克隆组变更模式的标准。具体来说，
+为了更好地帮助软件开发人员维护克隆代码，本章将结合其它机器学习方法和软件开发过程，对克隆代码进行一致性维护需求预测的实证研究。具体地，本章地研究问题如下：
 
-\begin{definition}[{\bf Consistent Change Pattern}] 
-%\label{defn-2}
-A clone group $CG'$ in software version $j+1$ possesses {\em\bf type-1 or 2 consistent change pattern} if there exists a pair of clones $CF'_1,$ and $CF'_2$  in $CG'$ which are mappable to a pair of clones $CF_1$ and $CF_2$ in a clone group $CG$ in version $j$ such that modification of code pairs from $(CF_1,CF_2)$ to $(CF'_1,CF'_2)$ is a type-1 or 2 consistent change. 
-\end{definition}
+{\bf Research Problem:} 克隆代码的一致性维护需求预测是否可以应用于其它的机器学习方法中，软件开发人员应如何结合软件开发过程中执行克隆一致性需求预测？\\
+%{\em {\bf Research Problem:} Whether this clone consistency prediction task can be applied by other machine learning methods, and how should the developer determine perform such prediction in practice?}
 
-具有这两个克隆一致的模式，我们可以理解克隆系列中相邻版本之间的克隆组的更改。
-记住我们的预测任务是预测克隆克隆和更改操作的克隆一致性。
-因此，我们从而在克隆克隆系谱中进行克隆克隆和这些操作的更改实例的定义。 具体来说，因此，我们首先要根据克隆系谱提供这些操作，如下，要采用我们的预测工作，我们给两个不同的
+为了解决本章的研究问题，将使用五种不同机器学习方法来预测克隆代码的一致性维护需求，并且分别在克隆代码创建时和克隆代码变化时进行预测。同时，在预测克隆一致性的过程中充分考虑并结合软件开发过程，比较和讨论两种不同预测的时间，从而帮助开发人员实际开发环境中执行克隆代码一致性预测，具体地，本文章研究问题可以细分为以下三个子问题，如下所示：
 
-\begin{definition}[{\bf Clone Instance}] 
-%\label{defn-3}
-Clone Cloning Instance: A clone group $CG$ in version $j$ is clone cloning instance if $CG$ is the root node in $CGE$. We supposed that $CG$ was created by cloning operation(copy and paste), and begin its evolution as a $CGE$ graph.
-
-Clone Changing Instance: A clone group $CG$ in version $j$ is a {\bf clone changing instance} if at least one clone group $CG'$ in version $j+1$ which is connected to $CG$ in the clone genealogy was modified. 
-
-Clone Instance: We call clone cloning and changing instance as {\bf clone instance}.
-\end{definition}
-
-假设{\ em克隆实例链接到一致的更改将导致额外的维护成本和克隆缺陷，当组中的一致性失败。}
-具体来说，对于克隆克隆实例，我们在其未来演进中采用{\ em type-1一致性变化}作为由此类型1改变引起的维护成本的标准。
-同时，对于克隆更改实例，我们在其未来演进中采用{\ em type-2一致的变化}作为由此类型2变化引起的缺陷可能性的标准。
-因此，我们尝试预测克隆实例的一致性，以避免克隆在不同克隆时间的一致的维护成本和一致的缺陷。
-我们一致将这两个要求作为{\ em克隆一致性要求}提供如下，\\
-
-\begin{definition}[{\bf Clone Consistency-Requirement}] 
-% \label{defn-4}
-A clone instance $CG$ in software version $j$ satisfies {\bf consistency-requirement\/} condition if there is a clone group $CG'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $CG'$ that is mappable in clone genealogy to a pair of clones in $CG$, and (2) $CG'$ possesses ``consistent change pattern''. When $CG$ does not satisfy consistency-requirement, we say that it is {\bf consistency-requirement free\/}, or simply {\em consistency-free\/} for short. \\
-We employed the type-1 consistent change pattern for clone cloning instance, and type-2 for changing instance.
-\end{definition}
-
-最终，我们可以提供我们的预测任务{\ em鉴于克隆或更改的克隆实例，确定此克隆实例是否满足一致性要求或免费。 }
-通过上述克隆更改定义及其一致性要求，我们将克隆和更改实例的一致性要求预测任务转换为分类问题。
-这个问题可以通过下一节将提供的机器学习方法来解决。
-
-
-
-\BiSubsection{克隆代码一致性维护需求}
-{Clone Consistency-Requirement}
-
-在实际的软件开发过程中，程序人员不仅仅会通过复制粘贴活动创建新的克隆代码；同时，软件中也存在的大量的克隆代码，并且在软件开发过程中会对其进行修改。因此，仅仅在复制粘贴时或者仅仅在克隆代码变化时进行一致性维护是不够的，需要结合软件开发过程同时在这两个时刻进行一致性需求维护。
-其次，上述方法中，本文仅仅使用到了贝叶斯网络作为预测模型，尽管取得了可以接受的效果。但是，在机器学习领域中，仍然存在着其它的机器学习方法，能否将一致性预测应用到其它的机器学习方法中对克隆代码进行一致性需求预测，是否存在一个统一的模型，在两种情况下都取得较好的实验效果是另一个值得研究的问题。
-最后，如何将克隆代码一致性维护需求预测与软件开发过程相结合，并选择合适的时刻进行克隆一致性维护预测，并如何将其嵌入到软件开发环境中实现边开发边预测的效果。
-
-鉴于此，本章将研究如下的研究问题：
-{\bf 克隆代码一致性预测任务是否可以应用于其他机器学习方法中，哪一种机器学习方法更加适用于克隆代码一致性预测中，以及如何结合软件开发过程选择合适的时间和方法预测克隆代码的一致性维护需求预测？}
-
-根据分析，本章的研究问题可以划分成三个子问题，如下所示：
-
-子问题1: 在预测复制粘贴克隆代码的一致性维护需求时，所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
-
+{\bf RQ1：}
+%子问题1: 
+在预测克隆代码创建时的一致性维护需求时，哪些机器学习方法可以用于该预测中，且所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
+%%{\bf RQ1:} At clone cloning time, which machine learning methods can be employed for clone consistency-requirement prediction?}\\
+%在这个问题上，我们将会按照Wang等人的预测。与代码和上下文的属性集的变体。
 %在这个子问题中，本章将第三章中的方法应用于其它的机器学习方法中，
 
-子问题2: 在预测变化的克隆代码的一致性维护需求时，所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
-
+{\bf RQ2：}
+%子问题2: 
+在预测克隆代码变化时的一致性维护需求时，哪些机器学习方法可以用于该预测中，且所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
+%{\bf RQ2:} At clone changing time, which machine learning methods can be employed for clone consistency-requirement prediction?\\
+%在这个问题上，我们将会按照Wang等人的预测。与代码和上下文的属性集的变体。
 %在这个子问题中，本章将第第四章的方法应用于其它的机器学习方法中，
 
-子问题 3: 程序开发人员在实际应用的过程中，应该如何选择相应的模型进行克隆代码的一致性维护预测，如何结合软件开发过程进行一致性维护预测？
+{\bf RQ3：}
+%子问题 3: 
+在实际开发过程中，程序开发人员应该如何结合软件开发过程选择合适的机器学习模型和预测时间，并对克隆代码进行一致性维护需求进行预测，从而都够达到最佳的预测效果？
+%{\bf RQ3:} Which technique of machine learning should they employ as their preference? And, how the developers perform these clone predictions to achieve the preferably effectiveness in practice? 
+}
+%将对比两者并且，开发一个产假
+
+鉴于此，本章基于不同的机器学习方法对克隆代码的一致性维护需求预测进行了一个实证研究，同时在克隆代码创建时和变化时预测克隆代码的一致性，并结合软件开发过程帮助程序开发人员选择合适和机器学习模型和预测时间已达到最佳的预测效果。首先，统一了克隆代码创建时和变化时的一致性变化及其一致性维护需求定义，可以在一个框架下预测克隆代码的一致性维护需求。然后，充分考虑了机器学习领域中五种不同的机器学习方法，并将其应用到克隆代码的一致性维护需求中。最后，本章结合软件开发过程，将克隆一致性维护预测方法嵌入到软件开发环境（eclipse）中，帮助程序开发人员实现边开发、边预测、边维护克隆代码，从而可以避免克隆一致性缺陷，并降低克隆代码的一致性维护代价。
+%因此，本章方法可可以提高系统的可维护性和软件质量。
+%\footnote{eclipse插件开发环境。}
+
+\BiSubsection{克隆一致性维护需求定义}
+{The Definitions for Clone Consistency-Requirement}
+
+在克隆代码的整个演化周期中，克隆片段可能会被开发人员修改，从而导致克隆代码的一致性变化。在本文的第三章和第四章分别提供了两种不同形式的克隆代码一致性变化定义，从而适应于不同时间的克隆一致性维护需求预测中。本章将统一第三章和第四章的定义，以应用于本章地实证研究中。具体来说，克隆代码的一致性变化如下，
+
+\begin{definition}[一致性变化（Consistent Change）]  
+%\label{def-cochange}
+假设存在两个克隆代码片段 $CF_1$和 $CF_2$，且它们被分别地修改为$CF'_1$和$CF'_2$。 给定一个非常小的阈值$\tau$，如果克隆代码$CF_1$和$CF_2$的变化满足以下条件称此变化为{一致性变化（Consistent Change）} , 
+  \[
+  \begin{array}[t]{crl}
+    \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\} &(1) \\
+    \multicolumn{2}{c}{| ~\mathit{textSim}(CF_1,CF'_1)  ~-~ \mathit{textSim}(CF_2,CF'_2) ~| ~< ~ \tau}  & (2)
+  \end{array}
+  \]
+更具体地，如果克隆变化仅满足条件1，将其称为Type-1一致性变化（{\em Type-1 Consistent Change}）；如果克隆变化同时满足条件1和条件2，将其称为Type-1一致性变化（{\em Type-2 Consistent Change}）。
+\end{definition}
+
+%\begin{definition}[{\bf Consistent Change}]  
+%\label{}
+%Given that two clone fragments $CF_1$, $CF_2$ are modified to $CF'_1$ and $CF'_2$ respectively. 
+%We say this modification on $CF_1$ and $CF_2$ is a {\em\bf consistent change\/} if for some very small threshold $\tau$, 
+%  \[
+%  \begin{array}[t]{crl}
+%    \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\} &(1) \\
+%    \multicolumn{2}{c}{| ~\mathit{textSim}(CF_1,CF'_1)  ~-~ \mathit{textSim}(CF_2,CF'_2) ~| ~< ~ \tau}  & (2)
+ % \end{array}
+ % \]
+%More specifically, if they only satisfy condition 1, we call this as {\bf \em type-1 consistent change}, and if both conditions 1 and 2 are satisfied, we term it {\bf \em type-2 consistent change}.
+%\end{definition}
+
+定义中克隆代码$ CF_1 $和$ CF_2 $的变化情况由相似性度量$ \mathit {textSim} $进行定义，$textSim$与第三章和第四章计算方式相同。定义中的两个约束条件共同定义了克隆代码的一致性变化，约束条件$1$确保了克隆代码片段同时被修改，约束条件$2$克隆代码片段发生了一致性的变化，由变化阈值$\tau$指定。
+
+其中，Type-1一致性变化又可以称为克隆创建时一致性变化，Type-2一致性变化又称为克隆变化时的一致性变化。这两种不同的一致性变化，将分别应用于两种不同时间的克隆一致性预测中。在克隆代码创建时，目标是避免新创建的克隆代码在其未来演化过程中的一致性变化，及其所导致额外的维护代价。所以，只要两个克隆片段同时变化，即认为会导致额外维护代价。因此，在克隆代码创建时使用使用Type-1一致性变化进行预测。在克隆代码变化时，目的是避免克隆变化可能导致的未来演化中的一致性变化，及其因此所引发的克隆一致性缺陷。因此， 不仅要求两个克隆代码片段同时变化，还需要发生相似的变化，否则将会引入克隆一致性缺陷，因此，在克隆代码变化时使用使用Type-2一致性变化进行预测。
+
+在克隆演化过程中，克隆片段是以克隆组的形式出现在软件系统中。克隆代码的变化情况必然会导致克隆组的变化，而克隆组的变化使用克隆演化模式进行描述，即一致性变化模式。本文给出演化过程中克隆组的一致性变化模式定义，如下所示：
+
+
+\begin{definition}[一致性变化模式（ Consistent Change Pattern）] 
+\label{def-changepattern}
+在软件版本 $j+1$中存在一个克隆组$CG'$ ，假设克隆组内至少存在两个克隆代码片段$CF'_1$ 和 $CF'_2$可以与映射到上一版本$j$的克隆组$CG$中，且 $CG$中与之对应的克隆代码片段的 $(CF_1,CF_2)$被修改为$(CF'_1,CF'_2)$。如果克隆片段之间的变化（ $(CF_1,CF_2)$变化至$(CF'_1,CF'_2)$满足克隆片段的“一致性变化（Consistent Change）”，则称克隆组$CG'$具有一致性变化模式（Consistent Change Pattern）。
+\end{definition}
+
+%\begin{definition}[{\bf Consistent Change Pattern}] 
+%\label{}
+%{\em
+%A clone group $CG'$ in software version $j+1$ possesses {\em\bf type-1 or 2 consistent change pattern} if there exists a pair of clones $CF'_1,$ and $CF'_2$  in $CG'$ which are mappable to a pair of clones $CF_1$ and $CF_2$ in a clone group $CG$ in version $j$ such that modification of code pairs from $(CF_1,CF_2)$ to $(CF'_1,CF'_2)$ is a type-1 or 2 consistent change. 
+%} 
+%\end{definition}
+
+其中“一致性变化”为Type-1或Type-2一致性变化，相应的克隆组变化模式则为Type-1和Type-2一致性变化模式。在相邻的两个软件版本中，克隆组一致性变化模式可以描述克隆演化中由于克隆片段变化所引发的克隆组的变化情况。
+
+回顾本章地研究内容是要在两种不同的时刻预测克隆代码的一致性维护需求，结合第三章和第四章的克隆实例的定义，这里将统克隆创建实例和克隆变化实例为克隆代码实例，如下所示：
+
+\begin{definition}[克隆实例（ Clone Instance）] 
+\label{def-instance}
+克隆创建实例：软件版本 $j$中的一个克隆组$CG$是克隆创建实例，如果该克隆组$CG$是其克隆家系$CGE$的根节点。
+克隆变化实例：
+软件版本 $j$中的一个克隆组$CG$是克隆变化实例，如果克隆组$CG$发生了变化且版本$j+1$ 中至少存在一个克隆组$CG'$与之对应（在同一克隆家系$CGE$中）。 
+克隆实例： 将克隆创建实例和克隆变化实例统称为克隆实例。
+\end{definition}
+%In the above definitions, we identify a $CG$ created by a cloning operation (copy and paste) as a new $CGE$ root that begins its evolution. 
+
+%\begin{definition}[{\bf Clone Instance}] 
+%\label{}
+%{\bf Clone Cloning Instance:}
+%{\em 
+%A clone group $CG$ in version $j$ is {\bf clone cloning instance} if $CG$ is a root node in the clone genealogy ($CGE$). 
+%}
+%~\\
+%{\bf Clone Changing Instance:}
+%{\em A clone group $CG$ in version $j$ is a {\bf clone changing instance} if at least one clone group $CG'$ in version $j+1$ which is connected to $CG$ in the clone genealogy was modified. 
+%}
+%~\\
+%{\bf Clone Instance:}
+%{\em We call clone cloning and changing instance as {\bf clone instance}.
+%}
+%\end{definition}
+
+
+克隆实例在演化过程中可能会引发的克隆一致性变化，如果不能确保克隆的一致性，将会导致导致额外的维护代价和一致性缺陷。具体来说，对于克隆创建实例，本文认为Type-1一致性变化及其演化模式在克隆演化过程中可能会导致额外的克隆维护代价。对于克隆变化实例，本文认为Type-2一致性变化及其演化模式在克隆演化过程可能会导致克隆一致性缺陷。因此，本章尝试在不同的时间预测克隆实例的一致性维护需求，以避免额外的克隆维护代价和一致性缺陷。本章结合第三章和第四章的克隆代码一致性维护需求的定义，将克隆创建时和变化时的一致性维护需求统一为克隆一致性维护需求定义，如下所示：
+
+\begin{definition}[克隆一致性维护需求（Clone Consistency-Requirement）] 
+ \label{def-consistency}
+给定版本 $j$中一个克隆实例，$CG$满足克隆一致性维护需求（Consistency-Requirement），如果在版本$k$中存在一个克隆实例 $CG'$（$k>j$）满足以下条件： (1) 在$CG'$中至少存在两个克隆片段在其克隆家系$CGE$中可以映射到克隆实例 $CG$中， (2) $CG'$ 具有“一致性变化模式”（Consistent Change Pattern）。反之，假如克隆实例$CG$ 不满足克隆一致性维护需求条件，称该克隆实例不需要一致性维护（consistency-requirement free，或者consistency-free）。
+\end{definition}
+
+%\begin{definition}[{\bf Clone Consistency-Requirement}] 
+ %\label{}
+%{\em
+%A clone instance $CG$ in software version $j$ satisfies {\bf consistency-requirement\/} condition if there is a clone group $CG'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $CG'$ that is mappable in clone genealogy to a pair of clones in $CG$, and (2) $CG'$ possesses ``consistent change pattern''. When $CG$ does not satisfy consistency-requirement, we say that it is {\bf consistency-requirement free\/}, or simply {\em consistency-free\/} or {\em free} for short. %\\
+%We employed the type-1 consistent change pattern for clone cloning instance, and type-2 for changing instance.c
+%}
+%\end{definition}
+
+其中，“一致性变化模式”为Type-1或Type-2一致性变化模式，相应的克隆一致性需求为Type-1和Type-2一致性维护需求。其中，Type-1克隆一致性维护需求可以用于预测克隆创建实例，Type-1克隆一致性维护需求可以用于预测克隆变化实例。
+
+最终，本章的克隆一致性维护需求预测任务可以转化为以下问题：
+%{\bf Prediction Task:}
+ 给定一个克隆实例，克隆创建实例或者克隆变化实例，判断该克隆实例是否满足克隆一致性维护需求。更进一步，本文将克隆代码一致性维护需求预测问题转换成为一个分类问题，因而可以使用机器学习中的方法来解决此问题。在本文第三章和第四章的研究中，仅仅考虑了贝叶斯网络方法，为了更深入研究克隆代码的一致性预测问题，本文将会使用五种不同的机器学习方法在预测克隆实例的一致性维护需求。将在后文中详细介绍。
+
 
 \BiSection{基于机器学习的克隆代码一致性需求预测框架}
 {The Framework for Clone Consistency-Requirement base on Machine Learning}
@@ -121,7 +179,7 @@ We employed the type-1 consistent change pattern for clone cloning instance, and
 我们执行和比较所有这五种机器学习方法，以帮助开发人员选择一种克隆和改变实际预测的一般技术。
 
 \BiSection{克隆实例收集与表示}
-{The Framework for Clone Consistency-Requirement base on Machine Learning}
+{The Framework for Clone Consistency-Requiremecnct base on Machine Learning}
 
 \BiSubsection{克隆实例收集}
 {Collecting Clone Instances}

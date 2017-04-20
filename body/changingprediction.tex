@@ -6,33 +6,38 @@
 \BiSection{引言}
 {Introduction}
 
-由于日益增长的软件开发的需求，开发人员在软件开发过程中经常复用既有代码，从而向系统中引入了大量的克隆代码。克隆代码会随着软件系统演化，在其演化过程中，克隆组内的某一克隆代片段可能会被软件开发员修改而发生变化。由于克隆组内的克隆片段彼此相似，克隆片段变化可能会导致其所在克隆组未来演化过程中的一致性变化。遗忘这种克隆代码的一致性变化，会引入与之相关的克隆一致性缺陷，从而增大系统的维护代价。本文将由克隆代码变化所导致的其所在克隆组未来演化过程中发生的一致性变化，称为克隆代码变化时的一致性维护需求。在克隆代码变化时时预测克隆代码的一致性维护需求，可以帮助避免克隆代码的一致性缺陷，从而帮助提高软件质量和可维护性。
+由于日益增长的软件开发的需求，开发人员在软件开发过程中经常复用既有代码，从而向系统中引入了大量的克隆代码。克隆代码会随着软件系统演化，在其演化过程中，克隆组内的某一克隆代码片段可能会被软件开发员修改而发生变化。由于克隆组内的克隆片段彼此相似，克隆片段变化可能会导致其所在克隆组未来演化过程中的一致性变化。遗忘这种克隆代码的一致性变化，会引入与之相关的克隆一致性缺陷，从而增大系统的维护代价。本文将由克隆代码变化所导致的其所在克隆组未来演化过程中发生的一致性变化，称为克隆代码变化时的一致性维护需求。在克隆代码变化时时预测克隆代码的一致性维护需求，可以帮助避免克隆代码的一致性缺陷，从而帮助提高软件质量和可维护性。
 
 鉴于此，本章与第三章相似，在定义克隆代码变化时的一致性变化和一致性维护需求的基础上，使用机器学习中的贝叶斯网络方法在克隆代码变化时预测其一致性维护需求。为训练克隆代码变化时一致性预测模型，首先通过构建软件系统的克隆家系来收集系统中所有的克隆变化实例（发生变化的克隆代码）。然后，提取了代码属性、上下文属性和演化属性三组属性值表示克隆代码变化实例。最后，使用贝叶斯网络方法训练机器学习模型，并预测克隆代码变化时的一致性维护需求。在四个开源软件系统上对本章方法进行了评估，实验结果表明本章方法以合理的准确率和召回率有效地预测克隆代码变化时的一致性维护需求。本章所提出的预测方法同样可以帮助开发人员在克隆代码变化时预测克隆代码的一致性，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
 
 \BiSection{克隆代码变化时一致性维护需求}
 {Clone Changing Consistency-Requirement}
 
-\BiSubsection{一致性变化实例}
+\BiSubsection{一致性变化例子}
 {An Example of Clone Consistent Change }
 
-%{\em clone fragment}是一段代码片段，类似于另一段代码片段\cite{koschke2007survey}。克隆片段在软件中大量存在，出于各种原因，最明显源自于复制和粘贴操作。复制和粘贴操作是重用来自软件的现有代码和引入丰富的克隆片段的最显着的方式。
-克隆代码在软件中的存在和变化可能会影响软件质量的问题，因此Fowler等人将克隆代码视为“Bad Smell”\cite{fowler2009refactoring}。而研究人员也同样认为克隆代码的一致性变化可能会导致软件缺陷，同时维持克隆代码的一致性也会导致额外的维护代价。研究发现如果一组克隆中的克隆片段需要一致地更改，并且开发人员忘记这样做，则可能会在软件进化的后期引入缺陷\cite{bettenburg2009empirical} \cite {juergens2009code}。另一方面，当不需要克隆组内的一致改变时，开发人员可能不必要花费时间来验证和尝试维持克隆一致性，导致额外的软件维护开销\cite{aversano2007clones} \cite{barbour2011late}。
+在软件开发过程中，复用既有代码是一种常见的软件开发手段，但是也会向软件系统中引入大量的克隆代码。有研究表明软件中的克隆代码可以占到系统代码规模的7\%-23\%\cite{koschke2007survey}。软件中存在的克隆代码不是静止不变的，会随着软件系统进行演化，其演化过程可使用克隆家系进行描述\cite{kim2005empirical}（克隆演化见本文~\ref{ref-evolution}~节）。本文第二章通过分析克隆演化特征发现，在克隆演化过程中，克隆代码的一致性变化往往多于不一致性变化，因此开发人员需要警惕发生变化的克隆代码，并且当发生变化时需要考虑克隆代码的一致性问题。（具体可参考本文~\ref{ref-characteristics}~节）
 
-图~\ref{co-change}~描述了克隆片段的变化引发的克隆组的一致性变化的例子。这些克隆代码片段来自于系统{\em jEdit}。在图~\ref{cg1}中，两个克隆片段存在于$ 3.1.0 $版本中，它们在版本$ 3.2.0 $之前进行了相似的修改。具体地，在版本$ 3.1.0 $中的第9-12行和第15行的克隆片段在随后的版本中被修改。在第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发者删除了声明语句到下一个版本。如图~\ref{cg2}~所示，两个被修改的代码片段仍然是克隆代码，仍存在于同一克隆组中（版本$ 3.2.0 $中），即克隆组$CG$发生了{\em  一致性变化模式}。如果程序员没有对上述的克隆代码进行一致性维护，这将会导致克隆代码的一致性缺陷。
+演化中的克隆变化使得克隆代码变得越来越难以维护，而克隆代码的一致性问题会导致额外的维护代价。当克隆代码发生变化时，程序开发人员需要验证克隆代码的一致性，从而导致维护代价的增加；如果开发人员忘记验证克隆代码的一致性，则可能会向系统中引入新的克隆一致性缺陷在\cite{bettenburg2009empirical} \cite {juergens2009code}。本文第三章研究了克隆代码创建时的一致性维护需求问题，在克隆代码产生时预测克隆代码一致性。在一定程度上可以降低软件的维护代价。但是，值得注意的是，并不是所有的克隆代码都可以被避免。同时，上述方法也无法处理系统中已经存在的克隆代码的一致性变化问题。因此，本章将讨论克隆代码变化时其一致性维护需求问题。
+
+在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统{jEdit}中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
 
 \begin{figure}[htbp]
 \centering
-\subfigure{\label{cg1}}\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in one clone group in version $3.1.0$]{\subfigure[版本$ 3.1.0 $中一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{Fig4-1examplea.eps}}}
+\subfigure{\label{cg1}}
+\addtocounter{subfigure}{-2}
+\subfigure[Two clone fragments in one clone group in version $3.1.0$]
+{\subfigure[版本$ 3.1.0 $中同一一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changea.pdf}}}
 \subfigure{\label{cg2}}\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in clone group in version $3.2.0$]{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{Fig4-1exampleb.eps}}}
+\subfigure[Two clone fragments in clone group in version $3.2.0$]
+{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changeb.pdf}}}
 \bicaption[co-change]{}{jEdit中的一致性变化的例子}
-{Fig.$\!$}{An Example of Consistent Change from Real World}
+{Fig.$\!$}{An example of consistent change from jEdit}
 \vspace{-1em}
 \end{figure}
 
-因此，本章旨在提供一种方法可以 {\em 帮助开发人员在克隆代码变化时预测克隆代码的一致性变化，从而以避免克隆缺陷和减少其维护代价}。具体来说，当开发人员修改作为其他代码的克隆的一段代码时，本文方法将对其进行预测，并向开发人员提供两种可能的警告：（1）需要一致性维护，（2）不需要一致性维护。因此，这可以帮助避免“克隆一致性缺陷”，保存一致性验证时间，这反过来可以提高克隆可维护性和软件可重用性。
+鉴于此，本章对发生变化的克隆代码进c行一致性预测，在克隆代码变化时，预测克隆代码的一致性维护需求。本章在克隆代码演化的基础上结合克隆代码一致性维护，首先给出了一种克隆代码变化时的一致性变化和一致性维护需求的定义，可以帮助预测克隆变化的一致性维护需求。然后，在第二章研究的基础上重新设计了代码属性、上下文属性和演化属性三组属性表示克隆代码的变化实例。最后，使用贝叶斯网络在克隆代码变化时预测其一致性维护需求。本章方法可以帮助程序开发人员避免克隆一致性缺陷，从而降低克隆代码的一致性维护代价。
+%因此，本章方法可可以提高系统的可维护性和软件质量。
 
 
 
@@ -154,7 +159,7 @@
 更正式地，\\
 
 \begin {definition} [{\bf Change Instance}]
-\label {defn-3}
+\label {}
 {\em 如果在克隆系谱中连接到$ G $的版本$ j + 1 $中的至少一个克隆组$ G'$具有一致性或一致性，则版本$ j $中的克隆组$ G $是一个{\bf  change instance}不一致的变化模式。
 }
 \end {definition}
@@ -186,6 +191,101 @@
 
 %我们应用贝叶斯网络学习技术来解决它。贝叶斯网络是表示一组随机事件及其条件依赖性的概率图形模型。形式上，它是有向无环图，使得其节点表示随机事件，并且其边表示两个节点（事件）之间的条件依赖性;未连接的两个节点表示有条件地彼此独立的两个事件。与每个节点相关联的是概率函数，其从与节点父事件相关联的值计算节点表示的事件的概率。
 %我们将广告读者提到\cite{} {Pearl1985}了解详情。 {注意，贝叶斯网络作为我们的分类没有特殊的原因。这个模型在分类问题中非常流行。还有一些机器方法来完成这项任务，如SVM，设计树等。我们不知道哪一个更好。 }
+
+%%%%以下是原文
+We propose a formal definition of ``consistent change'' between two pairs of clone fragments, as follows: 
+\\
+
+\begin{definition}[{\bf $\tau$-Consistent Change}]  
+\label{}
+{\em 
+Given that two clone fragments $c_1$, $c_2$ are modified to $c'_1$ and $c'_2$ respectively. We say this modification between $c_1$ and $c_2$ is a {\em\bf  $\tau$-consistent change\/} if for some very small threshold $\tau$, 
+  \[
+  \begin{array}[t]{lr}
+    \mathit{textSim}(c_i, c'_i) < 1 & \forall i \in \{1,2\} \\
+    \multicolumn{2}{c}{| ~\mathit{textSim}(c_1,c'_1)  ~-~ \mathit{textSim}(c_2,c'_2) ~| ~< ~ \tau}
+  \end{array}
+  \]
+  } 
+\end{definition}
+  
+Note that $\mathit{textSim}(c,c') =$ 1 - UPI($c,c'$). The first constraint above states that {\em both} $c_1$ and $c_2$ have been modified. The second constraint dictates that changes made to these fragments are very similar, differing at most by a small threshold $\tau$. 
+
+We employ ``$\tau$-consistent change'' as the criteria for labeling change pattern on clone group. Specifically, \\
+
+\begin{definition}[{\bf Consistent/Inconsistent Change Pattern}] 
+  \label{}
+  {\em 
+  Given a threshold $\tau$. A clone group $G'$ in software version $j+1$ possesses {\em\bf consistent change pattern} if there exists a pair of clones $c'_1,$ and $c'_2$  in $G'$ which are mappable to a pair of clones $c_1$ and $c_2$ in a clone group $G$ in version $j$ such that modification of code pairs from $(c_1,c_2)$ to $(c'_1,c'_2)$ is a $\tau$-consistent change. Conversely, we say that clone group $G'$ in version $j+1$ possesses {\em\bf inconsistent change pattern}.
+  } 
+\end{definition}
+
+~\\
+Definition~\ref{defn-2} differs from those used in the earlier work such as \cite{Kim2005,Saha2011}, which identify consistent change by asserting that {\em all} clones evolving from previous version of clone group are detected to be similar by clone detection tools.
+
+More importantly, we label a clone group with consistent change pattern {\em so long as consistent change (as defined above) occurs for a pair of clones.\/} 
+We believe this definition aligns better with the understanding that as long as there exists a pair of clones that needs consistent change, we should inspect the clones in the clone group when any clone has been modified.
+Consequently, the clone genealogy that we build will be different from that of \cite{Kim2005,Saha2011}. 
+
+Lastly, there are cases in which all clones in a clone
+group $G'$ in version $j+1$ are identical to their mappable
+counterpart in previous version $j$. In this case, we say the clone
+group in version $j+1$ possesses {\em Static pattern}.
+
+
+Recall that our objective is to predict the need for consistent change in clones when there is a modification made to a clone in the current version. 
+Thus, in performing prediction, we need to identify those clone groups which are targets of prediction.
+Certainly, not all clone groups are prediction targets.
+For instance, when a clone group does not experience change from the current version to the next version, it's not necessary to preform prediction on this clone group.
+We call those clone groups which are targets of prediction as {\em {\bf change instances}}. 
+A change instance is a clone group in some version $j$ and is characterized by the fact that some of its constituent clones will undergo modification to version $j+1$. 
+More formally, \\
+
+\begin{definition}[{\bf Change Instance}] 
+\label{}
+{\em 
+A clone group $G$ in version $j$ is a {\bf change instance} if at least one clone group $G'$ in version $j+1$ which is connected to $G$ in the clone genealogy possess consistent or inconsistent change pattern. 
+}
+\end{definition}
+
+~\\
+Given a change instance, we can identify the kind of changes that it has experienced by comparing the differences in codes between version $j$ and version $j+1$. 
+
+Next, while both consistent and inconsistent change patterns specify how clones evolve from one version to the next version, we are actually more interested in knowing if consistent change will occur to a pair of clones {\em anytime in future\/}. 
+This is because in practice, developers may choose to delay making consistent change, or sometime they may not be even aware of the need to make consistent change, until problems arise in future.
+For instance, in the repository of {\em jEdit}, we found a clone group in version $3.0.2$ which underwent an inconsistent change to result in version $3.1.0$; the group then evolved -- but this time consistently -- to version $3.2.0$. 
+Later on, this clone group evolved again -- consistently -- from version $3.2.2$ to version $4.0.0$. 
+
+Therefore, when we attempt to learn about clone consistent change from history (via genealogy), we need to look further into the future -- not just the immediate future -- to discover any pattern of consistent change. 
+We call the need to check for consistent change in future as {\em consistency-requirement.}
+This is defined formally as follows: \\
+
+\begin{definition}[{\bf Consistency-Requirement (Free)}] 
+  \label{}
+  {\em 
+A change instance $G$ in software version $j$ satisfies 
+{\bf  consistency-requirement\/} condition if there is a clone group $G'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $G'$ that is mappable in clone genealogy to a pair of clones in $G$, and (2) $G'$ possesses ``consistent change pattern''. 
+
+When $G$ does not satisfy consistency-requirement, we say that it is {\bf  consistency-requirement free\/}, or simply {\em consistency-free\/} for short. }
+\end{definition}
+
+~\\
+Armed with the definitions above, we can now phrase our research problem as follows:  \\
+
+\noindent
+\textbf{Research Problem:} {\em Given that a clone in a clone group $G$ has been modified (and thus $G$ is a change instance), determine if $G$ meets consistency-requirement or consistency-free.} \\
+
+
+With the above classification of clone group patterns into consistent change pattern and inconsistent change pattern, and the availability of clone genealogy, we transform this prediction of consistency-requirement for change instances into a classification problem. 
+To this end, input to the classification algorithm are two categories of data, one captures information about the clone group $G$, and the other captures information about the change made to a clone in $G$. 
+Classification is then performed to determine if consistent change pattern will occur in some future clone group connected to $G$ in the genealogy. 
+
+We apply Bayesian network learning technique to address it. 
+A Bayesian network is a probabilistic graphical model representing a set of random events and their conditional dependencies. 
+Formally, it is a directed acyclic graph such that its nodes represent random events, and its edges represent conditional dependencies between two nodes (events); Two nodes which are not connected represent two events that are conditionally independent of each other.
+Associated with each node is a probability function that computes the probability of the event represented by the node from the values associated with the nodes parent events. 
+We refer avid readers to \cite{Pearl1985} for details.c
+
 
 \BiSection{克隆变化时一致性维护需求预测框架} 
 {The Framework of Clone Changing Consistency-Requirement}
