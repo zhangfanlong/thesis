@@ -364,9 +364,9 @@ Halstead属性平均：
 %We capture this change for each important syntactic construct.
 %\end{itemize}
 
-\BiSection {变化时一致性需求预测}
+\BiSection {克隆代码变化时一致性需求预测}
 {Predicting Clone Changing Consistency-Requirement} 
-
+%%%打死都不要动这节， 有诡异的变化
 本章将克隆代码变化时的一致性维护需求问题，转化成了克隆变化实例的分类问题，即给定一个克隆变化实例，判别其是否满足克隆变化时的一致性维护需求。本文使用贝叶斯网络方法作为机器学习模型，并使用其预测克隆一致性维护需求。因此，本节先简单介绍贝叶斯网络方法。随后，使用属性化的克隆变化实例构建和训练贝叶斯网络模型，并使用训练好贝叶斯网络在克隆代码变化时预测其一致性维护需求。
 
 \BiSubsection{贝叶斯网络方法}
@@ -374,8 +374,13 @@ Halstead属性平均：
 
 同第二章一样，本章使用贝叶斯网络作为预测方法。贝叶斯网络是一个是一种概率图型，使用已经观察到的事件来预测将来可能发生的事件\cite{friedman1997bayesian}。关于贝叶斯网络的信息可以参考本文第三章节~\ref{lab-bayes}~贝叶斯网络。
 
-\BiSubsection {预测}
-{Predicting} 
+\BiSubsection{训练与预测}
+{Training and Predicting}
+%%%分成两个小节
+%\BiSubsection{构建与训练预测器}
+%{Building and Training Predictor}
+%\BiSection{一致性预测}
+%{Predicting Clone Consistency}
 
 在此步骤中，当现有克隆组发生更改时，软件维护人员可以使用我们的预测变量来预测克隆一致性。如图~\ref{}~所示，我们的方法可以集成到一个IDE，如eclipse，可以保持克隆在开发阶段的变化。运行预测变量需要跟踪克隆在软件进化及其变化中的支持。一旦检测到克隆更改，该工具将提取与此更改实例相关的所有属性，预测其一致性要求，并通知开发人员。
 根据预测，开发者因此可以根据需要一致地保持克隆。
