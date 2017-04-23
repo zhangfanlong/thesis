@@ -35,7 +35,7 @@
 {\bf RQ1：}
 %子问题1: 
 在预测克隆代码创建时的一致性维护需求时，哪些机器学习方法可以用于该预测中，且所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
-%%{\bf RQ1:} At clone cloning time, which machine learning methods can be employed for clone consistency-requirement prediction?}\\
+%%{\bf RQ1:} At clone creating time, which machine learning methods can be employed for clone consistency-requirement prediction?}\\
 %在这个问题上，我们将会按照Wang等人的预测。与代码和上下文的属性集的变体。
 %在这个子问题中，本章将第三章中的方法应用于其它的机器学习方法中，
 
@@ -120,13 +120,13 @@
 软件版本 $j$中的一个克隆组$CG$是克隆变化实例，如果克隆组$CG$中至少两个克隆片段发生变化且版本$j+1$ 中至少存在一个克隆组$CG'$与之对应（在同一克隆家系$CGE$中）。 
 克隆实例： 将克隆创建实例和克隆变化实例统称为克隆实例。
 \end{definition}
-%In the above definitions, we identify a $CG$ created by a cloning operation (copy and paste) as a new $CGE$ root that begins its evolution. 
+%In the above definitions, we identify a $CG$ created by a creating operation (copy and paste) as a new $CGE$ root that begins its evolution. 
 
 %\begin{definition}[{\bf Clone Instance}] 
 %\label{}
-%{\bf Clone Cloning Instance:}
+%{\bf Clone Creating Instance:}
 %{\em 
-%A clone group $CG$ in version $j$ is {\bf clone cloning instance} if $CG$ is a root node in the clone genealogy ($CGE$). 
+%A clone group $CG$ in version $j$ is {\bf clone creating instance} if $CG$ is a root node in the clone genealogy ($CGE$). 
 %}
 %~\\
 %{\bf Clone Changing Instance:}
@@ -134,7 +134,7 @@
 %}
 %~\\
 %{\bf Clone Instance:}
-%{\em We call clone cloning and changing instance as {\bf clone instance}.
+%{\em We call clone creating and changing instance as {\bf clone instance}.
 %}
 %\end{definition}
 
@@ -151,7 +151,7 @@
  %\label{}
 %{\em
 %A clone instance $CG$ in software version $j$ satisfies {\bf consistency-requirement\/} condition if there is a clone group $CG'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $CG'$ that is mappable in clone genealogy to a pair of clones in $CG$, and (2) $CG'$ possesses ``consistent change pattern''. When $CG$ does not satisfy consistency-requirement, we say that it is {\bf consistency-requirement free\/}, or simply {\em consistency-free\/} or {\em free} for short. %\\
-%We employed the type-1 consistent change pattern for clone cloning instance, and type-2 for changing instance.c
+%We employed the type-1 consistent change pattern for clone creating instance, and type-2 for changing instance.c
 %}
 %\end{definition}
 
@@ -211,7 +211,7 @@
 
 本章使用机器学习方法预测克隆代码的一致性维护需求，并使用软件中既有的克隆实例训练机器学习模型。但是，实际的克隆实例无法直接应用于机器学习中。因此，本文提取相应的属性值表示克隆代码实例，即提取代码、上下文两组属性代表克隆创建实例，提取代码属性、上下文属性和演化属性代表克隆变化实例。其中代码属性和上下文属性相似，但从不同的角度表示克隆创建实例和变化实例，克隆创建实例中的属性表示了创建时的被复制和被粘贴代码的特征，变化实例中的属性则表示了发生变化的克隆组的特征。
 
-为表示克隆创建实例，对创建实例的被复制和粘贴克隆代码使用不同的属性。代码属性用于表示被复制的克隆的特征，包括：克隆代码粒度、Halstead属性、结构属性、参数访问数量、总函数调用次数、本地函数调用次数、库函数调用次数、其它调用次数。上下文属性用于表示被粘贴的克隆代码的特征，包括：代码相似度、局部克隆标识、文件名相似度、文件名相似度标识、方法名相似度、总参数名相似度、最大参数名相似度、总参数类型相似度、块信息标识。属性具体信息可以参考本文第二章相关属性值部分（~\ref{lab-cloningattribute}~）。
+为表示克隆创建实例，对创建实例的被复制和粘贴克隆代码使用不同的属性。代码属性用于表示被复制的克隆的特征，包括：克隆代码粒度、Halstead属性、结构属性、参数访问数量、总函数调用次数、本地函数调用次数、库函数调用次数、其它调用次数。上下文属性用于表示被粘贴的克隆代码的特征，包括：代码相似度、局部克隆标识、文件名相似度、文件名相似度标识、方法名相似度、总参数名相似度、最大参数名相似度、总参数类型相似度、块信息标识。属性具体信息可以参考本文第二章相关属性值部分（~\ref{lab-creatingattribute}~）。
 
 对于克隆变化实例，从克隆组的角度重新提取了代码属性和上下文属性，并从演化的角度新增演化属性。代码属性从代码自身的角度描述了克隆变化实例中克隆代码特征，包括克隆粒度、代码行平均、Halstead属性平均、结构属性平均、总函数调用次数平均、本地函数调用次数平均、库函数调用次数平均、其它调用次数平均。上下文属性描述了克隆变化实例所在的克隆组的克隆关系特征，包括代码相似度平均、文件名相似度平均、文件名相似度变量、方法名相似度平均、总参数名相似度平均、最大参数名相似度平均、总参数类型相似度平均、块信息标识。历史属性描述了克隆变化实例所在克隆组在克隆变化发生前的历史演化特征，包括变化实例寿命、历史演化模式统计、当前演化模式、历史变化统计。同时，还提供了克隆变化实例的变化属性。
 属性具体信息可以参考本文第二章相关属性值部分（~\ref{lab-changingattribute}~）。
@@ -351,6 +351,13 @@ Tracking clones changes
 \BiSection{实验结果与分析}
 {Experiments Results and Analysis}
 
+
+为评估本文方法，本节给出实验结果与分析。首先简单介绍了实验所使用的实验系统和实验评估方法。然后，详细给出每个实验的结果。
+
+
+\BiSubsection{实验系统与实验设置}
+{Experimental Projects and Methodology}
+
 \begin{table*}[ht]
 %%\caption{The four open source projects for experiments}
 %%\label{allprojects}
@@ -364,7 +371,7 @@ Tracking clones changes
 ~\multirow{2}{*}{\textbf{Instances}}&\multirow{2}{*}{\textbf{Project}}&\textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}\\
 ~&~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&~\\
 \midrule[1pt]
-\multirow{4}{*}{\textbf{Cloning}}
+\multirow{4}{*}{\textbf{Creating}}
 &ArgoUML&	2574(77.07\%)&	766(22.93\%)&	3340\\
 &jEdit&560(88.47\%)&	73(11.53\%)&	633\\
 &jFreeChart&	2013(59.80\%)&	1353(40.20\%)&	3366\\
@@ -391,7 +398,7 @@ Tracking clones changes
 %%%% than the plain LaTeX2e tabular which is used here.
 %%\begin{tabular}{|c|c|c|c|c|c|c|}
 %%\hline
-%%~\multirow{3}{*}{\textbf{Project}}& \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Cloning Instances}} &  \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Changing Instances}} \\ 
+%%~\multirow{3}{*}{\textbf{Project}}& \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Creating Instances}} &  \multicolumn{3}{|c|}{\textbf{Number (Percentage) of Changing Instances}} \\ 
 %% \cline{2-7}
 %%~&\textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}& \textbf{Consistency-} &\textbf{Meeting} &\multirow{2}{*}{\textbf{Total}}\\
 %%~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&~&\textbf{Requirement Free}&\textbf{Consistency-Requirement}&\\
@@ -435,10 +442,10 @@ Tracking clones changes
 我们采用五种不同的机器学习方法来预测这四个项目的克隆一致性，因此预测结果如表。
 
 \begin{table}[htbp]
-%%\caption{The Average Effectiveness of Cloning Instances}
-%%\label{cloningallavg}
-\bicaption[cloningallavg]{}{不同机器学习方法的预测效果}
-{Table$\!$}{The Average Effectiveness of Cloning Instances}
+%%\caption{The Average Effectiveness of Creating Instances}
+%%\label{creatingallavg}
+\bicaption[creatingallavg]{}{不同机器学习方法的预测效果}
+{Table$\!$}{The Average Effectiveness of Creating Instances}
 \vspace{0.5em}
 \centering
 \wuhao
@@ -471,11 +478,11 @@ Tracking clones changes
 \end{table}
 
 \begin{table}[htbp]
-%%\caption{The Effectiveness of Cloning Instances for free}
-%%\label{cloningallfree}
+%%\caption{The Effectiveness of Creating Instances for free}
+%%\label{creatingallfree}
 %%\center
-\bicaption[cloningallfree]{}{克隆创建实例的一致性自由的预测效果}
-{Table$\!$}{The Effectiveness of Cloning Instances for Consistency-Free}
+\bicaption[creatingallfree]{}{克隆创建实例的一致性自由的预测效果}
+{Table$\!$}{The Effectiveness of Creating Instances for Consistency-Free}
 \vspace{0.5em}
 \centering
 \wuhao
@@ -508,10 +515,10 @@ Tracking clones changes
 \end{table}
 
 \begin{table}[htbp]
-%%\caption{The Effectiveness of Cloning Instances for Meeting Consistency-Requirement}
-%%\label{cloningallmeeting}
-\bicaption[cloningallmeeting]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Effectiveness of Cloning Instances for  Meeting Consistency-Requirement}
+%%\caption{The Effectiveness of Creating Instances for Meeting Consistency-Requirement}
+%%\label{creatingallmeeting}
+\bicaption[creatingallmeeting]{}{符合研究生院绘图规范的表格}{Table$\!$}
+{The Effectiveness of Creating Instances for  Meeting Consistency-Requirement}
 \vspace{0.5em}
 \wuhao
 \centering
@@ -547,10 +554,10 @@ Tracking clones changes
 
 
 \begin{table*}[htbp]
-%%\caption{The Average Effectiveness of Attribute Set for Cloning Instances}
-%%\label{cloningsetavg}
-\bicaption[cloningsetavg]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Average Effectiveness of Attribute Set for Cloning Instances}
+%%\caption{The Average Effectiveness of Attribute Set for Creating Instances}
+%%\label{csetavg}
+\bicaption[creatingsetavg]{}{符合研究生院绘图规范的表格}{Table$\!$}
+{The Average Effectiveness of Attribute Set for Creating Instances}
 \vspace{0.5em}
 \centering
 \scriptsize
@@ -587,10 +594,10 @@ Tracking clones changes
 
 \begin{table*}[htbp]
 \scriptsize
-%%\caption{The Effectiveness of Attribute Set for Cloning Instances for free}
-%%\label{cloningsetfree}
-\bicaption[cloningsetfree]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Effectiveness of Attribute Set for Cloning Instances for Consistency-Requirement Free}
+%%\caption{The Effectiveness of Attribute Set for Creating Instances for free}
+%%\label{creatingsetfree}
+\bicaption[creatingsetfree]{}{符合研究生院绘图规范的表格}{Table$\!$}
+{The Effectiveness of Attribute Set for Creating Instances for Consistency-Requirement Free}
 \vspace{0.5em}
 \centering
 \begin{tabular}{cccccccccccccc}
@@ -627,10 +634,10 @@ Tracking clones changes
 
 \begin{table*}[htbp]
 \scriptsize
-%%\caption{The Effectiveness of Attribute Set for Cloning Instances for meeting}
-%%\label{cloningsetmeeting}
+%%\caption{The Effectiveness of Attribute Set for Creating Instances for meeting}
+%%\label{creatingsetmeeting}
 \bicaption[sdfj1]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Effectiveness of Attribute Set for Cloning Instances for Meeting Consistency-Requirement}
+{The Effectiveness of Attribute Set for Creating Instances for Meeting Consistency-Requirement}
 \vspace{0.5em}
 \centering
 \begin{tabular}{cccccccccccccc}
@@ -667,10 +674,10 @@ Tracking clones changes
 比较所采用的学习方法的有效性，显然，{\em SVM}具有比这四个项目的其他方法更好的克隆预测能力。具体来说，SVM对于{\em ArgoUML，jEdit和jFreeChart}具有最好的结果，决策树具有最好的结果，SVM对于{\em Tuxguitar}来说是第二好的。与此同时，贝叶斯网络和本地贝叶斯方法在这四个项目中几乎保持了相对较差的预测结果。
 因此，我们建议开发人员在需要预测克隆实例时首先考虑SVM。
 
-为了探索属性集如何影响预测效果，我们仅使用一个属性集进行预测。属性集有效性的结果如表\ref{cloningset}所示。在这个表中，我们为所有属性集使用“全部”列，分别为其属性集使用“代码”，“上下文”。从这个表中可以看出，在不同属性的三个预测中，并没有显着差异。这表明我们的属性集不会对我们的预测产生负面影响。然而，对于这三个预测，我们还可以看到，在所有这四个项目的“属性”预测列（仅代码或上下文）中存在大部分相对较差的预测。具体来说，这三个项目的“代码”列{\em ArgoUML \/}，{\em jFreeChart \/}和{\em Tuxguitar}对于这五个方法都有最差的结果，而“上下文” “{\em jEdit}”项目的列对于这五种方法几乎都是最差的.此外，我们将这些预测的结果与五种机器学习方法进行比较，我们得出的结论与SVM具有较好的预测能力相同。因此，建议在该预测中保留所有属性集，并首先优选SVM方法。
+为了探索属性集如何影响预测效果，我们仅使用一个属性集进行预测。属性集有效性的结果如表\ref{creatingset}所示。在这个表中，我们为所有属性集使用“全部”列，分别为其属性集使用“代码”，“上下文”。从这个表中可以看出，在不同属性的三个预测中，并没有显着差异。这表明我们的属性集不会对我们的预测产生负面影响。然而，对于这三个预测，我们还可以看到，在所有这四个项目的“属性”预测列（仅代码或上下文）中存在大部分相对较差的预测。具体来说，这三个项目的“代码”列{\em ArgoUML \/}，{\em jFreeChart \/}和{\em Tuxguitar}对于这五个方法都有最差的结果，而“上下文” “{\em jEdit}”项目的列对于这五种方法几乎都是最差的.此外，我们将这些预测的结果与五种机器学习方法进行比较，我们得出的结论与SVM具有较好的预测能力相同。因此，建议在该预测中保留所有属性集，并首先优选SVM方法。
 
 
-根据表\ref{克拉克隆}和表\ref{cloningset}，我们可以给出我们对子问题1的建议。在克隆时间，五种机器学习方法可以应用于这种克隆预测，其结果非常相似。另外，他们之间还是有一点区别，SVM有更好的能力，我们建议开发选择这个来预测。同时，我们的属性集实验表明，所选择的属性对这一预测具有积极的影响，我们建议开发者可以自信选择它们进行预测。
+根据表\ref{克拉克隆}和表\ref{creatingset}，我们可以给出我们对子问题1的建议。在克隆时间，五种机器学习方法可以应用于这种克隆预测，其结果非常相似。另外，他们之间还是有一点区别，SVM有更好的能力，我们建议开发选择这个来预测。同时，我们的属性集实验表明，所选择的属性对这一预测具有积极的影响，我们建议开发者可以自信选择它们进行预测。
 
 \BiSubsection{2}
 {2}
