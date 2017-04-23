@@ -369,11 +369,10 @@ Halstead属性平均：
 
 本章将克隆代码变化时的一致性维护需求问题，转化成了克隆变化实例的分类问题，即给定一个克隆变化实例，判别其是否满足克隆变化时的一致性维护需求。本文使用贝叶斯网络方法作为机器学习模型，并使用其预测克隆一致性维护需求。因此，本节先简单介绍贝叶斯网络方法。随后，使用属性化的克隆变化实例构建和训练贝叶斯网络模型，并使用训练好贝叶斯网络在克隆代码变化时预测其一致性维护需求。
 
-\BiSubsection {训练}
-{Training} 
+\BiSubsection{贝叶斯网络方法}
+{Bayesian Network Method} 
+
 对于每个主题知识库，我们通过收集其变化实例的属性来构建训练数据集。所需的最后一个准备工作是与每个实例关联其一致性 - 要求/无一致性指示，如定义~\ref{defn-4}~中定义。 其中一些将用于训练模型，其他将被用作预测验证的基础真理。最后，形成的数据集将提供给WEKA以开发用于预测的贝叶斯网络模型。在训练模型中，贝叶斯网络的节点表示属性，边缘是属性之间的条件依赖性。
-
-
 
 我们应用贝叶斯网络学习技术来解决它。
 贝叶斯网络是表示一组随机事件及其条件依赖性的概率图形模型。
@@ -381,16 +380,9 @@ Halstead属性平均：
 与每个节点相关联的是概率函数，其根据与节点父事件相关联的值计算由节点表示的事件的概率。
 有关详细信息，请参阅热门读者\ cite {Pearl1985}
 
-
-
-%We apply Bayesian network learning technique to address it. 
-%A Bayesian network is a probabilistic graphical model representing a set of random events and their conditional dependencies. 
-%Formally, it is a directed acyclic graph such that its nodes represent random events, and its edges represent conditional dependencies between two nodes (events); Two nodes which are not connected represent two events that are conditionally independent of each other.
-%Associated with each node is a probability function that computes the probability of the event represented by the node from the values associated with the nodes parent events. 
-%We refer avid readers to \cite{Pearl1985} for details.
-
 \BiSubsection {预测}
 {Predicting} 
+
 在此步骤中，当现有克隆组发生更改时，软件维护人员可以使用我们的预测变量来预测克隆一致性。如图~\ref{}~所示，我们的方法可以集成到一个IDE，如eclipse，可以保持克隆在开发阶段的变化。运行预测变量需要跟踪克隆在软件进化及其变化中的支持。一旦检测到克隆更改，该工具将提取与此更改实例相关的所有属性，预测其一致性要求，并通知开发人员。
 根据预测，开发者因此可以根据需要一致地保持克隆。
 
