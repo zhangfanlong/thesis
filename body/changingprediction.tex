@@ -20,7 +20,7 @@
 
 演化中的克隆变化使得克隆代码变得越来越难以维护，而克隆代码的一致性问题会导致额外的维护代价。当克隆代码发生变化时，程序开发人员需要验证克隆代码的一致性，从而导致维护代价的增加；如果开发人员忘记验证克隆代码的一致性，则可能会向系统中引入新的克隆一致性缺陷在\cite{bettenburg2009empirical} \cite {juergens2009code}。本文第三章研究了克隆代码创建时的一致性维护需求问题，在克隆代码产生时预测克隆代码一致性。在一定程度上可以降低软件的维护代价。但是，值得注意的是，并不是所有的克隆代码都可以被避免。同时，上述方法也无法处理系统中已经存在的克隆代码的一致性变化问题。因此，本章将讨论克隆代码变化时其一致性维护需求问题。
 
-在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统{jEdit}中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
+在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统jEdit中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
 
 \begin{figure}[htbp]
 \centering
@@ -64,7 +64,7 @@
 \begin{definition}
 [变化时一致性变化（Changing Consistent Change）]  
 \label{def-changingchange}
-给定存在两个克隆代码片段 $CF_1$和 $CF_2$，且它们被分别地修改为$CF'_1$和$CF'_2$。  如果对于一个非常小的阈值$\tau$，克隆代码$CF_1$和$CF_2$的变化满足以下条件，称此变化为{克隆变化时的一致性变化（Changing Consistent Change）} , 
+给定存在两个克隆代码片段 $CF_1$和 $CF_2$，且它们被分别地修改为$CF'_1$和$CF'_2$。  如果对于一个非常小的阈值$\tau$，克隆代码$CF_1$和$CF_2$的变化满足以下条件，称此变化为克隆变化时的一致性变化（Changing Consistent Change）， 
   \[
   \begin{array}[t]{crl}
     \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\} &(1) \\
@@ -411,7 +411,7 @@ Halstead属性平均：
 \BiSubsection{实验系统与实验设置}
 {Experimental Projects and Methodology}
 
-为评估本章方法，本章选取了四个开源软件进行实验。四个实验系统的克隆变化实例统计情况如表~\ref{changingsta}~所示。具体来说，第3列和第4列分别给出了不需要一致性维护和需要一致性维护的克隆变化实例的数量和比例。不需要一致性维护的克隆变化实例，该克隆变化不会使其所在的克隆组在未来演化中发生一致性变化，因此程序人员无需关注其克隆组的一致性问题。需要一致性维护的克隆变化实例，该克隆变化可能使其所在克隆组在未来演化过程中发生一致性变化，而遗忘这种变化会导致克隆缺陷，从而降低软件质量。
+为评估本章方法，本章选取了四个开源软件进行实验。四个实验系统的克隆变化实例统计情况如表~\ref{changesta}~所示。具体来说，第3列和第4列分别给出了不需要一致性维护和需要一致性维护的克隆变化实例的数量和比例。不需要一致性维护的克隆变化实例，该克隆变化不会使其所在的克隆组在未来演化中发生一致性变化，因此程序人员无需关注其克隆组的一致性问题。需要一致性维护的克隆变化实例，该克隆变化可能使其所在克隆组在未来演化过程中发生一致性变化，而遗忘这种变化会导致克隆缺陷，从而降低软件质量。
 
 从表中~\ref{changesta}~可以得出两个发现。第一，每个实验系统中都有数百到上千的克隆变化实例，数量从159到1040个，其中项目{jEdit}是含有最少的克隆变化实例。第二，在这些变化实例中，需要一致性维护的克隆实例比例占相当大的一部分，其比例为33\%到74\%。其中，ArgoUML中大部分的克隆变化实例不需要一致性维护。jEdit和jFreeChart需要和不需要一致性维护的克隆变化实例数量相差不大。而Tuxguitar中的克隆变化实例大部分都需要一致性维护。尽管需要一致性维护的克隆变化实例远远少于克隆创建实例（表~\ref{copysta}~），但是仍在存在数百个需要一致性维护的实例，同时克隆变化实例的危害也更大。因为对克隆变化实例来讲，需要一致性维护的克隆实例比例更大，也更容易导致缺陷。
 
@@ -506,10 +506,10 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 \item 
 警告率(Warning Rate)：指所警告的需要一致性维护的克隆变化实例，即预测为需要一致性维护的实例与系统中全部实例的比值。这些克隆变化实例可能会导致一致性缺陷问题，需要确保克隆组的一致性。
 
-\item \textbf{Precision}: 
+\item 
 准确率(Precision)：指警告为需要一致性维护的克隆变化实例的准确率，即在所预测为需要一致性维护的变化实例中，正确预测的实例与全部警告实例的比值。
 
-\item \textbf{Recall}: 
+\item 
 召回率(Recall)：指所警告的需要一致性维护的克隆变化实例的召回率，即预测为需要一致性维护的实例与系统中的真实的需要一致性维护实例的比值。
 \end{itemize}
 
@@ -531,7 +531,7 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 
 全属性实验使用本章提取的全部属性组在四个实验系统上进行评估，实验结果如表~\ref{changeallmeeting}所示。
 
-所创建的模型在预测{\em jFreeChart}和{\em Tuxguitar}的一致性需求时，预测结果显示非常有效，其中预测的准确度和召回率在80\%左右。同时，{\em jEdit}系统的预测效果虽然不如上面两个系统好，但是也相当不错。原因可能是因为jEdit系统的克隆变化实例规模较小，没有对模型实现较好的预测，但这需要进一步研究。尽管{\em  ArgoUML}的预测效果不如其它系统的预测效果，但其准确率仍然可以达到65\%左右，且召回率在45\%左右。最后，对于四个实验系统，本文所构建的模型均具有有十分合理的警告率，警告率十分接近于满足一致性维护需求的克隆变化实例的比例（如表~\ref {changsta}~中所示）。
+所创建的模型在预测{\em jFreeChart}和{\em Tuxguitar}的一致性需求时，预测结果显示非常有效，其中预测的准确度和召回率在80\%左右。同时，{\em jEdit}系统的预测效果虽然不如上面两个系统好，但是也相当不错。原因可能是因为jEdit系统的克隆变化实例规模较小，没有对模型实现较好的预测，但这需要进一步研究。尽管{\em  ArgoUML}的预测效果不如其它系统的预测效果，但其准确率仍然可以达到65\%左右，且召回率在45\%左右。最后，对于四个实验系统，本文所构建的模型均具有有十分合理的警告率，警告率十分接近于满足一致性维护需求的克隆变化实例的比例（如表~\ref {changesta}~中所示）。
 
 %The models created have been very effective in predicting consistency-requirement satisfaction for both the projects {\em jFreeChart} and {\em Tuxguitar}, with both the precision and the recall of the prediction hovering around 80\%.  It performs fairly well, though not as good, for {\em jEdit} repository. This might be due to the small size of the repository, but further investigation is required. Although {\em ArgoUML} do not have a good prediction like the other repositories, it still can predict the requirement with precision around 65\% and recall around 45\%. For all the projects, our models have produced fairly reasonable warning rates; it is around to the percentage of change instances meeting consistency requirements (as listed in Table~\ref{t_1}).
 
@@ -944,14 +944,15 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 %%table~\ref{t_9} shows that all precisions and recalls suffer comparing with the effective experiment. Combining this result and the (first) Effectiveness Experiment, we observe that prediction model is effective when it is trained from its own repository having sufficient number of change instances; ie., when the repository has already evolved for quite some time. Therefore, we recommend that, at the infancy stage of software development, due to a lack of sufficient number of clone change instances for training the model well, the developer can use the model bulit by Wang {\sl et al.} \cite{Wang2014} that detects copy-and-paste operations to avoid clones. After several versions of evolution of the software, and with increasing amount of data from its own repository, the developer can retrain the model to predict consistency-free of clone changes in the project.
 
 \begin{table}[htbp]
-\bicaption[changecrossfree]{}{项目交叉实验结果}
-{Table$\!$}{The Results of Cross-Project Experiment}
+\bicaption[changecrossfree]{}{四个实验系统上项目交叉实验效果}
+{Table$\!$}{The effectiveness for cross-project on four projects}
 \vspace{0.5em}
 \centering
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
-{\textbf{Project}}&{\textbf{Threshold}}&{\textbf{RR(\%)}}&{\textbf{Precision(\%)}}&{\textbf{Recall(\%)}}\\
+{测试系统}&{阈值}&{警告率(\%)}&{精确率(\%)}&{召回率(\%)}\\
+%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\\begin{table}[htbp]
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	6.09&	73.08&	6.60\\
@@ -984,9 +985,10 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 \end{tabular}
 \end{table}
 
-\BiSubsection{讨论}{Discussion}
+\BiSubsection{讨论}
+{Discussion}
 
-本章从不同的角度评估了所建立的贝叶斯网络模型的预测能力，同时对不需要一致性维护和需要一致性维护的克隆变化实例进行了一致性预测。实验结果表明，当系统使用自身的克隆变化实例进行全属性预测时，本章的模型在一致性维护需求和一致性维护自由的实验上具有有效的预测能力。而通过属性组实验发现每一个属性组在不同角度和程度上对预测模型的效果有着积极的作用。因此，本文鼓励开发人员使用全属性组进行克隆变化实例的一致性维护需求预测，从而将其适用到其它系统是达到最佳的预测效果。
+本节从不同的角度评估了所建立的贝叶斯网络模型的预测能力，同时对不需要一致性维护和需要一致性维护的克隆变化实例进行了一致性预测。实验结果表明，当系统使用自身的克隆变化实例进行全属性预测时，本章的模型在一致性维护需求和一致性维护自由的实验上均具有有效的预测能力。同时，属性组实验中，发现每一个属性组在不同角度和程度上对预测模型的效果有着积极的作用。因此，本文鼓励开发人员使用全属性组进行克隆变化实例的一致性维护需求预测，从而将其适用到其它系统是达到最佳的预测效果。
 
 %We evaluated the prediction power of Bayesian network model built to predict both on consistency-requirement and free for all the clone change instances. Based on the results of our experiments, our models have effective prediction ability, on both consistency-requirement and consistency-free prediction, when they are trained with full attributes for all instances.  The experiments on omitting single attribute set reveal each of the attribute sets contribute significantly -- to various degree -- to the quality of the prediction model. Therefore, developers should be encouraged to add in other attributes along these three dimensions to further sharpen the predictability of the constructed model. 
 
@@ -1013,7 +1015,8 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 \BiSection{本章结论}
 {Summary of this Chapter}
 
-在软件演化过程中，发生变化的克隆代码可能会导致一致性变化而引发克隆一致性缺陷，从而增加了软件维护的代价。在本文中，我们建议一种方法来预测克隆一致性 - 任何克隆组，其中一些组成的克隆片段进行代码修改。我们从软件仓库构建克隆系谱以提取克隆更改实例。对于每个变化实例，我们提取三组属性。具体来说，我们引入一组{\em 进化属性}来捕捉进化历史的特征。因此，我们的属性{\em 提供了关于代码变化的整体观点，从个人，环境和进化的角度}。我们使用这些数据为使用WEKA实现的每个存储库构建贝叶斯网络。我们对四个开源软件项目进行实验，以研究预测模型的三个视角。{实验结果表明，预测模型具有合理的速率：对于两个较大的存储库具有良好的精确度和召回率，并且对于最小的存储库具有合理的精确度和召回率。此外，所有三组属性对预测模型的回忆率有很强的影响。我们的实验表明，跨项目预测可能不是一个好的选择质量预测。
+在软件演化过程中，发生变化的克隆代码可能会导致一致性变化而引发克隆一致性缺陷，从而增加了软件维护的代价。为了帮助程序开发人员避免克隆一致性缺陷，降低软件维护代价，本章提出了一个克隆代码变化时一致性维护需求预测方法，在克隆代码发生变化时预测该变化是否会导致克隆一致性缺陷，从而提醒程序开发人员对克隆代码进行一致性维护。通过构建软件系统的克隆家系收集系统中的克隆变化实例，并用于构建和训练克隆代码一致性预测的贝叶斯网络模型。同时，为了表示克隆变化实例，本章从克隆组的角度提取了三组属性描述克隆变化实例的特征，分别代码属性、上下文属性和演化属性。对四个开源软件项目进行了一致性维护需求和自由实验，从而验证所构建模型的预测能力。实验结果表明，实验结果表明本章方法可以以合理的准确率和召回率有效地预测克隆代码的一致性维护需求。%对于两个较大的存储库具有良好的精确度和召回率，并且对于最小的存储库具有合理的精确度和召回率。
+此外，提取的三组属性对预测效果起到了积极的作用，并对预测结果的召回率有较强的影响。同时，对于克隆变化实例不足的系统，跨项目所构建的模型还不能够达到让人满意的预测效果，因此建议采用第二章提出的方法在克隆代码创建时预测其一致性。
 
 %预测器构造的主要成本来自存储库的变化实例收集;这种成本可以容易地在软件演进上摊销，使得这种方法可扩展。为了跟进，我们打算通过引入新的属性或属性选择来提高预测变量的回忆能力。通过引入一致性的预测{\em free}来补充现有的一致性需求预测。此外，我们打算将这个模型构建和预测过程集成到一个IDE中，如Eclipse。我们认为，这种整体方法可以提高软件可维护性以提高软件质量，因为开发人员现在可以更清楚地了解何时需要调查克隆组的一致性要求，避免一致性缺陷的潜在风险。
 
