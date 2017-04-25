@@ -403,7 +403,7 @@ Tracking clones changes
 %因此，我们使用包装WEKA来建立和训练我们所有需要的预测模型与不同的机器学习方法。WEKA是一种非常灵活且易于使用的数据挖掘工具，其中包含大量的分类/预测方法\cite{hall2009weka}。
 %在本节中，我们将使用每种机器学习方法的缩写术语，贝叶斯网络为{\em BayesNet}，本机贝叶斯为{\em Native}，支持向量机为{\em SVM}，K最近邻居作为{\em KNN}和设计树作为{\em 树}详细。
 
-\BiSubsection{克隆创建时预测实验}
+\BiSubsection{克隆创建时一致性预测}
 {Experiments for Clone Consistency-Requirement}
 
 在本实验中，我们解决了克隆克隆实例的第一个子研究问题。
@@ -412,47 +412,12 @@ Tracking clones changes
 属性集是否对此预测产生积极或消极的影响？
 我们采用五种不同的机器学习方法来预测这四个项目的克隆一致性，因此预测结果如表。
 
-\begin{table}[htbp]
-%%\caption{The Average Effectiveness of Creating Instances}
-%%\label{creatingallavg}
-\bicaption[creatingallavg]{}{不同机器学习方法的预测效果}
-{Table$\!$}{The Average Effectiveness of Creating Instances}
-\vspace{0.5em}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{\textbf{Metric}}&{\textbf{Method}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
-\midrule[1pt]
-\multirow{5}{*}{Percision}
-&{BayesNet}&0.935&0.889&0.883&	0.831\\
-&{Native}&	0.886&	0.871&	0.869&	0.793\\
-&{SVM}&0.958&	0.924&0.906&0.888\\
-&{KNN}&	0.94&0.886&0.9&	0.848\\
-&{Tree}	&0.939&0.898	&0.893&0.889\\
-\hline
-\multirow{5}{*}{Recall}
-&{BayesNet}& 0.936&	0.877&	0.882&	0.836\\
-&{Native}&0.888&0.82&	0.868&0.794\\
-&{SVM}& 0.958&0.921&0.904&0.883\\
-&{KNN}&0.94&0.889&	0.9	&0.848\\
-&{Tree}&0.94	&0.905&	0.892&0.891\\
-\hline
-\multirow{5}{*}{F-Measure}
-&{BayesNet}&0.935&0.882&0.881&0.832\\
-&{Native}&0.887&	0.84&0.867&0.794\\
-&{SVM}&0.957&	0.903	&0.903&0.876\\
-&{KNN}&0.94&0.887&	0.9	&	0.848\\
-&{Tree}	&0.939&	0.901	&0.892&0.89\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
 
 \begin{table}[htbp]
 %%\caption{The Effectiveness of Creating Instances for free}
 %%\label{creatingallfree}
 %%\center
-\bicaption[creatingallfree]{}{克隆创建实例的一致性自由的预测效果}
+\bicaption[creatingallfree]{}{克隆创建实例的一致性维护自由的预测效果}
 {Table$\!$}{The Effectiveness of Creating Instances for Consistency-Free}
 \vspace{0.5em}
 \centering
@@ -488,8 +453,8 @@ Tracking clones changes
 \begin{table}[htbp]
 %%\caption{The Effectiveness of Creating Instances for Meeting Consistency-Requirement}
 %%\label{creatingallmeeting}
-\bicaption[creatingallmeeting]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Effectiveness of Creating Instances for  Meeting Consistency-Requirement}
+\bicaption[creatingallmeeting]{}{克隆创建实例的一致性维护需求的预测效果}{Table$\!$}
+{The Effectiveness of Creating Instances for Meeting Consistency-Requirement}
 \vspace{0.5em}
 \wuhao
 \centering
@@ -523,15 +488,51 @@ Tracking clones changes
 
 
 
-
-\begin{table*}[htbp]
-%%\caption{The Average Effectiveness of Attribute Set for Creating Instances}
-%%\label{csetavg}
-\bicaption[creatingsetavg]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Average Effectiveness of Attribute Set for Creating Instances}
+\begin{table}[htbp]
+%%\caption{The Average Effectiveness of Creating Instances}
+%%\label{creatingallavg}
+\bicaption[creatingallavg]{}{克隆创建实例一致性维护需求平均预测效果}
+{Table$\!$}{The Average Effectiveness of Creating Instances for Consistency-Requirement}
 \vspace{0.5em}
 \centering
-\scriptsize
+\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+{\textbf{Metric}}&{\textbf{Method}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
+\midrule[1pt]
+\multirow{5}{*}{Percision}
+&{BayesNet}&0.935&0.889&0.883&	0.831\\
+&{Native}&	0.886&	0.871&	0.869&	0.793\\
+&{SVM}&0.958&	0.924&0.906&0.888\\
+&{KNN}&	0.94&0.886&0.9&	0.848\\
+&{Tree}	&0.939&0.898	&0.893&0.889\\
+\hline
+\multirow{5}{*}{Recall}
+&{BayesNet}& 0.936&	0.877&	0.882&	0.836\\
+&{Native}&0.888&0.82&	0.868&0.794\\
+&{SVM}& 0.958&0.921&0.904&0.883\\
+&{KNN}&0.94&0.889&	0.9	&0.848\\
+&{Tree}&0.94	&0.905&	0.892&0.891\\
+\hline
+\multirow{5}{*}{F-Measure}
+&{BayesNet}&0.935&0.882&0.881&0.832\\
+&{Native}&0.887&	0.84&0.867&0.794\\
+&{SVM}&0.957&	0.903	&0.903&0.876\\
+&{KNN}&0.94&0.887&	0.9	&	0.848\\
+&{Tree}	&0.939&	0.901	&0.892&0.89\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+\bicaption[creatingsetavg]{}{克隆创建实例的属性组平均预测效果}
+{Table$\!$}
+{The Average Effectiveness of Attribute Set on Creating Instances for Consistency-Requirement}
+\vspace{0.5em}
+\centering
+\wuhao
+%\scriptsize
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
@@ -560,17 +561,19 @@ Tracking clones changes
 &Tree&	0.939&	0.904&	0.93&		0.901&	0.887&	0.881&		0.892&	0.788&	0.889&		0.89&	0.802&	0.881\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+%\end{table*}
+\end{sidewaystable} 
 
-
-\begin{table*}[htbp]
-\scriptsize
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+%\scriptsize
 %%\caption{The Effectiveness of Attribute Set for Creating Instances for free}
 %%\label{creatingsetfree}
-\bicaption[creatingsetfree]{}{符合研究生院绘图规范的表格}{Table$\!$}
-{The Effectiveness of Attribute Set for Creating Instances for Consistency-Requirement Free}
+\bicaption[creatingsetfree]{}{克隆创建实例的属性组克隆一致性维护自由预测效果}{Table$\!$}
+{The Effectiveness of Attribute Set on Creating Instances for Consistency-Requirement Free}
 \vspace{0.5em}
 \centering
+\wuhao
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
@@ -600,17 +603,19 @@ Tracking clones changes
 &Tree&0.961&	0.938&	0.956	&	0.947	&0.942&	0.939	&	0.912&	0.843	&0.911&		0.924	&0.868&	0.918\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+%\end{table*}
+\end{sidewaystable}
 
-
-\begin{table*}[htbp]
-\scriptsize
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+\footnotesize
 %%\caption{The Effectiveness of Attribute Set for Creating Instances for meeting}
 %%\label{creatingsetmeeting}
-\bicaption[sdfj1]{}{符合研究生院绘图规范的表格}{Table$\!$}
+\bicaption[sdfj1]{}{克隆创建实例的属性组克隆一致性维护自由预测效果}{Table$\!$}
 {The Effectiveness of Attribute Set for Creating Instances for Meeting Consistency-Requirement}
 \vspace{0.5em}
 \centering
+%\wuhao
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
@@ -639,7 +644,8 @@ Tracking clones changes
 &Tree&	0.865&	0.79&	0.842	&	0.545&	0.459&	0.435	&	0.861	&0.706&	0.857	&	0.805	&0.637&	0.79\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+%\end{table*}
+\end{sidewaystable}
 
 表{克拉克隆}表示克隆实例预测的有效性。从这个表可以看出，这种方法可以通过五种不同的机器学习方法有效地预测克隆一致性要求，从79.3\%到95.8\%的准确度从79.4\%回归到95.8\% ，F值从79.4\%至95.7\%。
 比较所采用的学习方法的有效性，显然，{\em SVM}具有比这四个项目的其他方法更好的克隆预测能力。具体来说，SVM对于{\em ArgoUML，jEdit和jFreeChart}具有最好的结果，决策树具有最好的结果，SVM对于{\em Tuxguitar}来说是第二好的。与此同时，贝叶斯网络和本地贝叶斯方法在这四个项目中几乎保持了相对较差的预测结果。
@@ -658,47 +664,14 @@ Tracking clones changes
 属性集是否对我们的预测产生积极或消极的影响？
 }
 为了解决这个问题，我们采用了五种不同的机器学习方法进行克隆更改的一致性，结果如表。
-\begin{table}[htbp]
-%%\caption{The Average Effectiveness of Changing Instances}
-%%\label{changingallavg}
-\bicaption[changingallavg]{}{符合研究生院绘图规范的表格}
-{Table$\!$}{The Average Effectiveness of Changing Instances}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
-\midrule[1pt]
-\multirow{5}{*}{Percision}
-&{BayesNet}&0.724&	0.686&	0.791&0.72\\
-&{Native}& 0.734&	0.696	&0.778&	0.729\\
-&{SVM}&0.744	&0.704&0.793	&0.733\\
-&{KNN}&0.733	&0.597&	0.772&	0.672\\
-&{Tree}&0.682	&0.581	&0.742	&0.637\\
-\hline
-\multirow{5}{*}{Recall}
-&{BayesNet}&0.735	&	0.686&0.791&0.746\\
-&{Native}&0.726&	0.692&0.778&0.737\\
-&{SVM}&0.752	&0.704&0.791&0.734\\
-&{KNN}&0.731	&	0.597	&	0.77	&	0.706\\
-&{Tree}&0.698&	0.579	&	0.742&0.672\\
-\hline
-\multirow{5}{*}{F-Measure}
-&{BayesNet}&	0.726	&	0.686	&0.79	&0.726\\
-&{Native}&0.729&	0.689&0.778&0.733\\
-&{SVM}&0.729&0.704	&0.789&	0.733\\
-&{KNN}&0.732	&0.597	&0.771	&	0.683\\
-&{Tree}&0.632	&	0.573&	0.739&0.651\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
+
 
 
 \begin{table}[htbp]
 %%\scriptsize
 %%\caption{The Effectiveness of Changing Instances for Consistency-Requirement Free}
 %%\label{changingallfree}
-\bicaption[changingallfree]{}{符合研究生院绘图规范的表格}
+\bicaption[changingallfree]{}{克隆变化实例的一致性维护自由预测结果}
 {Table$\!$}{The Effectiveness of Changing Instances for Consistency-Requirement Free}
 \vspace{0.5em}
 \centering
@@ -735,7 +708,7 @@ Tracking clones changes
 %%\scriptsize
 %%\caption{The Effectiveness of Changing Instances for meeting}
 %%\label{changingallmeeting}
-\bicaption[changingallmeeting]{}{符合研究生院绘图规范的表格}
+\bicaption[changingallmeeting]{}{克隆变化实例的一致性维护需求预测结果}
 {Table$\!$}{The Effectiveness of Changing Instances for Meeting Consistency-Requirement }
 \vspace{0.5em}
 \centering
@@ -768,16 +741,51 @@ Tracking clones changes
 \end{tabular}
 \end{table}
 
+\begin{table}[htbp]
+%%\caption{The Average Effectiveness of Changing Instances}
+%%\label{changingallavg}
+\bicaption[changingallavg]{}{克隆变化实例的一致性维护需求平均预测结果}
+{Table$\!$}{The Average Effectiveness of Changing Instances}
+\centering
+\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+{\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
+\midrule[1pt]
+\multirow{5}{*}{Percision}
+&{BayesNet}&0.724&	0.686&	0.791&0.72\\
+&{Native}& 0.734&	0.696	&0.778&	0.729\\
+&{SVM}&0.744	&0.704&0.793	&0.733\\
+&{KNN}&0.733	&0.597&	0.772&	0.672\\
+&{Tree}&0.682	&0.581	&0.742	&0.637\\
+\hline
+\multirow{5}{*}{Recall}
+&{BayesNet}&0.735	&	0.686&0.791&0.746\\
+&{Native}&0.726&	0.692&0.778&0.737\\
+&{SVM}&0.752	&0.704&0.791&0.734\\
+&{KNN}&0.731	&	0.597	&	0.77	&	0.706\\
+&{Tree}&0.698&	0.579	&	0.742&0.672\\
+\hline
+\multirow{5}{*}{F-Measure}
+&{BayesNet}&	0.726	&	0.686	&0.79	&0.726\\
+&{Native}&0.729&	0.689&0.778&0.733\\
+&{SVM}&0.729&0.704	&0.789&	0.733\\
+&{KNN}&0.732	&0.597	&0.771	&	0.683\\
+&{Tree}&0.632	&	0.573&	0.739&0.651\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
 
-
-\begin{table*}[htbp]
-\scriptsize
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+\footnotesize
 %%\caption{The Average Effectiveness of Attribute Set for Changing Instances}
 %%\label{changingsetavg}
-\bicaption[changingsetavg]{}{符合研究生院绘图规范的表格}
+\bicaption[changingsetavg]{}{克隆变化实例的属性组一致性维护需求平均预测效果}
 {Table$\!$}{The Average Effectiveness of Attribute Set for Changing Instances}
 \vspace{0.5em}
 \centering
+%\wuhao
 \begin{tabular}{cccccccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{4}{c}{\textbf{ArgoUML}}&\multicolumn{4}{c}{\textbf{jEdit}}&\multicolumn{4}{c}{\textbf{jFreeChart}}&\multicolumn{4}{c}{\textbf{Tuxguitar}}\\
@@ -807,16 +815,19 @@ Tracking clones changes
 &Tree&	0.632&	0.634&	0.694&	0.635&		0.573&	0.577&	0.533&	0.584&		0.739&	0.741&	0.711&	0.731&		0.651&	0.635&	0.664&	0.651\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+%\end{table*}
+\end{sidewaystable} 
 
-\begin{table*}[htbp]
-\scriptsize
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+\footnotesize
 %%\caption{The Effectiveness of Attribute Set for Changing Instances for free}
 %%\label{changingsetfree}
-\bicaption[changingsetfree]{}{符合研究生院绘图规范的表格}
+\bicaption[changingsetfree]{}{克隆变化实例的属性组一致性维护自由预测效果}
 {Table$\!$}{The Effectiveness of Attribute Set for Changing Instances for Consistency-Requirement Free}
 \vspace{0.5em}
 \centering
+%\wuhao
 \begin{tabular}{cccccccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{4}{c}{\textbf{ArgoUML}}&\multicolumn{4}{c}{\textbf{jEdit}}&\multicolumn{4}{c}{\textbf{jFreeChart}}&\multicolumn{4}{c}{\textbf{Tuxguitar}}\\
@@ -846,16 +857,19 @@ Tracking clones changes
 &Tree&	0.81	&0.812	&0.819&	0.814&		0.518&	0.544&	0.628&	0.526&		0.678&	0.68&	0.668	&0.671&		0.247&	0.226&	0.318&	0.23\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+%\end{table*}
+\end{sidewaystable}
 
-\begin{table*}[htbp]
-\scriptsize
+\begin{sidewaystable} [htbp]
+%\begin{table*}[htbp]
+\footnotesize
 %%\caption{The Effectiveness of Attribute Set for Changing Instances for meeting}
 %%\label{changingsetmeeting}
-\bicaption[changingsetmeeting]{}{符合研究生院绘图规范的表格}
+\bicaption[changingsetmeeting]{}{克隆变化实例的属性组一致性维护需求预测效果}
 {Table$\!$}{The Effectiveness of Attribute Set for Changing Instances for Meeting Consistency-Requirement}
 \vspace{0.5em}
 \centering
+%\wuhao
 \begin{tabular}{cccccccccccccccccc}
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{4}{c}{\textbf{ArgoUML}}&\multicolumn{4}{c}{\textbf{jEdit}}&\multicolumn{4}{c}{\textbf{jFreeChart}}&\multicolumn{4}{c}{\textbf{Tuxguitar}}\\
@@ -885,7 +899,8 @@ Tracking clones changes
 &Tree&	0.263	&0.264	&0.435	&0.266		&0.626	&0.608	&0.441	&0.641		&0.785	&0.789	&0.743	&0.776		&0.791	&0.776	&0.784	&0.796\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{table*}
+\end{sidewaystable} 
+%\end{table*}
 
 
 表显示了克隆更改实例的预测的有效性。
@@ -919,9 +934,32 @@ Tracking clones changes
 由于软件的不断发展，其项目克隆更改实例的数据将足以对预测器进行良好的训练。
 但是，这种方法只能预测变化的一致性要求，不能帮助开发人员维护克隆更改的一致性。为了实现克隆一致性的目标，我们还建议开发人员采取措施，通过一致性维护和管理技术（如\cite{cheng2016rule}和\cite{nguyen2012clone}）执行克隆一致的更改。
 
-\BiSection{结论}
-{Research Problem}
-克隆和更改软件开发人员克隆的行为会增加软件维护的负担，这是由于当软件发展时可能需要保持克隆组的一致性变化。在本文中，我们提出了克隆一致性要求预测的研究问题，并构建c了一个实证研究，以克隆克隆和更换时间的五种不同的机器学习方法来解决这个问题。我们调整克隆一致性更改的克隆定义，以及用于克隆克隆和更改实例的组更改模式。对于每个克隆实例，我们提取不同的属性集以表示克隆克隆和更改实例。具体来说，对于克隆实例，我们提取用于粘贴代码的复制代码和上下文属性的两个变体属性集合的代码属性集，并引入一组{\em 演化属性}来捕获克隆实例的演化历史的特征。因此，我们的属性{\em 从个人，环境和进化的角度提供关于代码更改的整体视图}。我们使用这些数据为使用WEKA实现的每个存储库构建贝叶斯网络。我们对四个开放源码软件项目进行实验，以不同的预测任务来解决我们的三个子研究问题。实验结果表明，该预测具有合理的速率：克隆实例具有良好的效果，克隆更改实例可以接受。我们建议开发人员在执行克隆一致性预测时应使用SVM方法作为其预测变量。我们还提供了我们的建议，开发人员可以在实践中的软件开发时间跟随。
 
-为了跟进，我们首先打算建立一个通用的跨项目预测器，以增强没有足够数据的新的软件存储库的能力来训练其模型。通过这个跨项目预测器，开发人员可以忽略开发人员的培训步骤，这可以真正节省克隆一致性预测的时间。此外，我们打算通过为变化预测引入新的属性或属性选择来增强预测变量的能力。
-对于克隆更改实例，我们还打算在开发过程中构建一种新技术来支持克隆一致的更改以保存。此外，我们打算将此模型构建和预测过程集成到IDE中，如Eclipse。c我们认为，这种全面的方法可以大大提升软件可维护性，从而提高软件质量，因为开发人员现在可以更加了解当需要调查克隆组的一致性要求时，避免出现一致性缺陷的潜在风险。
+%%\section{Threats to Validity}
+
+%Our empirical study work may subject to some threats of validities including construct validity and conclusion validity.
+
+%One concern is about threat to construct validity, related to the ``creating and changing'' metrics we used in the construction and evaluation.We provide two kind ``consistent change'' patterns for clone groups, specifically type-1 consistent change pattern for creating and type-2 for changing.Both of them might not be truly accurate for clone groups that include {\em more than two\/} clone fragments, as clones in a clone group may not really match the pattern condition. Nonetheless, this will not be really significant because of two reasons: (1) Most of the clone groups found in the repositories are of size 2; (2)We believe that, when consistent change happened to at least two clone fragments in a group type-1 consistent change for creating indeed increase clone maintenance cost, as well as that when changes happening to clones causing type-2 consistent change in a clone group developers also indeed should check through all clones in such changing group for consistency to avoid consistency-defect.
+
+%On the other hand, threats to validity of conclusion concerns about the population of clone instances in software's repository as well as the employed machine learning methods. Software's repository supplies our clone instances to machine learning methods, that require adequate training data to train the prediction model well; therefore, software's repository should ideally contain several revisions or have enough amount of clone instances. Consequently, our approach maybe not applicable for a new repository or the repository without enough instances. In thus situation, we recommend developers to be careful in introducing code clones by copy-and-paste operation to avoid the code clones; and recommend developer take other measures to maintain the clones and their changes, such as effective clone management tools. 
+
+%In this work, we do not improve the machine learning technique. For these learning methods, there still have some space for enhancing the predictive ability through adjusting specific parameters. Our defense to this argument is that the effectiveness of prediction is already reasonable for clone consistency prediction. Obtaining the best configuration of these methods for the best prediction effectiveness will be anther task that is beyond the existing scope of this  research.
+
+
+
+\BiSection{结论}
+{Summary of this Chapter}
+
+在软件开发过程中，克隆创建实例（复制粘贴操作）和克隆变化实例（克隆修改操作）可能会导致克隆代码在演化过程中的一致性变化，从而可能增加软件维护的代价。因此，本章统一了克隆创建和变化时的一致性维护需求定义，并结合软件开发过程对克隆代码一致性维护需求预测进行了实证研究。为帮助程序开发人员在实际应用中预测克隆代码的一致性维护，本章结合软件开发过程提出了一个研究问题，并使用五种不同的机器学习方法预测克隆代码的一致性维护需求；同时设计和开发了了一个克隆代码一致性预测插件，可以帮助程序开发人员在实际的开发过程中预测克隆代码的一致性，切实的提高软件的可维护性和软件质量。 %对于每个克隆实例，我们提取不同的属性集以表示克隆创建和更改实例。具体来说，对于创建实例，我们提取了用于粘贴代码的复制代码和上下文属性的代码属性的两个变体属性集，并引入了一组{\ em演化属性}来捕获创建实例的演化历史的特征。因此，我们的属性{\ em从个人，环境和进化的角度提供关于代码更改的整体视图}。我们使用这些数据为使用WEKA实现的每个存储库构建一个贝叶斯网络
+在四个开源系统上分别在克隆代码创建时和变化时进行了实验分组，从三个不同的角度回答了本文所提出的研究问题。实验结果表明使用不同的机器学习方法所构建的预测模型在克隆一致性维护需求问题上具有相一致的预测效果，可以以高效地预测克隆创建实例一致性且有效地预测克隆变化的一致性问题。尽管如此，本文建议开发人员采用SVM方法进行预测，因为SVM在两种时刻均具最佳的预测能力。同时，为帮助软件开发人员在实际中对克隆一致性进行预测，本文结合软件开发过程在不同的软件开发阶段给出了不同的克隆一致性预测的建议。最后，本文结合实际的软件开发过程，基于eclipse实现了一个克隆代码一致性维护插件，可以在软件开发过程中帮助程序开发人员预测一致性，帮助降低软件维护代价，提高可维护性。
+
+%The behaviors of creating and changing clones by developers -- in software development -- will increase to the burden of software maintenance cost, as there is increased needs for potential maintenance of consistent change in a clone group.   In this paper, we raise a research problem for clone consistency-requirement prediction based on previous work of \cite{wang2014predicting}\cite{zhang2016predicting}, and construct an empirical study addressing this problem with {\em five\/} different machine learning methods through unifying clone consistency perdition both at creating and changing times. We adapt these definitions of clone consistency to this unified creating and changing predictions with their extracted attribute sets. %For each clone instance, we extract the diverse attribute set to represent clone creating and changing instance. Specifically, for creating instance we extract two variant attribute sets of code attributes for copied code and context attributes for pasted code, and introduce a set of {\em evolution attributes} to capture the characteristics of evolution history for creating instance. Consequently, our attributes {\em provide a holistic view about code change, from perspectives of individual, environment, and evolution}.  We use these data to build a Bayesian network for each repository, implemented using WEKA. 
+%We conducted experiments on four open source software projects, with the aim to address our proposed problem form different perspectives. The results show that our models employed different machine methods all have similar reasonable ability of consistency prediction, and all having good effectiveness for creating instances and acceptable for changing instances. Meanwhile, we recommend developer employing SVM technique for their predictor due to the latter's good predictive power, both for clone creating and changing. Furthermore, we provide our recommendations for the developer when they perform clone consistency prediction at different software development time in practice.
+
+%为了跟进，我们首先打算建立一个通用的跨项目预测器，以增强没有足够数据的新的软件存储库的能力来训练其模型。通过这个跨项目预测器，开发人员可以忽略开发人员的培训步骤，这可以真正节省克隆一致性预测的时间。此外，我们打算通过为变化预测引入新的属性或属性选择来增强预测变量的能力。
+%对于克隆更改实例，我们还打算在开发过程中构建一种新技术来支持克隆一致的更改以保存。此外，我们打算将此模型构建和预测过程集成到IDE中，如Eclipse。c我们认为，这种全面的方法可以大大提升软件可维护性，从而提高软件质量，因为开发人员现在可以更加了解当需要调查克隆组的一致性要求时，避免出现一致性缺陷的潜在风险。
+
+%To follow up, we intend to build a general predictor for cross-project prediction, that will enhance the ability for the new software repository not having enough data to train its own model well. With this cross-project predictor, developers may also ignore the training phase at the developing, that can indeed increase the efficiency of clone consistency prediction. In addition, we also intend to enhance the predictive ability of the predictor for the changing prediction by introducing new attributes or selecting best sub attributes. In addition, we intend to integrate this model construction and prediction processes into an IDE, such as Eclipse.  For the clone changing instance, we also intend to build  a new technique to support the clone consistent change during the development to save the .
+
+%We believe that this holistic approach can be a solid boost to software maintainability to improve software quality, as developers can now be more aware of when consistency-requirement of a clone group need to be investigated, avoiding the potential risk of consistency-defects. 
+
