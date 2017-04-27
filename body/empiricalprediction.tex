@@ -351,18 +351,20 @@ Tracking clones changes
 \BiSection{实验结果与分析}
 {Experiments Results and Analysis}
 
-本节给出本章的实验结果与分析，首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
+本节给出本章的实验结果与分析，使用五种不同的机器学习方法，对克隆代码创建时和变化时同时进行一致性维护预测。首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
 
 
 \BiSubsection{实验系统与实验设置}
 {Experimental Projects and Methodology}
 
-为了解决本章的研究问题，本章在四个开源项目上进行了实验。表~\ref{clonesta}~给出了实验系统中克隆实例的统计信息，包括克隆创建实例和克隆变化实例。具体来说，表中第3、4列列出了不满足一致性维护需求的两类克隆实例的数量和比例。不需要一致性维护的克隆实例，在其未来的演化中不会导致一致性变化和额外的维护代价。需要一致性维护的克隆实例，在其演化过程中可能导致一致性变化及克隆一致性缺陷。
+为了解决本章的研究问题，本章在四个开源项目上进行了实验。表~\ref{instancesta}~给出了实验系统中克隆实例的统计信息，包括克隆创建实例和克隆变化实例。从该表可以看出，系统中克隆创建实例的数量要多于克隆变化实例的数量。克隆创建实例的数量范围为633到3666个，克隆变化实例的数量范围在159到1040个，系统jEdit是克隆规模最小的系统。表中第3和4列给出了不需要和需要一致性维护的克隆实例的数量和比例。不需要一致性维护的克隆实例，在其未来的演化中不会导致一致性变化和额外的维护代价。需要一致性维护的克隆实例，在其演化过程中可能导致一致性变化及克隆一致性缺陷。
 
-从表~\ref{clonesta}~中可以看出，系统中的克隆创建实例的数量是633到3666个，变化实例的数量为159到1040个。系统中克隆创建实例的数量要远于克隆变化实例的数量。其中，jEdit是四个系统中拥有克隆创建实例和克隆变化实例最少的。第二，软件系统中大部分的克隆创建实例在其演化过程中不满足一致性维护要求(比例从59.8\%到88.47\%)。这表明克隆操作已经成为开发人员的常用技术，并且大多数并不会在演化中引入一致的变化。第三，在克隆变化实例中，需要一致性维护的克隆实例比例占相当大的一部分，其比例为33\%到74 \%。尽管克隆变化实例的数量没有那么多，但是在系统中仍有几百个克隆变化实例，而这些变化似乎也更容易引发一致性变化，从而导致增加克隆代码一致性缺陷的风险。开发人员应该更加注意软件开发中的克隆变化。
+
+%We conduct our experiments on {four} open source projects for this clone consistency prediction task. Table~\ref{projects}~ shows the details of these projects with the clone-creating and clone-changing instances.  As observed from this table, number of clone-creating instances ranges from 633 to 3,666, and that of clone-changing instances ranges between 159 and 1,040, with project {\em jEdit} being the smallest repository in both scenarios. Specifically, the numbers of two types of clone instances which meet consistency-requirement (ie., leading to some form of consistent change of clone groups in the future) are shown in column 3 and column 6, whereas columns 2 and 5 reflect the numbers of clone instances that are consistency-requirement {\em free} (ie., do {\em not\/} lead to any consistent change in the future). 
+
 
 \begin{table}[htbp]
-\bicaption[clonesta]{}{实验系统的克隆实例信息统计}
+\bicaption[instancesta]{}{实验系统的克隆实例信息统计}
 {Table$\!$}{The statistics for clone instances in four projects}
 \vspace{0.5em}
 \centering
@@ -389,14 +391,33 @@ Tracking clones changes
 \end{tabular}
 \end{table}
 
+从表~\ref{instancesta}~中可以观察到两个现象。第一，软件系统中存在大量的克隆创建实例（三个项目中有上千的例子），同时大部分的克隆创建实例在其演化过程中不满足一致性维护要求(比例从59.8\%到88.47\%)。这表明克隆创建操作（即复制和粘贴操作）已经成为开发人员的常用技术，并且它们中的大多数在演化过程中不会在将来引入任何一致的变化，建议开发人员可以使用复制和粘贴操作节省开发时间。第二，在克隆变化实例中，三个系统中只有数百个变化实例，仅有jFreeChart中有1040变化实例。这表明相对于克隆代码在演化过程中不会频繁地发生变化，但也有相当数量的变化。值得注意的，这些变化中需要一致性维护的变化实例比例占相当大的一部分，其比例为33\%到74 \%。克隆代码的一致性变化更容易引发一致性变化，从而导致增加克隆代码一致性缺陷的风险，因此开发人员在软件开发过程中应该更加注意软件开发过程中的克隆变化。
+
+%We have two observations for clone instances from Table~\ref{projects}.
+%\begin{enumerate}
+%\item For clone-creating instances, there are thousands of creating instances from {\em three projects\/}, and more than half-a-thousand for{\em jEdit\/}.Among them, only a small percentage of them meeting consistency-requirement, ranging from 12\% to 40\%. This shows that clone-creating operation (ie., copy-and-paste operation) have become a common development technique, but the majority of them will not introduce any consistent change in the future, indicating that developers usually apply copy-and-paste technique to save development time.
+  
+%\item On the other hand, for changing instances, there only have hundreds of instances from {\em three\/} projects, and 1,040 counts from {\em jFreeChart\/}, indicating that these clones do not change frequently in evolution.Nonetheless, the percentage of changing instances that meets consistency-requirement ranges from 33\% to 74\% , indicating that there still have hundreds of opportunity of clone consistency-defect arising form these consistent changes of clone-changing instance in the software. Hence, developers should pay more attention on clone changing during software development time.
+%\end{enumerate}
+
+
 本章对克隆代码的一致性需求预测进行实证研究，目的是解决本文提出的研究问题：克隆代码的一致性维护需求预测是否可以应用于其它的机器学习方法中，软件开发人员应如何结合软件开发过程中执行克隆一致性需求预测？
 
-本文将此研究问题划分为三个子问题，因此本章实验也相应的划分为三个部分以回答三个子问题。对于第一个研究问题，进行“创建时一致性预测实验”。对克隆创建实例进行实验，实验结果表明了五种不同机器学习方法的有效性。类似地，为了回答第二个研究问题，本章设计了“变化时一致性预测”实验。对克隆变化实例进行实验，也分析了五种不同的机器学习方法在克隆变化实例上的有效性。最后，第三个研究问题没有具体的实验，本章通过对比克隆创建实验和变化实验，并结合软件开发过程，回答本章提出的第三个研究问题。给出了一些相关的建议，帮助程序开发人员在开发实践中使用这些预测模型和技术。
-
-在克隆创建实验和克隆变化实验中，与本文第三章和第四章相似，又分别进行了两种实验\footnote{值得注意的是，本章没有进行交叉验证实验。}：全属性实验和属性组实验，从两个不同的角度评估五种机器学习方法的有效性。全属性实验，使用所提取的全部属性进行预测，并对比五种机器学习方法。属性组实验中，使用不同的属性组进行实验，分析不同属性组的影响。
-
+本章将此研究问题划分为三个子问题，因此实验也相应的划分为三个部分以回答三个子问题。对于第一个研究问题，进行了“克隆代码创建时一致性预测实验”，用于验证五种不同机器学习方法对克隆代码创建时一致性预测的有效性。类似地，为了回答第二个研究问题，本章设计了“克隆代码变化时一致性预测”实验。对克隆变化实例进行实验，也分析了五种不同的机器学习方法在克隆变化实例上的有效性。最后，第三个研究问题没有具体的实验，但通过结合软件开发过程，并对比克隆创建实验和变化实验，回答了本章提出的第三个研究问题。同时，给出了一些相关的建议，帮助程序开发人员在开发实践中使用这些预测模型和技术。
+%In this empirical study, we aim to address our research problem with three detailed sub research questions; as such, our experiments are divided into three parts respectively.For the first research question, we construct {\em clone creating experiment\/} for creating instances that reports on the effectiveness of the {\em five} different machine learning methods.Secondly, {\em clone changing experiment\/} is built for second research question with these methods.Finally, we compare and contrast the above two experiments for clone-creation and clone-change respectively, in order to answer the third research question. We provide our recommendations for developers on how to apply these change-consistency predictive task in practice based on the investigations of the above two experiments.
 
 
+在克隆创建实验和克隆变化实验中，与本文第三章和第四章相似，又分别进行了两种实验\footnote{值得注意的是，本章没有进行交叉验证实验。}：全属性实验和属性组实验，从两个不同的角度评估五种机器学习方法的有效性。全属性实验，使用所提取的全部属性进行预测，并对比五种机器学习方法。属性组实验中，使用不同的属性组进行实验，分析不同属性组在五种不同机器学习方法上的预测能力。
+%Similar to the works performed in \cite{wang2014predicting}\cite{zhang2016predicting},  we assess the effectiveness of this prediction from two different perspectives:
+%\begin{enumerate}
+%\item {\em Effectiveness Experiment\/}: We utilize all attributes extracted from each of the four projects with different machine learning methods to assess the quality of the prediction.
+%\item {\em Attribute Set Experiment\/}: We assess the impact of each of the contributing attribute sets with different machine learning methods on the prediction.
+%\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%以下是详细的所有实验细节。
+%%%放弃不用
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %与第三章和第四章类似，克隆变化实例有两种类别，即需要一致性维护实例和不需要一致性维护实例。本章还从上述两个角度对本文方法进行了评估，进一步将实验划分为需要一致性维护实验和不需要一致性维护实验。“需要一致性维护实验”，分析了不同机器学习方法对满足一致性维护需求的实例的预测能力。与之相反，“不需要一致性实验”，分析了不同机器学习方法对不满足一致性维护需求的实例的预测能力。这些满足维护需求的克隆实例，将导致未来的一致变化。当实例刚发生时，应该警告开发人员采取一定的措施。另一方面，不满足一致性需求的实例，将不会导致一致性变化，因此开发人员可以自由地自行复制或更改代码。
 
 %为了评测每一个实验结果，本文采用三个度量值评估预测效果，分别是：准确率（Precision）、召回率（Recall）和F值（F-measure）。其中，准确率和召回率的计算方式与第三章和第四章中一致，F值则权衡了两种度量，其计算方式如下，
@@ -408,6 +429,71 @@ Tracking clones changes
 
 %我们的案例研究中，采用五种机器学习方法来探索这四个项目的这些预测的有效性。我们没有意图改进这些方法来适应这种一致性要求的预测。
 %因此，我们使用包装WEKA来建立和训练我们所有需要的预测模型与不同的机器学习方法。WEKA是一种非常灵活且易于使用的数据挖掘工具，其中包含大量的分类/预测方法\cite{hall2009weka}。在本节中，我们将使用每种机器学习方法的缩写术语，贝叶斯网络为{\em BayesNet}，本机贝叶斯为{\em Native}，支持向量机为{\em SVM}，K最近邻居作为{\em KNN}和设计树作为{\em 树}详细。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+在每一个实验中，本章使用五种不同的机器学习方法，并同时对需要一致性维护的克隆实例和不需要一致性维护的克隆实例进行预测。在实验中，首先，将数据集分为10个数据集作10倍交叉验证，用于评估预测效果。然后，分别计算满足一致性维护需求和不满足一致性维护需求的准确率（Precision）、召回率（Recall）和F值（F-measure），用于评估不同类型实例的预测效果。最后，将这两组预测结果进行加权平均，使用平均准确率、平均召回率和平均F值作为实验指标，评估预测模型的预测能力。
+%Each of the prediction models is trained to predict both consistency-requirement and consistent-requirement free at the same time. All data are divided into 10 cross-validation set, as normally done in such experiment.We evaluate the prediction effectiveness of each of the models by first calculating the precisions, recalls, and f-measures for them predicting the consistency and free instances respectively. Then, we calculate the combined average precision, recall and f-measure from these two results.
+
+因此，对克隆创建实例和克隆变化实例的评价指标为：准确率、召回率和F值，如下所示：
+%To evaluate the effectiveness of each prediction for clone-creating and changing instances, we employ three different metrics, as follows:
+
+\begin{itemize}
+\item
+{准确率（Precision）：} 该指标评估克隆实例一致性维护需求预测的准确程度，包含了满足和不满足一致性维护需求的实例。首先，计算预测中满足一致性维护需求的克隆实例的准确率``$P_1$''，即预测为满足一致性维护需求的克隆实例中正确预测的数量与全部预测数量的比值。然后，相似的计算不满足一致性维护需求克隆实例的准确率``$P_2$''。最后，将这两个值进行加权平均，作为整个模型的准确率。 ``$P_1$'' 是满足一致性维护需求的准确率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$P_2$''为不满足一致性维护需求的准确率，且 ``$N_2$''为实例数量。平均准确率（Average Precision）计算如下,
+\[
+\mbox{\it Ave-Precision} ~=~ {\frac {P_1 \times N_1 + P_2 \times N_2}{N_1 + N_2}}
+\]
+在实验中，使用此 ``Average Precision'' 作为模型准确率（Precision）。
+
+
+\item
+{召回率（Recall）：} 该指标评估克隆实例一致性维护预测的查全能力，包含了满足一致性维护需求和不满足一致性维护需求的实例。同准确率，分别计算满足和不满足一致性维护需求的实例的召回率，然后对两者进行加权平均。$R_1$'' 是满足一致性维护需求的召回率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$R_2$''为不满足一致性维护需求的召回率，且 ``$N_2$''为实例数量。平均召回率（Average Recall）计算如下,
+\[
+\mbox{\it Ave-Recall} ~=~ {\frac  {R_1 \times N_1 + R_2 \times N_2}{N_1 + N_2}}.
+\]
+在实验中，使用此 ``Average Recall'' 作为模型召回率（Recall）。
+
+\item
+{F值（F-measure）：} 该指标可以评估所有克隆实例的准确率和召回率的平均有效性。相似地，先分别计算满足和不满足一致性维护需求的克隆实例的F值，然后根据实例的数量进行加权平均。给定一个预测的准确率为precision、召回率为 recall，则该预测的F-Measure可计算如下,
+\[  
+\mbox{\it F-measure} =2 \times {\frac {\mbox{\it precision} \times \mbox{\it recall} }{ \mbox{\it precision} + \mbox{\it recall} } }
+\]
+为计算本章预测的平均F-measure， ``$F_1$'' 是满足一致性维护需求的克隆实例的F值，且实例的个数为``$N_1$''；``$F_2$'' 是不满足一致性维护需求的克隆实例的F值，且实例的个数为``$N_1$''，则平均F值（Average F-measure） 可计算如下,
+\[
+\mbox{\it Ave-F-measure} ~=~ {\frac  {F_1 \times N_1 + F_2 \times N_2}{N_1 + N_2}}.
+\]
+在实验中，使用此 ``Average F-measure'' 作为模型F值（F-measure）。
+\end{itemize}
+
+%\begin{itemize}
+%\item
+%{\bf Precision:} This assesses the accuracy of the model in predicting if a clone instance meet the consistency-requirement and free.  Specifically, we first compute the ratio of the number of {\em correct} predictions of clone instances meeting consistency-requirement to the number of predictions made by the model about instances meeting consistency-requirement. Then, we compute similar ratio for consistency-free. Taking clone-creating prediction as an example, we have two precision values, ``$P_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$P_2$'' is for consistency-free instances with number ``$N_2$''. The average precision for clone-creating prediction is computed as follows,
+%\[
+%\mbox{\it Ave-Precision} ~=~ {\frac {P_1 \times N_1 + P_2 \times N_2}{N_1 + N_2}}
+%\]
+%We employ this ``Average Precision'' as the assessing metric ``{\bf Precision} '' for this prediction.
+%\item
+%{\bf Recall:} This assesses the effectiveness of the model in discovering all clone instances meeting either consistency-requirement or free. We similarly compute two different {\em recalls\/}  corresponding to two categories -- consistent-requirement and consistent-requirement free -- of clone instances, then calculate the {\em average recall\/} according to their weight of each clone category's counts. Specifically, the first recall is computed as the ratio of the number of {\em correct} predictions of clone instances meeting consistency-requirement to total number of clone instances meeting consistency-requirement (i.e., ground truth). Taking clone-creating prediction as an example, we have two recall values, ``$R_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$R_2$'' is for consistency-free instances with number ``$N_2$''. The average recall for this clone-creating prediction is computed as follows,
+%\[
+%\mbox{\it Ave-Recall} ~=~ {\frac  {R_1 \times N_1 + R_2 \times N_2}{N_1 + N_2}}.
+%\]
+%We employ this ``Average Recall'' as the assessing metric ``{\bf Recall} '' for this prediction.
+%\item
+%  {\bf F-measure:} This assesses the weighted average effectiveness of the precision and recall both for all clone instances. It is a measure of the prediction's accuracy. We compare the {\em average F-Measure\/} for both two categories of clone instances according to  their weight of each category's counts. Given the precision and the recall value of a prediction for one of the two categories of clone instances, the {\em F-Measure} is computed as follows,
+%\[  
+%\mbox{\it F-measure} =2 \times {\frac {\mbox{\it precision} \times \mbox{\it recall} }{ \mbox{\it precision} + \mbox{\it recall} } }
+%\]
+%Taking clone-creating prediction as an example, we have two F-measure values, ``$F_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$F_2$'' is for consistency-free instances with number ``$N_2$''. The average F-measure for this clone-creating prediction is computed as follows,
+%\[
+%\mbox{\it Ave-F-measure} ~=~ {\frac  {F_1 \times N_1 + F_2 \times N_2}{N_1 + N_2}}.
+%\]
+%We employ this ``Average F-measure'' as the assessing metric ``{\bf F-measure} ''for this prediction.
+%\end{itemize}
+
+%在本章的实证研究中，使用五种不同的机器学习方法来验证预测帮助程序开发人员选择合适的机器学习模型。值得注意的是，本文没有对机器学习方法本身做进一步的改进。在培训这五种型号时，必须进行一些设置。大多数这些设置默认设置在WEKA中，无需进一步调整。这意味着有可能进一步增强这些方法的有效性的机会。在我们的实验中，例如，{\ em BayesNet}被训练为克隆创建实例的父节点数设置为3，克隆更改为4。 {\ em Native}只有一个父节点。这两个模型都使用0.5作为两个一致性标签的阈值 - 默认设置为{\ em WEKA}。对于{\ em SVM \ /}方法，我们使用{\ em多项式内核\ /}作为内核函数。对于{\ em Tree \ /}，我们使用具有0.75置信因子的J48算法。在{\ em KNN \ /}中，我们使用欧几里德距离作为距离函数与1个邻居进行预测。
+
+%In this study, five machine learning methods are employed to determine their effectiveness in performing predictions.We use the package named {\em WEKA\/} to build and train each of the prediction models for {\em five\/} different machine learning methods. WEKA is a very flexible and easy-to-use data mining tool which contains plenty of methods for prediction\cite{hall2009weka}. In this section, we use abbreviations for each of machine learning methods, denoting Bayesian network as {\em BayesNet\/}, Native Bayes as {\em Native\/}, Support Vector Machine as {\em SVM\/}, K-Nearest Neighbors as {\em KNN\/} and Design Tree as {\em Tree\/}.
+%Some settings are necessary when these five models are trained. Most of these settings are set by default in WEKA, without further adjustment. This means that there might be further opportunity for enhancement made to the effectiveness of these methods. In our experiment, {\em BayesNet}, for example, is trained with the number of parent node set to 3 for clone-creating instance and 4 for clone-changing. {\em Native} only has one parent node. Both these models use 0.5 as the threshold for the two consistency labels -- a default set by {\em WEKA}. for the {\em SVM\/} method, we employed {\em polynomial kernel\/} as the kernel function.  For {\em Tree\/}, we employed the J48 algorithm with 0.75 confidence factor. In {\em KNN\/}, we use the euclidean distance as the distance function with 1 neighbor for the prediction.
 
 \BiSubsection{克隆创建时一致性预测}
 {Experiments for Clone Consistency-Requirement}
@@ -416,8 +502,8 @@ Tracking clones changes
  子问题1：
 在克隆克隆时间，其他机器学习方法是否可以用于克隆一致性要求预测？
 属性集是否对此预测产生积极或消极的影响？
-我们采用五种不同的机器学习方法来预测这四个项目的克隆一致性，因此预测结果如表。
 
+我们采用五种不同的机器学习方法来预测这四个项目的克隆创建时的克隆代码的一致性维护需求，实验结果如表\ref{creatingallavg}~和~\ref{creatingsetavg}~所示。
 
 %\begin{table}[htbp]
 %\bicaption[creatingallfree]{}{克隆创建实例的一致性维护自由的预测效果}
@@ -496,7 +582,8 @@ Tracking clones changes
 \wuhao
 \begin{tabular}{cccccc}
 \toprule[1.5pt]
-{\textbf{Metric}}&{\textbf{Method}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
+{指标}&{方法}&{{ArgoUML}}&{{jEdit}}&{{jFreeChart}}&{{Tuxguitar}}\\
+%{\textbf{Metric}}&{\textbf{Method}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
 \midrule[1pt]
 \multirow{5}{*}{Percision}
 &{BayesNet}&0.935&0.889&0.883&	0.831\\
@@ -512,7 +599,7 @@ Tracking clones changes
 &{KNN}&0.94&0.889&	0.9	&0.848\\
 &{Tree}&0.94	&0.905&	0.892&0.891\\
 \hline
-\multirow{5}{*}{F-Measure}
+\multirow{5}{*}{F-measure}
 &{BayesNet}&0.935&0.882&0.881&0.832\\
 &{Native}&0.887&	0.84&0.867&0.794\\
 &{SVM}&0.957&	0.903	&0.903&0.876\\
@@ -521,6 +608,11 @@ Tracking clones changes
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
+
+表~\ref{creatingallavg}~给出了克隆创建实例的使用全部属性组的预测结果。从表中可以看出，五种不同的机器学习方法均可以高效地预测克隆一致性要求，准确率从79.3\%到95.8\%，召回率从79.4\%到95.8\% ，F值从79.4\%至95.7\%。同时，对比不同机器学习方法的有效性，通过对比发现，SVM在这四个实验系统上具有最佳的预测能力。具体来说，SVM在系统 ArgoUML、jEdit和jFreeChart上有最好的结果。对于{Tuxguitar}系统来说，决策树具有最好的结果，SVM具有第二好的预测结果。与此同时，贝叶斯网络和朴素贝叶斯方法在这四个项目中几乎具有相对较差的预测结果，但是相差并不明显。
+因此，建议开发人员在需要预测克隆创建实例时首先考虑SVM，其它的机器学习方法也可以作为选择进行考虑。
+
+%Table~\ref{creatingall} depicts the effectiveness of clone-creating instances' prediction.From this table, we observe that all five models {\em effectively} predict consistency-requirement for clone-creating instances, having precisions range from 79.3\% to 95.8\%, recalls from 79.4\% to 95.8\%, and F-measure from 79.4\% to 95.7\%.By contrasing the effectiveness among these different learning methods, it is clear that {\em SVM\/} has slightly better ability of prediction than the other methods for four projects.Specifically, SVM has the best results for{\em ArgoUML, jEdit and jFreeChart}, Decision Tree has the best results and SVM has the second best for {\em Tuxguitar}.At the same time, Bayesian Network and Native Bayes almost always hold relatively worse-off prediction results on these four projects.Therefore, we conclude that {\em SVM\/} has good predictive ability -- among these five machine learning models -- for clone creating consistency prediction.
 
 \begin{sidewaystable} [htbp]
 \bicaption[creatingsetavg]{}{克隆创建实例的属性组平均预测效果}
@@ -531,9 +623,12 @@ Tracking clones changes
 \wuhao
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
-\multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
+\multirow{2}{*}{指标}&\multirow{2}{*}{方法}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
 \cline{3-14}
 &&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}~\\
+%\multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{3}{c}{\textbf{ArgoUML}}&\multicolumn{3}{c}{\textbf{jEdit}}&\multicolumn{3}{c}{\textbf{jFreeChart}}&\multicolumn{3}{c}{\textbf{Tuxguitar}}\\
+%\cline{3-14}
+%&&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{All}&\textbf{Code}&\textbf{Context}~\\
 \midrule[1pt]
 \multirow{5}{*}{Percision}
 &BayesNet&	0.935&	0.912&	0.917&		0.889&	0.885&	0.83&		0.883&	0.808&	0.903&		0.831&	0.811&	0.843\\
@@ -549,7 +644,7 @@ Tracking clones changes
 &KNN&	0.94&	0.912&	0.934&		0.889&	0.912&	0.885&		0.9&	0.803&	0.898&		0.848&	0.81&	0.862\\
 &Tree&	0.94&	0.905&	0.931&		0.905&	0.896&	0.889&		0.892&	0.796&	0.89&		0.891&	0.807&	0.882\\
 \hline
-\multirow{5}{*}{F-Measure}
+\multirow{5}{*}{F-measure}
 &BayesNet&	0.935&	0.912&	0.917&		0.882&	0.876&	0.84&		0.881&	0.797&	0.902&		0.832&	0.811&	0.844\\
 &Native&	0.887&	0.867&	0.878&		0.84&	0.848&	0.829&		0.867&	0.741&	0.872&		0.794&	0.75&	0.819\\
 &SVM&	0.957&	0.927&	0.941&		0.903&	0.903&	0.907&		0.903&	0.797&	0.903&		0.876&	0.827&	0.869\\
@@ -558,6 +653,17 @@ Tracking clones changes
 \bottomrule[1.5pt]
 \end{tabular}
 \end{sidewaystable} 
+
+
+为了探索不同属性组对预测效果的影响，在五个机器学习方法上进行了属性组实验，实验结果如表~\ref{creatingsetavg}~所示。表中“全部”列是全部属性实验结果，属性组实验结果在“代码”列和“上下文”列中。
+
+从这个表中可以看出，属性组实验结果和全部属性组实验结果没有显着差异。这表明所使用的属性组不会对克隆创建时一致性预测产生负面影响。尽管如此，在全部实验结果中，效果最差的实验结果往往出现在属性组的实验结果中，即在仅使用代码属性或仅适用上下属属性预测时。具体来说，对系统ArgoUML、 jFreeChart和 Tuxguitar，其仅使用代码属性进行预测时五种机器学习方法的预测效果最差；而对系统jEdit仅仅使用“上下文” 属性的五种机器学习方法预测效果最差。
+
+最后，分析不同机器学习方法之间的预测能力，可以得出与全属性实验相似的结论，即五种机器学习方法的预测能力相差不大，但SVM方法具有相对最好的预测能力。因此建议程序开发人员在预测时保留所有的属性，并优先选择SVM方法。
+
+
+%To explore the significance of each extracted attribute set, we alter the experiments by {\em employing only one} attribute set for consistency prediction. The results for the effectiveness of attributes set are shown in Table~\ref{creatingset}. In this table, we use ``All'' columns to record the results when all attribute sets are used, and ``Code'', ``Context'' respectively for the case when only one attribute set is used. From this table, we observe that there dose not have the significant different results among these three predictions using individual attribute set. This revelation indicates that our attribute sets {\em do not\/} play any negative impact on our prediction. Nevertheless, we also can see that most of the relatively worst prediction results exist in the ``Attribute'' columns (only code or context) for all these four projects. Specifically, the ``Code'' columns for these three project {\em ArgoUML\/}, {\em jFreeChart\/}, and {\em Tuxguitar} have the worst results for all these five methods, and ``Context '' column for {\em jEdit} project have almost all the worst for these five methods. In addition, we compare the results of these prediction among five machine learning methods and again come to the same conclusion that with all attribute set, {\em SVM\/} has the best ability for attribute set prediction. Thus, we recommend to retain all the attribute sets in this prediction, and prefer {\em SVM\/} method over other methods.
+
 
 %\begin{sidewaystable} [htbp]
 %\bicaption[creatingsetfree]{}{克隆创建实例的属性组克隆一致性维护自由预测效果}{Table$\!$}
@@ -633,23 +739,22 @@ Tracking clones changes
 %\end{tabular}
 %\end{sidewaystable}
 
-表{克拉克隆}表示克隆实例预测的有效性。从这个表可以看出，这种方法可以通过五种不同的机器学习方法有效地预测克隆一致性要求，从79.3\%到95.8\%的准确度从79.4\%回归到95.8\% ，F值从79.4\%至95.7\%。
-比较所采用的学习方法的有效性，显然，{\em SVM}具有比这四个项目的其他方法更好的克隆预测能力。具体来说，SVM对于{\em ArgoUML，jEdit和jFreeChart}具有最好的结果，决策树具有最好的结果，SVM对于{\em Tuxguitar}来说是第二好的。与此同时，贝叶斯网络和本地贝叶斯方法在这四个项目中几乎保持了相对较差的预测结果。
-因此，我们建议开发人员在需要预测克隆实例时首先考虑SVM。
 
-为了探索属性集如何影响预测效果，我们仅使用一个属性集进行预测。属性集有效性的结果如表\ref{creatingset}所示。在这个表中，我们为所有属性集使用“全部”列，分别为其属性集使用“代码”，“上下文”。从这个表中可以看出，在不同属性的三个预测中，并没有显着差异。这表明我们的属性集不会对我们的预测产生负面影响。然而，对于这三个预测，我们还可以看到，在所有这四个项目的“属性”预测列（仅代码或上下文）中存在大部分相对较差的预测。具体来说，这三个项目的“代码”列{\em ArgoUML \/}，{\em jFreeChart \/}和{\em Tuxguitar}对于这五个方法都有最差的结果，而“上下文” “{\em jEdit}”项目的列对于这五种方法几乎都是最差的.此外，我们将这些预测的结果与五种机器学习方法进行比较，我们得出的结论与SVM具有较好的预测能力相同。因此，建议在该预测中保留所有属性集，并首先优选SVM方法。
+根据表~\ref{creatingallavg}~和~\ref{creatingsetavg}~中的实验结果，可以给出对子问题RQ1的回答和建议。在克隆代码创建时，五种机器学习方法都可以应用于克隆代码的一致性维护需求预测中，并具有相似的预测能力。另外，其预测能力仍然具有一点差异，SVM似乎拥有相对最佳的预测效果，因此优先推荐使用SVM技术应用在一致性预测中。与此同时，所使用的属性组在预测中起到了积极的作用，建议程序开发人员在预测时保留所有的属性组进行变化时一致性预测。
 
+%Recommendation: 
+%%According to Table~\ref{creatingall}~and Table~\ref{creatingset}, we can give our recommendation for SQ1. At the creating time, the five employed machine learning method can be applied to thus creating consistency prediction with quite similar prediction results. What's more, there still have a little difference among them, the {\em SVM\/} have the nicer ability, recommending that {\em SVM\/} technique should be the first choice. At the same time, our experiment of attribute set show that the selected attribute have the positive impact on this prediction, that recommending that developers should employed them all for their prediction.
 
-根据表\ref{克拉克隆}和表\ref{creatingset}，我们可以给出我们对子问题1的建议。在克隆时间，五种机器学习方法可以应用于这种克隆预测，其结果非常相似。另外，他们之间还是有一点区别，SVM有更好的能力，我们建议开发选择这个来预测。同时，我们的属性集实验表明，所选择的属性对这一预测具有积极的影响，我们建议开发者可以自信选择它们进行预测。
+\BiSubsection{克隆创建时一致性预测}
+{Experiments for Clone Consistency-Requirement}
 
-\BiSubsection{2}
-{2}
-在本节中，我们解决克隆更改实例的第二个问题。{\em
-{子问题2：}
+在本节中解决本章提出的第二个研究问题。
+子问题2：
 在克隆更改时间，其他机器学习方法是否可以用于克隆一致性要求预测？
 属性集是否对我们的预测产生积极或消极的影响？
-}
-为了解决这个问题，我们采用了五种不同的机器学习方法进行克隆更改的一致性，结果如表。
+
+
+为了解决这个问题，使用五种不同的机器学习方法在克隆代码变化时进行一致性维护预测，实验结果如表~\ref{changingallavg}~和表~\ref{changingsetavg}~所示。
 
 
 %
@@ -721,14 +826,35 @@ Tracking clones changes
 %\end{tabular}
 %\end{table}
 
+
+表~\ref{changingallavg}~给出了使用全属性组在五种不同机器学习方法上的克隆变化实例的预测结果。
+从这个表可以看出，克隆变化实例在这五种机器学习方法上具有可以接受的预测效果。准确率的范围从58.1\%到79.3 \%，召回率从57.9\%到79.1 \%，而F-measure从57.3 \%到79 \%。
+%Table~\ref{changingall} shows the effectiveness of clone-changing consistency prediction. From the table, we observe that the effectiveness of clone-changing prediction is {\em acceptable\/}, having precision values range between 58.1\% and 79.3\%, recall values between 57.9 \% and 79.1\%, and F-measure values between 57.3\% to 79\%.
+
+根据这四个系统的预测结果，通过比较发现预测效果最好的系统是jFreeChart，三个评价指标中拥有最多的最大值，同时jFreeChart中的克隆变化实例的个数也是最多的。然而，系统jEdit是所有系统中预测效果最差的。其原因在于预测模型需要足够的训练集进行训练，然而jEdit中的训练数据太少导致所建立的模型训练不充分，jEdit仅有159个克隆变化实例。%因此可以得出结论，在进行克隆变化的一致性预测是，预测效果将取决于不同项目的训练集规模大小。
+本文建议在对克隆代码进行一致性预测时，需要对模型进行充分的训练，以达到最佳的预测效果。
+
+%Comparing the prediction results on these four projects, we observe that the best prediction is project {\em jFreeChart\/}, which has the best results for all three metrics; and the project {\em jEdit\/} yet has the worst prediction in four projects.The reason is that this prediction need more training data to build its predictor well. However, the {\em jEdit\/} subject has the least number data with only 159 counts of clone-changing instances, resulting in worst training for the predictor. \textcolor{red}{the following in blue sounds obvious. need to say it?} \textcolor{blue}{We therefore conclude that the effectiveness for different projects is dependent on the {\em size\/} of the specific project.}
+
+此外，通过对比五种机器学习方法在四个系统上的有效性，除基于决策树的方法外，另外三种方法的预测能力十分相似，没有明显的差异。同时，相对而言SVM方法具有相对较好的预测效果。%具体来说，SVM对{\em jEdit，jFreeChart和Tuxguitar}具有最好的结果，KNN和SVM对于{\em ArgoUML}是最好的。
+基于贝叶斯的方法（贝叶斯网络和朴素贝叶斯方法）具有十分友好的预测结果，其预测结果是可以接受的。应该注意的是，{\em KNN}和{\em Decisions Tree}这两种机器学习方法相对而言预测能力不如其他的机器学习方法，尤其是{\em Decisions Tree}方法。
+
+因此，建议开发人员在预测克隆变化实例时也可以考虑SVM，但是贝叶斯的方法也具有不错的预测能力，仅比SVM相差一点点。
+
+
+%Furthermore, by comparing the effectiveness among the five machine learning methods, we observe that {\em SVM\/} remains the top predictor on these four projects, with most of the best results in precisions, recalls and F-measures. 
+%Specifically, SVM have the best results for{\em jEdit, jFreeChart, and Tuxguitar}, and KNN and SVM have the best for {\em ArgoUML}.Meanwhile, both the Bayesian Network and Native Bayes have {\em acceptable\/} predictions. In contrast, the remaining two machine learning methods, {\em KNN\/} and {\em Decisions Tree\/}, do not have sufficiently good results, particularly for {\em Decisions Tree\/}.
+%We therefore suggest that the developers should consider {\em SVM\/} as their preference  when performing creating consistency prediction.
+
 \begin{table}[htbp]
 \bicaption[changingallavg]{}{克隆变化实例的一致性维护需求平均预测结果}
-{Table$\!$}{The Average Effectiveness of Changing Instances}
+{Table$\!$}{The average effectiveness of changing instances}
 \centering
 \wuhao
 \begin{tabular}{cccccc}
 \toprule[1.5pt]
-{\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
+{指标}&{系统}&{ArgoUML}&{jEdit}&{jFreeChart}&{Tuxguitar}\\
+%{\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
 \midrule[1pt]
 \multirow{5}{*}{Precision}
 &{BayesNet}&0.724&	0.686&	0.791&0.72\\
@@ -754,10 +880,18 @@ Tracking clones changes
 \end{tabular}
 \end{table}
 
+为探索属性组对预测能力的影响，同样进行在五种不同的机器学习方法上进行了属性组实验，实验结果如表找到属性的贡献，我们还进行属性集的实验，依次删除一个属性集。属性集的有效性如表~\ref{changingsetavg}~所示。依次移除代码属性、上下文属性和演化属性，“All”列是使用全部属性组的实验结果，“Code”、“Cont”、“Evo”分别是是删除{\em Code， Context，Evolution }属性组后的实验结果。
+%To explore the contribution for each attribute set, we also construct the attribute set experiment with removing one attribute set in sequence. The effectiveness of attributes set is  shown in Table~\ref{changingset}~. In this table, the ``All'' columns are the results using full attribute sets, and ``Code'', ``Cont'' and ``Evo'' columns are the results for removing {\em Code, Context, Evolution\/} attribute set respectively.
+
+
+从表中可以看出，三个属性集中任何一个都没有在预测中起到决定性的作用，同时它们任何一个也没有起到消极的作用。尽管如此，三个属性组中的任何一个可能在预测中仅起到了有限的一点积极作用，但三个属性组作为一个整体却仍然可以以可以接受的准确率和召回率有效的预测克隆代码的一致性维护需求。另外，不同的属性集在预测中可能会发挥不同的作用。通过比较五种机器学习方法的预测结果，可以得出与全属性实验相似的结论，即方法之间的差异并不会导致预测结果的明显差异，并取得来的相一致的预测能力。但是，支持向量机似乎拥有相对最佳的预测能力，同样贝叶斯的方法同样也可以取得不错的预测效果。因此在预测中本文需要保留所有属性集，并优先选择SVM方法
+
+%From this table, we can see that each of these three attribute sets may not play a significant impact for thus prediction, and they also do not have the negative impact either. Nonetheless, each of them may have some limited positive impact, yet the whole of them do predict changing instances {\em acceptable\/}. By comparing the results among these five employed machine learning methods, we can get the same conclusions, that the effectiveness showing that the {\em SVM\/} have the nicer ability for this prediction, and {\em KNN\/} and {\em Decision Tree\/} have the worst prediction. Thus, recommended that leave all the attribute sets in this prediction, and prefer {\em SVM\/} technique firstly.
+
 \begin{sidewaystable} [htbp]
 \footnotesize
 \bicaption[changingsetavg]{}{克隆变化实例的属性组一致性维护需求平均预测效果}
-{Table$\!$}{The Average Effectiveness of Attribute Set for Changing Instances}
+{Table$\!$}{The average effectiveness of attribute set for changing instances}
 \vspace{0.5em}
 \centering
 \begin{tabular}{cccccccccccccccccc}
@@ -868,36 +1002,53 @@ Tracking clones changes
 %\end{sidewaystable} 
 
 
-表显示了克隆更改实例的预测的有效性。
-从这个表可以看出，这种方法的有效性可以用五种不同的方法来预测变化的实例，这个预测范围从58.1\%到79.3 \%的准确度从57.9\%回归到79.1 \%，F-measure从57.3 \%到79 \%。我们比较了这四个项目的预测结果，我们可以看到最好的预测是项目{\em  jFreeChart}，这三个指标的结果最多;而这个项目{\em jEdit}在这四个项目中预测最差。原因是我们的预测需要培训数据来建立井预测。然而，{\em jEdit}具有最小数据，只有159个计数变化实例导致预测器缺乏足够的培训。因此，我们得出结论，不同项目的有效性取决于具体项目的规模。此外，通过比较五种机器学习方法的有效性，改变预测的较小更好的能力是这四个项目的SVM，与其他方法相比，其精度，回忆和F度量度最好的结果。具体来说，SVM对{\em jEdit，jFreeChart和Tuxguitar}具有最好的结果，KNN和SVM对于{\em ArgoUML}是最好的。同时，贝叶斯网络和本地贝叶斯也有可以接受的预测。尽管如此，应该注意的是，{\em KNN}和{\em Decisions Tree}的这两种机器学习方法具有不够好的结果，特别是{\em Decisions Tree}。因此，我们建议开发人员在需要预测克隆实例时首先考虑SVM。
-同时，贝叶斯网络和本土贝叶斯方法在这四个项目中几乎拥有相对较差的预测结果。
-因此，我们建议开发人员在需要预测克隆实例时首先应该考虑SVM。
-
-为了找到属性的贡献，我们还进行属性集的实验，依次删除一个属性集。属性集的有效性如表所示。在这个表中，“全部”列是使用完整属性集的结果，“代码”，“连接”和“埃沃”列是删除{\em Code， Context，Evolution }属性集。
-%%% t-test
-从这个表中可以看出，这三个属性集中的每一个都不会对这种变化的预测产生重大影响，同时也不会产生负面影响。尽管如此，他们中的每一个都可能具有一些有限的积极影响，但是它们全部都预测了可接受的变化。另外，不同的属性集将在预测中发挥不同的作用。通过比较这五种机器学习的结果，我们可以得出相同的结论，使所有属性集的有效性得到了支持向量机具有更好的预测能力，KNN和决策树具有最差的预测。因此，建议在该预测中保留所有属性集，并首先优选SVM方法。
+根据对克隆变化实例的预测结果（表~\ref{changingallavg}~和~\ref{changingsetavg}~），可以对RQ2进行回答。当克隆代码发生变化时，五种机器学习方法在现有的属性值上都具有可以接受的预测能力，合理的准确率、召回率和F值。尽管SVM方法具有相对较好的预测效果，但是彼此之间的相差并不大。同时，所提起的属性组作为一个整体在预测中起到了积极的作用。所有属于整体的属性都对这一预测产生了积极的影响。因此建议开发人员在预测时使用全部的属性组，并使用SVM作为预测模型。
 
 
-根据表改变预测的结果，我们有问题2的答案。在不断变化的时代，我们的五台机器学习方法具有可以接受的预测结果。尽管大部分预测能力是相似的，SVM仍然有更好的预测。而且，所有属于整体的属性都对这一预测产生了积极的影响。因此，我们建议开发人员将所有属性保留在其预测中，并考虑在需要更改实例时使用SVM作为分类模型。
+%Recommendation: 
+%According to this results of changing prediction with Table~\ref{changingall}~and~\ref{changingset}, we have the answer for SQ2. At the changing time, our five employed machine learning methods have the {\em acceptable\/} results of this changing consistency prediction. Although most all their prediction ability are similar, the {\em SVM\/} still have the nicer prediction. And, all the attribute set as a whole have their positive impact in this prediction. We therefore suggest that the developer keep all the attributes in their prediction, and consider that employ {\em SVM\/} as the classification model when the need to predict changing instances.
 
 
-\BiSubsection{3}
-{3}
+\BiSubsection{软件开发过程中的克隆代码一致性预测}
+{Predicting Clone Consistency during Development Time}
+
 在这个讨论中，我们比较克隆和变化预测来解决最后一个研究问题。
-{\em {子问题3：}
+子问题3：
 他们应该采用哪种机器学习技术作为他们的偏好？而且，开发人员如何执行这些克隆预测来实现实践中的最佳效果？
-}
 
-根据最后两个小节，我们可以提供我们的建议，帮助开发人员在需要时进行预测。
-对于技术选择，我们强烈建议使用SVM机器学习方法，因为在克隆和更换时间这四个实验项目的有效性预测结果。除此之外，我们还建议开发人员选择用于克隆实例的KNN和Tree模型，以及BayesNet和Native Bayes在更改实例时可以保证这些方法具有相同或更好的预测能力。对于属性集选择，我们还建议开发人员应该选择所有属性集，以对这些对预测有积极贡献的属性集进行预测。%%此外，我们还建议，如果开发者能够保证获得有效的结果，开发人员可以探索更多属性进行自己的预测。
+%{\bf RQ3:}Which technique of machine learning should they employ as their preference? And, how the developers perform these clone predictions to achieve the preferably effectiveness in practice? 
 
-比较表，我们可以发现这两个预测的有效性受到具体项目的影响。具体来说，克隆克隆预测的有效性比改变预测更好，在改变预测项目{\em jEdit}中有几乎最差的结果。我们认为预测效果取决于其软件仓库数据集的规模，即预测模型需要更多的培训数据，特别是克隆变化预测。因此，我们建议开发人员在版本发展后收集足够的克隆实例时执行预测。假设没有这些，缺陷预测的其他技术可能会让开发人员注意到使用跨项目预测。但是，在这个交叉项目之前，需要对其进行更多的观察。
+根本节将据上面两节的实验结果，并结合软件开发过程，帮助程序开发人员在实践中运用克隆代码一致性维护需求预测，从而回答本章提出的上面第三个研究问题。
 
+从机器学习方法的角度上来看，本文使用机器学习方法均取得了不错的预测能力，预测结果具有很大的相似性，表明本文所选择的属性可以很好的表示克隆代码创建实例和变化实例，并不依赖于某个具体的机器学习方法。因此，程序开发人员可以根据自己的喜好或者情况选择合适的机器学习方法。当程序开发人员无法决策使用何种机器学习方法，本文强烈建议使用SVM机器学习方法。因为上面的两个小节的实验结果表明，SVM在克隆创建时和变化时均取得了相对较好的预测能力。除此之外，本文还建议开发人员在克隆创建的时候选择使用于KNN和Tree模型，以及在克隆变化时使用BayesNet和Native Bayes方法，从而可以保证这些方法具有相同或更好的预测能力。对于属性集的选择，本文还建议开发人员应该选择并使用本文所提取的全部属性集，因为这些属性值在预测中起到了积极的作用。除此之外，本文还建议如果开发者能够保证获得有效的结果，开发人员可以探索更多属性和机器学习方法构建自己的预测。
 
-考虑到软件开发，我们还可以提供我们的建议，让开发人员在实践中实现最佳的效果。在开发阶段，主要任务是开发软件，并将新功能添加到软件中，这可能导致执行克隆操作频率。因此，我们建议开发人员采用这种方法来预测克隆的一致性。然而，软件可能只会发展小型版本，导致预测数据不足的数据不足。为了解决这个问题，跨项目预测可以用于代码克隆预测，这在工作中被使用\cite{wang2014predicting}。
-因此，我们建议开发人员可以通过此预测克隆操作来小心引入新的克隆。在开发的中间阶段，主要任务是添加新功能并修复包括克隆一致性缺陷在内的暴露缺陷。因此，我们建议开发人员应该考虑两者来预测克隆实例和克隆更改实例。在大多数开发任务的软件演进之后，可能有足够的克隆克隆实例的培训数据和用于更改实例的训练数据不足。这些足够的数据可以训练克隆预测器，以帮助开发人员关心克隆一致性。对于变化的预测，开发人员应该在work \cite{zhang2016predicting}中描述的跨项目预测中建立和训练模型。在开发的最后阶段，主要任务是维护可能导致大量克隆更改一致性的软件。因此，我们建议开发人员对克隆更改实例执行克隆一致性预测。
+%According to the last two experiments, we can provide our recommendations to help developers in conducting clone consistency maintenance.  From the prespective of selecting right predictive tool, we strongly recommend using {\em SVM\/} machine learning method because of its {\em respectably\/} effectiveness prediction results for these four experimental projects both at creating and changing time. In addition, we also suggest that developer choose the {\em KNN\/} and {\em Tree\/} model for creating instances, and {\em BayesNet and Native Bayes\/} for changing instance when they can guarantee these methods have the same or better prediction ability. From the perspective of selecting attribute sets to enable prediction, we recommend that developers should select {\em all\/} the attribute sets to perform their prediction as these attribute sets demonstrate their positive contribution in prediction.
+
+通过对比克隆创建实例和克隆变化时的预测结果（表~\ref{creatingallavg}~和~表\ref{changingallavg}），发现预测效果的好坏会依赖于具体的系统。具体来说，克隆创建实例的预测效果要好于克隆变化实例的预测效果，而在这两个预测中，系统jEdit就几乎都具有最差的预测结果。原因在于jEdit的克隆实例的规模太小，不能对其自身的预测模型进行较好的训练，从而导致预测效果最差。因此，本文建议开发人员在进行克隆创建和变化实例时，需要在软件演化一定版本后收集到足够的训练数据后再进行训练和预测。在软件开发初始阶段，由于系统中缺少训练数据，可以使用跨项目预测的方法解决该问题，但需要对跨项目预测做进一步的研究，从而达到较好的预测效果。
+
+%%Comparing Tables~\ref{creatingall}~and~\ref{changingall}, we can find that these two predictions have different effectiveness, which are impacted by the specific project's {\em size\/}. Specifically, the effectiveness for clone creating prediction is better than changing prediction, and  in changing prediction project {\em jEdit\/} has almost worst results.We believe that prediction effectiveness is dependent of the {\em scale\/} of the data set from its software's repository, meaning that this clone consistency prediction model needs more training data, specially for clone changing prediction. We therefore recommend that the developer should perform clone consistency prediction when they collect enough clone instances after versions are evolved. 
+%Supposing that there do not have these, the other technique from the defect prediction may enter the developers' mind that using the cross-project prediction.
+%However, the more observation on this cross-project are need before its performing.
+
+为了结合软件开发过程，本文还从软件开发的不同角度给出相关的建议，让开发人员在实践中应用克隆代码一致性维护需求时实现最佳的预测效果。
+%From software development perspective, we recommend that developers aim to achieve preferably effectiveness in practice. 
+
+在软件开发的初始阶段，主要任务是快速的进行软件开发，并同时向系统中添加新的功能。这种特点可能会促使程序开发人员大量的进行复制粘贴操作，复用既有的代码进行快速开发。因此，本文建议开发人员在软件开发的初始阶段使用克隆代码创建时的一致性维护预测方法。进一步地，由于要向软件中引入新的功能，因此，建议使用该模型预测克隆代码的一致性维护自由的克隆，仅仅避免那些可能会引发一致性变化的克隆代码，进而快速的开发软件。但是，由于在最初始的阶段，软件系统可能仅仅具有几个版本，因此系统中的克隆创建实例不够多，导致预测数据不足的数据不足，无法完全的训练预测模型。为了解决这个问题，可以使用跨项目预测方法用于克隆代码创建时的预测，见本文第三章中的跨项目预测部分。
+
+%At the start stage of development, the main task is that developing the software fatly and adding the new function to the software, that may lead to perform creating operation frequently. We therefore recommend developers employ this approach to predict creating consistency. However, if the software may evolve only small versions, this can lead to insufficient data and thus affects its predictive well. In this situation, the cross-project prediction can be construct for code creating prediction, which is utilized in work \cite{wang2014predicting}.
+
+在开发的中间阶段，主要任务是添加新功能并修复包括克隆一致性缺陷在内的暴露缺陷。因此，我们建议开发人员应该同时考虑两者来预测克隆创建实例和克隆变化实例。在大多数开发任务的软件演进之后，可能有足够的克隆克隆实例的培训数据和用于更改实例的训练数据不足。这些足够的数据可以训练克隆预测器，以帮助开发人员关心克隆一致性。对于变化的预测，开发人员应该在work \cite{zhang2016predicting}中描述的跨项目预测中建立和训练模型。
+
+%At the middle stage of development, the main task is that adding the new function and fixing the expose defects including the clone consistency defects. Therefore, we recommend that the developer should consider performing both the predictions for clone-creating instance and clone-changing instances. After these evolutions of software with more task completed during development, there may have sufficient training data for clone creating instance and insufficient training data for clone-changing instances. The issue with insufficient data is that our system {\em cannot\/} train the clone-creating predictor sufficiently well, that troubling developer for these creating consistency.For thus this situation of changing prediction, the developer should build and train the model with cross-project prediction described in previous work \cite{zhang2016predicting}
+
+在开发的最后阶段，主要任务是维护可能导致大量克隆更改一致性的软件。因此，我们建议开发人员对克隆更改实例执行克隆一致性预测。
 由于软件的不断发展，其项目克隆更改实例的数据将足以对预测器进行良好的训练。
+%At the last stage of development, the main task is to maintain the software so that there may be plenty of clone changes consistency instances. At that stage, we thus recommend developers to perform the clone consistency prediction for clone-changing instances. In the case that software undergoing many generations of evolution, the data for clone changing instance of this project itself will have sufficient data for training the predictor well.However, our approach can only help predict the need for change consistency-requirement, {\em not} to help developers to maintain the clone change consistency.
+
 但是，这种方法只能预测变化的一致性要求，不能帮助开发人员维护克隆更改的一致性。为了实现克隆一致性的目标，我们还建议开发人员采取措施，通过一致性维护和管理技术（如\cite{cheng2016rule}和\cite{nguyen2012clone}）执行克隆一致的更改。
+
+%Finally, To accomplish the objective of ensuring clone consistency, we recommend that developers should take in other measures to perform such clone consistent changes, employ the techniques of consistency maintenance and management, such as \cite{cheng2016rule} and \cite{nguyen2012clone}.
+
 
 
 %%\section{Threats to Validity}
