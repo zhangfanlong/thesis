@@ -495,7 +495,11 @@ Tracking clones changes
 %In this study, five machine learning methods are employed to determine their effectiveness in performing predictions.We use the package named {\em WEKA\/} to build and train each of the prediction models for {\em five\/} different machine learning methods. WEKA is a very flexible and easy-to-use data mining tool which contains plenty of methods for prediction\cite{hall2009weka}. In this section, we use abbreviations for each of machine learning methods, denoting Bayesian network as {\em BayesNet\/}, Native Bayes as {\em Native\/}, Support Vector Machine as {\em SVM\/}, K-Nearest Neighbors as {\em KNN\/} and Design Tree as {\em Tree\/}.
 %Some settings are necessary when these five models are trained. Most of these settings are set by default in WEKA, without further adjustment. This means that there might be further opportunity for enhancement made to the effectiveness of these methods. In our experiment, {\em BayesNet}, for example, is trained with the number of parent node set to 3 for clone-creating instance and 4 for clone-changing. {\em Native} only has one parent node. Both these models use 0.5 as the threshold for the two consistency labels -- a default set by {\em WEKA}. for the {\em SVM\/} method, we employed {\em polynomial kernel\/} as the kernel function.  For {\em Tree\/}, we employed the J48 algorithm with 0.75 confidence factor. In {\em KNN\/}, we use the euclidean distance as the distance function with 1 neighbor for the prediction.
 
-\BiSubsection{克隆创建时一致性预测}
+\BiSubsection{项目内克隆一致性需求预测}
+{Clone Consistency-Requirement for Within Project}
+
+
+\BiSubsubsection{克隆创建时一致性预测}
 {Experiments for Clone Consistency-Requirement}
 
 在本实验中，我们解决了克隆克隆实例的第一个子研究问题。
@@ -745,7 +749,7 @@ Tracking clones changes
 %Recommendation: 
 %%According to Table~\ref{creatingall}~and Table~\ref{creatingset}, we can give our recommendation for SQ1. At the creating time, the five employed machine learning method can be applied to thus creating consistency prediction with quite similar prediction results. What's more, there still have a little difference among them, the {\em SVM\/} have the nicer ability, recommending that {\em SVM\/} technique should be the first choice. At the same time, our experiment of attribute set show that the selected attribute have the positive impact on this prediction, that recommending that developers should employed them all for their prediction.
 
-\BiSubsection{克隆创建时一致性预测}
+\BiSubsubsection{克隆创建时一致性预测}
 {Experiments for Clone Consistency-Requirement}
 
 在本节中解决本章提出的第二个研究问题。
@@ -1008,6 +1012,16 @@ Tracking clones changes
 %Recommendation: 
 %According to this results of changing prediction with Table~\ref{changingall}~and~\ref{changingset}, we have the answer for SQ2. At the changing time, our five employed machine learning methods have the {\em acceptable\/} results of this changing consistency prediction. Although most all their prediction ability are similar, the {\em SVM\/} still have the nicer prediction. And, all the attribute set as a whole have their positive impact in this prediction. We therefore suggest that the developer keep all the attributes in their prediction, and consider that employ {\em SVM\/} as the classification model when the need to predict changing instances.
 
+\BiSubsection{跨项目克隆代码一致性预测实验}
+{Clone Consistency Prediction Experiment}
+
+本节给出跨项目预测的实验结果。
+
+\BiSubsubsection{跨项目克隆创建时一致性预测}
+{Clone Creating Consistency Prediction Cross-Project}
+
+\BiSubsubsection{跨项目克隆变化时一致性预测}
+{Clone Changing Consistency Prediction Cross-Project}
 
 \BiSubsection{软件开发过程中的克隆代码一致性预测}
 {Predicting Clone Consistency during Development Time}
