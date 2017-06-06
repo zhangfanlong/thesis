@@ -1,6 +1,6 @@
 % !Mode:: "TeX:UTF-8" 
 
-\BiChapter{克隆代码修改时一致性维护预测方法}
+\BiChapter{克隆代码变化时一致性维护需求预测方法}
 {Predicting Clone Consistency-Requirement at Clone Changing Time}
 
 \BiSection{引言}
@@ -20,23 +20,41 @@
 
 演化中的克隆变化使得克隆代码变得越来越难以维护，而克隆代码的一致性问题会导致额外的维护代价。当克隆代码发生变化时，程序开发人员需要验证克隆代码的一致性，从而导致维护代价的增加；如果开发人员忘记验证克隆代码的一致性，则可能会向系统中引入新的克隆一致性缺陷在\cite{bettenburg2009empirical} \cite {juergens2009code}。本文第三章研究了克隆代码创建时的一致性维护需求问题，在克隆代码产生时预测克隆代码一致性。在一定程度上可以降低软件的维护代价。但是，值得注意的是，并不是所有的克隆代码都可以被避免。同时，上述方法也无法处理系统中已经存在的克隆代码的一致性变化问题。因此，本章将讨论克隆代码变化时其一致性维护需求问题。
 
-在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统jEdit中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
+在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{changingexamplea}~和~\ref{changingexampleb}~所示。该一致性变化例子来自于软件系统jEdit中。在图~\ref{changingexamplea}~中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{changingexampleb}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
 
 \begin{figure}[htbp]
 \centering
-\subfigure{\label{cg1}}
-\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in one clone group in version $3.1.0$]
-{\subfigure[版本$ 3.1.0 $中同一一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changea.pdf}}}
-\subfigure{\label{cg2}}\addtocounter{subfigure}{-2}
-\subfigure[Two clone fragments in clone group in version $3.2.0$]
-{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changeb.pdf}}}
-\bicaption[co-change]{}{jEdit中的一致性变化的例子}
-{Fig.$\!$}{An example of consistent change from jEdit}
+\includegraphics[width=0.8\textwidth]{co-changea.pdf}
+\bicaption[changingexamplea]{}{版本$ 3.1.0 $中同一一个克隆组中的两个克隆片段}
+{Fig.$\!$}{Two clone fragments in one clone group in version $3.1.0$}
 \vspace{-1em}
 \end{figure}
 
-鉴于此，本章对发生变化的克隆代码进c行一致性预测，在克隆代码变化时，预测克隆代码的一致性维护需求。本章在克隆代码演化的基础上结合克隆代码一致性维护，首先给出了一种克隆代码变化时的一致性变化和一致性维护需求的定义，可以帮助预测克隆变化的一致性维护需求。然后，在第二章研究的基础上重新设计了代码属性、上下文属性和演化属性三组属性表示克隆代码的变化实例。最后，使用贝叶斯网络在克隆代码变化时预测其一致性维护需求。本章方法可以帮助程序开发人员避免克隆一致性缺陷，从而降低克隆代码的一致性维护代价。
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{co-changeb.pdf}
+\bicaption[changingexampleb]{}{版本$ 3.2.0 $中克隆组中的两个克隆片段}
+{Fig.$\!$}{Two clone fragments in clone group in version $3.2.0$}
+\vspace{-1em}
+\end{figure}
+
+%%%%在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统jEdit中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
+%%%%
+%%%%\begin{figure}[htbp]
+%%%%\centering
+%%%%\subfigure{\label{cg1}}
+%%%%\addtocounter{subfigure}{-2}
+%%%%\subfigure[Two clone fragments in one clone group in version $3.1.0$]
+%%%%{\subfigure[版本$ 3.1.0 $中同一一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changea.pdf}}}
+%%%%\subfigure{\label{cg2}}\addtocounter{subfigure}{-2}
+%%%%\subfigure[Two clone fragments in clone group in version $3.2.0$]
+%%%%{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changeb.pdf}}}
+%%%%\bicaption[co-change]{}{jEdit中的一致性变化的例子}
+%%%%{Fig.$\!$}{An example of consistent change from jEdit}
+%%%%\vspace{-1em}
+%%%%\end{figure}
+
+鉴于此，本章对发生变化的克隆代码进行一致性预测，在克隆代码变化时，预测克隆代码的一致性维护需求。本章在克隆代码演化的基础上结合克隆代码一致性维护，首先给出了一种克隆代码变化时的一致性变化和一致性维护需求的定义，可以帮助预测克隆变化的一致性维护需求。然后，在第二章研究的基础上重新设计了代码属性、上下文属性和演化属性三组属性表示克隆代码的变化实例。最后，使用贝叶斯网络在克隆代码变化时预测其一致性维护需求。本章方法可以帮助程序开发人员避免克隆一致性缺陷，从而降低克隆代码的一致性维护代价。
 %因此，本章方法可可以提高系统的可维护性和软件质量。
 
 
