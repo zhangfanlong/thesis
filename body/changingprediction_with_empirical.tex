@@ -1,0 +1,1025 @@
+% !Mode:: "TeX:UTF-8" 
+
+\BiChapter{基于贝叶斯网络的克隆变化时一致性维护预测方法}
+{Predicting Clone Consistency-Requirement Based on Bayesian Network at Clone Changing Time}
+
+\BiSection{引言}
+{Introduction}
+
+由于日益增长的软件开发的需求，开发人员在软件开发过程中经常复用既有代码，从而向系统中引入了大量的克隆代码。克隆代码会随着软件系统演化，在其演化过程中，克隆组内的某一克隆代码片段可能会被软件开发员修改而发生变化。由于克隆组内的克隆片段彼此相似，克隆片段变化可能会导致其所在克隆组未来演化过程中的一致性变化。遗忘这种克隆代码的一致性变化，会引入与之相关的克隆一致性缺陷，从而增大系统的维护代价。本文将由克隆代码变化所导致的其所在克隆组未来演化过程中发生的一致性变化，称为克隆代码变化时的一致性维护需求。在克隆代码变化时时预测克隆代码的一致性维护需求，可以帮助避免克隆代码的一致性缺陷，从而帮助提高软件质量和可维护性。
+
+鉴于此，本章与第三章相似，在定义克隆代码变化时的一致性变化和一致性维护需求的基础上，使用机器学习中的贝叶斯网络方法在克隆代码变化时预测其一致性维护需求。为训练克隆代码变化时一致性预测模型，首先通过构建软件系统的克隆家系来收集系统中所有的克隆变化实例（发生变化的克隆代码）。然后，提取了代码属性、上下文属性和演化属性三组属性值表示克隆代码变化实例。最后，使用贝叶斯网络方法训练机器学习模型，并预测克隆代码变化时的一致性维护需求。在四个开源软件系统上对本章方法进行了评估，实验结果表明本章方法以合理的准确率和召回率有效地预测克隆代码变化时的一致性维护需求。本章所提出的预测方法同样可以帮助开发人员在克隆代码变化时预测克隆代码的一致性，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
+
+\BiSection{克隆代码变化时一致性维护需求}
+{Clone Changing Consistency-Requirement}
+
+\BiSubsection{一致性变化例子}
+{An Example of Clone Consistent Change }
+
+在软件开发过程中，复用既有代码是一种常见的软件开发手段，但是也会向软件系统中引入大量的克隆代码。有研究表明软件中的克隆代码可以占到系统代码规模的7\%-23\%\cite{koschke2007survey}。软件中存在的克隆代码不是静止不变的，会随着软件系统进行演化，其演化过程可使用克隆家系进行描述\cite{kim2005empirical}（克隆演化见本文~\ref{ref-evolution}~节）。本文第二章通过分析克隆演化特征发现，在克隆演化过程中，克隆代码的一致性变化往往多于不一致性变化，因此开发人员需要警惕发生变化的克隆代码，并且当发生变化时需要考虑克隆代码的一致性问题。（具体可参考本文~\ref{ref-characteristics}~节）
+
+演化中的克隆变化使得克隆代码变得越来越难以维护，而克隆代码的一致性问题会导致额外的维护代价。当克隆代码发生变化时，程序开发人员需要验证克隆代码的一致性，从而导致维护代价的增加；如果开发人员忘记验证克隆代码的一致性，则可能会向系统中引入新的克隆一致性缺陷在\cite{bettenburg2009empirical} \cite {juergens2009code}。本文第三章研究了克隆代码创建时的一致性维护需求问题，在克隆代码产生时预测克隆代码一致性。在一定程度上可以降低软件的维护代价。但是，值得注意的是，并不是所有的克隆代码都可以被避免。同时，上述方法也无法处理系统中已经存在的克隆代码的一致性变化问题。因此，本章将讨论克隆代码变化时其一致性维护需求问题。
+
+在详细论述本章方法之前，本文先给出一个克隆代码的一致性变化的具体例子，如图~\ref{co-change}~所示。该一致性变化例子来自于软件系统jEdit中。在图~\ref{cg1}中给出了$ 3.1.0 $版本中的两个克隆代码片段，它们之间是彼此相似的，可称之为克隆代码。在随着系统演化至$ 3.2.0 $版本时，上述两个克隆代码发生了一致性变化。具体地，$ 3.1.0 $版本中的第9-12行和第15行代码在下一版本$ 3.2.0 $中被开发人员修改。第9-12行，开发人员将{\tt selectionEnd}更改为$ 0 $，并删除了一对花括号。在第15行，开发人员删除了声明语句。如图~\ref{cg2}~所示，这两个被修改的代码片段仍然是彼此相似的克隆代码（仍存在于版本$ 3.2.0 $中的同一克隆组中）。假设程序人员没有对上述两个克隆代码进行一致性维护，这必然会导致克隆代码的一致性缺陷，从而降低软件质量。
+
+\begin{figure}[htbp]
+\centering
+\subfigure{\label{cg1}}
+\addtocounter{subfigure}{-2}
+\subfigure[Two clone fragments in one clone group in version $3.1.0$]
+{\subfigure[版本$ 3.1.0 $中同一一个克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changea.pdf}}}
+\subfigure{\label{cg2}}\addtocounter{subfigure}{-2}
+\subfigure[Two clone fragments in clone group in version $3.2.0$]
+{\subfigure[版本$ 3.2.0 $中克隆组中的两个克隆片段]{\includegraphics[width=0.8\textwidth]{co-changeb.pdf}}}
+\bicaption[co-change]{}{jEdit中的一致性变化的例子}
+{Fig.$\!$}{An example of consistent change from jEdit}
+\vspace{-1em}
+\end{figure}
+
+鉴于此，本章对发生变化的克隆代码进c行一致性预测，在克隆代码变化时，预测克隆代码的一致性维护需求。本章在克隆代码演化的基础上结合克隆代码一致性维护，首先给出了一种克隆代码变化时的一致性变化和一致性维护需求的定义，可以帮助预测克隆变化的一致性维护需求。然后，在第二章研究的基础上重新设计了代码属性、上下文属性和演化属性三组属性表示克隆代码的变化实例。最后，使用贝叶斯网络在克隆代码变化时预测其一致性维护需求。本章方法可以帮助程序开发人员避免克隆一致性缺陷，从而降低克隆代码的一致性维护代价。
+%因此，本章方法可可以提高系统的可维护性和软件质量。
+
+
+
+%我们通过WEKA \cite{hall2009weka}开发和构建了一个贝叶斯网络作为预测器，并对三个软件项目的预测能力进行了实验。
+%我们的实验表明：预测器执行稳定的精确度和召回，对于克隆一致性要求和无一致性的预测，精度范围在70\%到80\%之间，其召回率在63\%和83\%之间。 {\em {我们的实验表明：预测变量的精确度和回忆率对于一致性要求和自由变化实例具有每个存储库的稳定范围;并且为了保持一致性，精度范围在70到80\%之间，其召回率在63和89\%之间。}}此外，每个属性集以其自身的方式对预测能力作出肯定贡献，并且这些属性集中的任何属性集的缺失都可能不利地影响预测器的回忆能力。 {我们的方法可以集成在IDE中以维护克隆更改，这可以避免克隆一致性缺陷。}
+%本文的贡献如下：
+%\begin {itemize}
+%\item 我们提出一种方法来预测克隆组中发生克隆变化所致的一致变化的需要。
+%\item 我们基于与克隆系谱相关的信息来识别一组新的属性用于预测。结果表明，这套属性对预测变量的回忆能力有积极影响。
+%\item 我们通过对四个开源项目的评估来证明这种预测的可行性。结果表明，我们的方法可以有效预测克隆组的一致变化，具有良好的精度和合理的回忆，并可以帮助提高软件的可靠性通过预测性克隆维护的可重用性。
+%\end {itemize}
+
+
+
+%在我们的工作中，我们使用克隆检测工具{\em NiCad}来检测来自软件库的克隆。这里，如果两个（或更多个）克隆片段足够相似，则它们形成克隆组。在{\em NiCad}中，这种相似性度量用UPI（代表{\em unique percentage items}）表示。UPI根据代码的百分比定义了两个克隆片段之间的{\em 差异}。例如，值为$ 0.3$的UPI表示这两个克隆片段中的30\%不同;换句话说，它们中的70\%具有相同的代码行。
+%在这项工作中，{\em  我们设置一个阈值$tau-{CG}$为$0.3$形成克隆组};即，如果UPI $(c_1, c_2)- 0.3$，两个克隆片段$ c_1 $和$ c_2 $被视为属于同一克隆组。}
+
+
+\BiSubsection{克隆变化时一致性维护需求定义}
+{The Definitions for Clone Changing Consistency-Requirement}
+
+在克隆代码的演化过程中，克隆片段可能会被开发人员修改，从而导致克隆代码的一致性变化，这种克隆代码变化可能会导致克隆一致性缺陷。为了描述克隆代码的这种修改，本章给出克隆代码变化时一致性变化定义，如下所示：\\
+
+\begin{definition}
+[变化时一致性变化（Changing Consistent Change）]  
+\label{def-changingchange}
+给定存在两个克隆代码片段 $CF_1$和 $CF_2$，且它们被分别地修改为$CF'_1$和$CF'_2$。  如果对于一个非常小的阈值$\tau$，克隆代码$CF_1$和$CF_2$的变化满足以下条件，称此变化为克隆变化时的一致性变化（Changing Consistent Change）， 
+  \[
+  \begin{array}[t]{crl}
+    \mathit{textSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\} &(1) \\
+    \multicolumn{2}{c}{| ~\mathit{textSim}(CF_1,CF'_1)  ~-~ \mathit{textSim}(CF_2,CF'_2) ~| ~< ~ \tau}  & (2)
+  \end{array}
+  \]
+\end{definition}
+
+%% \ begin {definition} [$ \ tau $ -Conistent change]
+%% \ label {defn-1}
+%% {\ em
+%%假定两个克隆片段$ c_1 $，$ c_2 $分别修改为$ c'_1 $和$ c'_2 $ %%。我们认为$ c_1 $和$ c_2 $之间的修改是$ \ tau $ - {\ em一致的更改\ /}如果对于某个阈值$ \ tau $，
+%% \ [
+%% \ begin {array} [t] {l}
+%% \ mathit {textSim}（c_i，c'_i）<1 ~~~ \ forall i \ in \ {1,2 \} \\
+%% | 〜\ mathit {textSim}（c_1，c'_1）〜| 〜 - 〜|〜\ mathit {textSim}（c_2，c'_2）〜| 〜<〜\ tau
+%% \ end {array}
+%% \]
+%%}
+%%注意$ \ mathit {textSim} $是根据NiCad中使用的%%度量实现的相似性度量。 \ textcolor {blue} {在NiCad中，这种相似性度量是以UPI（代表{\ em唯一百分比项目}）表示的%%。}
+%% \ end {definition}
+%% 
+  
+注意$\mathit {textSim}(c,c')= $ 1 - UPI($ c,c'$)，UPI是两个代码片段之间不同的代码行数占总代码行的比例，计算方式同第二章中的计算方式相同。第一个约束条件要求 $ CF_1 $和$CF_2 $同时修改；第二个约束条要求$ CF_1 $和$CF_2$发生满足阈值$\tau$条件下一致性的变化，即对代码片段进行了非常相似且一致的变化。本章中$\tau$取值为$0.003$，要求代码片段之间变化完全一致。
+
+变化时一致性变化，不仅要求克隆代码片段被同时修改，还要求一致的变化。原因在于：在克隆代码变化时，目的是避免克隆变化可能导致的未来演化中的一致性变化，及其因此所引发的克隆一致性缺陷。因此， 不仅要求两个克隆代码片段同时变化，还需要发生相似的变化，否则将会引入克隆一致性缺陷。
+
+在克隆演化过程中，克隆片段的变化必然也会导致克隆组的变化，而克隆组的变化可以使用克隆演化模式进行描述，即一致性变化模式。本文给出演化过程中克隆组的一致性变化模式定义，如下所示：\\
+
+\begin{definition}
+[变化时一致性变化模式（ Changing Consistent Change Pattern）] 
+\label{def-changingpattern}
+在软件版本 $j+1$中存在一个克隆组$CG'$ ，假设克隆组内至少存在两个克隆代码片段$CF'_1$ 和 $CF'_2$可以与映射到上一版本$j$的克隆组$CG$中，且 $CG$中与之对应的克隆代码片段的 $(CF_1,CF_2)$被修改为$(CF'_1,CF'_2)$。如果克隆片段之间的变化（ $(CF_1,CF_2)$变化至$(CF'_1,CF'_2)$满足克隆片段的“一致性变化（Consistent Change）”，则称克隆组$CG'$具有一致性变化模式（Consistent Change Pattern）。
+\end{definition}
+
+%\begin{definition}[{\bf Consistent/Inconsistent Change Pattern}] 
+%  \label{}
+%  {\em 
+%  Given a threshold $\tau$. A clone group $G'$ in software version $j+1$ possesses {\em\bf consistent change pattern} if there exists a pair of clones $c'_1,$ and $c'_2$  in $G'$ which are mappable to a pair of clones $c_1$ and $c_2$ in a clone group $G$ in version $j$ such that modification of code pairs from $(c_1,c_2)$ to $(c'_1,c'_2)$ is a $\tau$-consistent change. Conversely, we say that clone group $G'$ in version $j+1$ possesses {\em\bf inconsistent change pattern}.
+%  } 
+%\end{definition}
+
+变化时的一致性变化模式，与其它论文中使用的定义不同，其原因在于：本章目的在于预测克隆代码的一致性所导致的克隆一致性缺陷。为了便于读者更容易理解克隆变化时的一致性维护需求，本章现给出克隆变化实例的定义，如下所示：\\
+
+%Definition~\ref{defn-2} differs from those used in the earlier work such as \cite{Kim2005,Saha2011}, which identify consistent change by asserting that {\em all} clones evolving from previous version of clone group are detected to be similar by clone detection tools.
+%More importantly, we label a clone group with consistent change pattern {\em so long as consistent change (as defined above) occurs for a pair of clones.\/} 
+%We believe this definition aligns better with the understanding that as long as there exists a pair of clones that needs consistent change, we should inspect the clones in the clone group when any clone has been modified.
+%Consequently, the clone genealogy that we build will be different from that of \cite{Kim2005,Saha2011}. 
+
+\begin{definition}
+[克隆变化实例（ Clone Changing Instance）] 
+\label{def-changinginstance}
+克隆变化实例：
+软件版本 $j$中的一个克隆组$CG$是克隆变化实例，如果克隆组$CG$中至少两个克隆代码片段发生变化，且版本$j+1$ 中至少存在一个克隆组$CG'$与之对应（在同一克隆家系$CGE$中）。 
+\end{definition}
+
+%\begin{definition}[{\bf Change Instance}] 
+%\label{}
+%{\em 
+%A clone group $G$ in version $j$ is a {\bf change instance} if at least one clone group $G'$ in version $j+1$ which is connected to $G$ in the clone genealogy possess consistent or inconsistent change pattern. 
+%}
+%\end{definition}
+
+
+给定一个克隆变化实例，在其未来的演化过程中，可能会导致克隆组的一致性变化模式。克隆组的一致性变化可能会导致一致性缺陷，从而降低软件质量。因此，在克隆代码变化时，预测其未来演化过程中是否会发生一致性变化，可以避免由克隆变化实例导致的一致性缺陷。本文将克隆变化所导致的一致性变化，称为克隆一致性维护需求。克隆变化时的一致性维护需求定义如下：\\
+%接下来，虽然一致和不一致的更改模式指定克隆如何从一个版本发展到下一个版本，但我们实际上更有兴趣了解一对克隆{\em 是否会在未来}中发生一致的更改。这是因为在实践中，开发人员可能选择延迟做出一致的更改，或者有时他们可能甚至不知道需要进行一致的更改，直到未来出现问题.
+
+\begin{definition}
+[变化时一致性维护需求（Changing Consistency-Requirement）] 
+ \label{def-changingrequirement}
+给定版本 $j$中一个克隆变化实例，$CG$满足克隆一致性维护需求（Consistency-Requirement），如果在版本$k$中存在一个克隆实例 $CG'$（$k>j$）满足以下条件： (1) 在$CG'$中至少存在两个克隆片段在其克隆家系$CGE$中可以映射到克隆实例 $CG$中， (2) $CG'$ 具有“一致性变化模式”（Consistent Change Pattern）。反之，假如克隆变化实例$CG$ 不满足克隆一致性维护需求条件，称该克隆实例不需要一致性维护（consistency-requirement free，或者consistency-free）。
+\end{definition}
+
+%\begin{definition}[{\bf Consistency-Requirement (Free)}] 
+%  \label{}
+%  {\em 
+%A change instance $G$ in software version $j$ satisfies 
+%{\bf  consistency-requirement\/} condition if there is a clone group $G'$ in software version $k$, with $k>j$, such that (1) there is at least a pair of clones in $G'$ that is mappable in clone genealogy to a pair of clones in $G$, and (2) $G'$ possesses ``consistent change pattern''. 
+%When $G$ does not satisfy consistency-requirement, we say that it is {\bf  consistency-requirement free\/}, or simply {\em consistency-free\/} for short. }
+%\end{definition}
+
+最终，可以将本章的的研究问题表述如下：给定一个克隆变化实例，即克隆组中$CG$的克隆代码片段$CF$被修改，确定$CG $是否满足克隆变化时一致性维护需求。
+
+更进一步，根据上述定义克隆变化实例只有两种状态：满足和不满足一致性维护需求。我们将变化实例的一致性要求的预测转化为分类问题。本章克隆变化时的克隆一致性需求预测问题可转换为一个典型的分类问题，因此使用机器学习模型解决此分类问题，具体方法见下文。
+
+\BiSection{克隆变化时一致性维护需求预测框架} 
+{The Framework of Clone Changing Consistency-Requirement}
+
+为解决本章所提出的克隆一致性需求维护预测问题，本文首先给出了一个方法框架。
+基于贝叶斯网络的克隆变化时一致性维护需求预测框架架如图~\ref{framwork3}所示。方法可以划分为三个阶段，克隆变化实例收集阶段、克隆变化实例表示阶段和一致性维护需求预测阶段。收集阶段旨在收集系统中全部的克隆变化实例，可将其用于使用机器学习方法中来训练预测模型。由于实际的克隆变化实例无法直接应用于机器学习方法中，因此在表示步骤中将提取相应的属性值表示克隆变化实例。接下来，在预测步骤，使用属性化的克隆变化实例构建和训练机器学习模型，并使用其预测克隆变化实例的克隆一致性维护需求。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 0.8\textwidth]{framework4.pdf}
+\bicaption[framework4]{}{基于贝叶斯网络的克隆变化时一致性维护需求预测框架}
+{Fig.$\!$}{The framework for clone changing consistency prediction based on Bayesian network}
+\vspace{-1em}
+\end{figure}
+
+具体来说，在收集阶段中，通过构建系统的克隆家系从软件中收集所有的克隆变化实例。使用NiCad来检测软件版本中的所有克隆，并通过在相邻版本的克隆组之间进行映射来构建克隆家系，用于识别克隆变化实例。在表示阶段中，通过提取属性值表示克隆变化实例，提取了代码属性、上下文属性和历史属性三组属性组，同时，还提取了关于克隆变化的相关信息。在预测阶段中，使用收集到的克隆变化实例训练贝叶斯网络，并在克隆变化时预测克隆一致性维护需求。在使用已构建好的模型进行预测时，可将该模型嵌入到软件开发环境中。软件开发环境需要实时跟踪克隆代码的变化（克隆变化实例），然后提取克隆变化实例的度量值。最后，使用模型预测其一致性维护需求，根据预测结果提醒程序开发人员采取进一步的维护操作。
+
+克隆变化实例有两种不同的预测结果，即满足一致性维护需求和不满足维护需求。对于满足一致性维护需求实例来说，其在将来的演化中可能会引发一致性变化，程序开发人员需要验证克隆组内克隆代码的一致性问题。对于不满足一致性维护需求实例来说，其在将来的演化中不会引发一致性变化，程序开发人员可以放心的对该克隆代码进行修改，不必考虑克隆一致性问题。
+
+本章基于贝叶斯网络预测克隆变化实例的一致性。使用克隆变化实例属性表示贝叶斯网络中的节点，并用于构造贝叶斯网络的结构。使用收集到的克隆变化实例学习贝叶斯网络的参数，从而完成模型的训练，细节可参考本文后续章节。
+
+\BiSection{克隆变化实例收集}
+{Collecting Clone Changing Instance}
+
+收集克隆变化的的目的在于生成克隆一致性预测的训练集，并将其用于训练机器学习模型。通过构建系统的克隆家系并识别其中的克隆演化模式，可以从软件中收集所有的克隆变化实例。首先使用NiCad来检测软件版本中的所有克隆，然后通过在相邻版本的克隆组之间进行映射来构建克隆家系，最后识别克隆一致性演化模式识别系统中的克隆变化实例。
+
+根据定义~\ref{def-changinginstance}~，本文假定克隆家系$CGE$中发生变化的克隆组为克隆变化实例。因此通过构建克隆家系并识别克隆家系中发生变化的克隆组，可以收集克隆创建实例。
+
+（1）构建克隆家系。首先，下载系统所有版本的源代码，并使用NiCad的默认配置检测检测每一版本的中Type1-3的克隆代码。然后，通过映射所有相邻版本的克隆代码，构建系统中全部克隆家系。为完成版本间的映射，为每个克隆片段生成一个克隆区域描述符 $CRD$\cite{duala2010clone}，使用基于CRD的克隆映射算法映射两个连续版本之间的所有克隆片段和克隆组\cite{ci2013new}\cite{ci2013newD}。根据克隆映射结果，构建系统的克隆家系。
+
+（2）识别克隆演化模式和收集克隆变化实例。首先，识别克隆家系中的克隆演化模式。构建克隆家系后，通过对比相邻版本的克隆代码，可以识别克隆家系的克隆演化模式，尤其是一致性变化模式（参考定义~\ref{def-evolutionpattern}~和\ref{def-changingpattern}~）。所识别的克隆演化模式有三个作用：（a）可以用于表示克隆变化实例，本文使用克隆演化模式作为表示克隆变化实例的部分演化属性。因此，克隆演化模式可以用于克隆变化实例表示中。（b）克隆演化模式可以帮助收集克隆变化实例。根据定义~\ref{def-changingchange}~可以识别系统中发生一致性变化的克隆代码和克隆组，从而确定克隆家系中的克隆变化实例。（c）克隆演化模式可以帮助确认克隆一致性维护需求。根据定义~\ref{def-changingrequirement}~，一致性维护需求，可以通过遍历克隆家系$CGE$是否发生了一致性变化模式（定义~\ref{def-changingpattern}~）进行确定。
+
+然后，收集克隆变化实例。在识别克隆家系演化模式，尤其是一致性变化模式后（~\ref{def-changingpattern}~），根据定义~\ref{def-changinginstance}通过识别克隆家系中的变化克隆组，便可以收集系统中的克隆变化实例。
+
+（3）标识克隆变化实例的一致性维护需求。在收集所有的克隆变化实例后，还需确认相关实例的一致性需求。根据定义~\ref{def-changingchange}~和~\ref{def-changingrequirement}~，通过遍历克隆变化实例所在的克隆家系$CGE$的演化情况，确定其一致性维护需求。如果克隆变化实例在其演化过程中发生了一致性变化模式(~\ref{def-changingpattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
+
+\BiSection{克隆变化实例表示}
+{Representing Clone Changing Instance}
+\label{lab-changingattribute}
+本章使用贝叶斯网络预测克隆代码变化时的一致性维护需求，并使用软件中既有的克隆变化实例训练贝叶斯网络模型。但是，实际的克隆变化实例无法直接应用于贝叶斯网络中。因此，本文将提取相应的属性值表示克隆变化实例。将分别提取代码属性、上下文属性和演化属性代表克隆变化实例。其中，克隆变化实例的代码属性和上下文属性与本文第三章中克隆创建实例的属性相似，区别在于克隆变化实例将从克隆组的角度提取相应的属性。同时，本章还从演化的角度提取了演化属性表示克隆变化实例。
+
+%%%代码属性是，上下文属性是，，，，
+
+
+（1）代码属性
+%{Code attributes}
+
+代码属性从代码自身的角度描述了克隆变化实例中克隆代码特征。代码属性描述了克隆代码的词法、语法和函数调用等信息。代码属性主要包括克隆代码粒度、Halstead属性、结构属性、调用属性等。与第三章中代码属性不同的是，克隆变化实例从克隆组的角度提取相应属性（注意一个克隆变化实体表示一个发生变化的克隆组）。具体的代码属性如下所示：
+%类似于\cite{} {Wang2012}中收集的属性。主要区别在于它们的计算：Wang et al。 从两个代码聚集的属性：复制和粘贴代码。这里，我们计算每个属性的平均值，当需要时。因此，我们的属性包括代码行的平均数，参数的平均数，调用调用的平均数。此外，我们有：
+\begin{itemize}
+\item 
+克隆粒度：
+在克隆变化实例中，所有克隆片段的数量。
+\item 
+代码行平均：
+在克隆变化实例中，所有克隆片段的平均代码行。
+\item 
+Halstead属性平均：
+在克隆变化实例中，所有克隆片段的Halstead属性平均，有四个基本的度量值，分别为平均操作符种类、平均操作数种类、平均操作符总量和平均操作数总量。
+\item
+结构属性平均：
+在克隆变化实例中，所有克隆片段的结构属性属性平均，包括\verb+if_then+, \verb+if\_else+, \verb+switch+, \verb+while+, \verb+do+, \verb+for+,  \verb+this\_or\_super+等。 
+\item 
+参数访问数量平均：
+在克隆变化实例中，所有克隆片段的参数访问数量统计的平均。
+\item  
+总函数调用次数平均：
+在克隆变化实例中，所有克隆片段的所有函数调用的次数统计。
+\item  
+本地函数调用次数平均：
+在克隆变化实例中，所有克隆片段的调用函数与被复制克隆片段在相同类的调用次数统计平均。
+\item  
+库函数调用次数平均：
+在克隆变化实例中，所有克隆片段的库函数的调用次数统计平均，包括java库函数的调用、eclipse库函数的调用以及第三方包函数的调用。
+\item  
+其它调用次数平均：
+在克隆变化实例中，所有克隆片段中既不是库函数调用、也不是本地函数调用的其它调用次数统计平均，如同项目内其它包函数调用或同包内其它类中的函数调用。
+\end{itemize}
+
+
+%%\begin{itemize}
+%%\item Clone Group Size: 
+%%The number of code fragments in the clone group.
+%% \item Average Code Lines: The average number of code lines for all
+%%  clone fragments in clone group.
+%%\item Average Number of Halstead: 
+%%The average number of Halstead for all clone fragments in clone group. The Halstead includes the number of distinct operators, number of distinct operands, total number of operators, total number of operands.
+%% \item Average Number of Parameters: The average number of parameters
+%%   for all clone fragments in the clone group.
+%%\item Average Number of Important Syntactic Constructs: 
+%%For each important syntactic construct (such as \verb+if+, \verb+while+, etc.), we compute the average number of occurrences of the construct for all clone fragments of clone group.
+%% \item Average Number of Invocations: The average number of method
+%%   invocations for all clone fragments in the clone group, which
+%%   includes all invocations, library invocations, local invocations,
+%%   and other invocations.
+%%\end{itemize}
+
+（2）上下文属性
+%Context attributes
+
+上下文属性是克隆变化实例中克隆代码之间的关系属性，描述了克隆代码之间的克隆关系。上下文属性包括克隆变化实例中的平均代码相似度、克隆分布、所包含克隆代码之间的一些相似度等等。值得注意的是，上下文属性也是从克隆组的角度进行计算，首先计算组内任意两个克隆代码片段的上下文属性，然后将上下文属性加权平均。在本文所使用的克隆组中，大部分的克隆组仅包含两个克隆代码片段，少部分克隆组包含多个克隆片段。具体的上下文属性如下所示：
+%上下文该集合包含克隆组中克隆的上下文信息，其中一些类似于Wang等人收集的那些。 在\cite{} {Wang2012}中，主要的区别在于我们计算克隆组中的值，而不仅仅是两个克隆。此外，我们添加了几个属性来描述克隆上下文，例如克隆相似性，参数类型和块信息等。这里是属性列表：
+
+\begin{itemize}
+\item
+代码相似度平均：
+在克隆变化实例中，所有的克隆代码的代码相似度平均，使用和NiCad相同的方式计算\cite{roy2008nicad}。
+\item
+局部克隆标识：
+克隆变化实例中的克隆片段是否在同一个文件中。
+\item
+文件名相似度平均：
+在克隆变化实例中，所有的克隆代码的文件的名相似度平均。假定文件名分别为$M_1$和$M_2$，则文件名相似度为$Sim(M_1,M_2)$，采用编辑距离\cite{levenshtein1966binary}计算(剩余度量中相似度采用相同方法计算)。
+\item
+文件名相似度变量：
+当克隆变化实例中所有克隆片段是局部克隆时，其文件名相似度为1，为非局部克隆时为0。该属性决定文件名相似度是否起效。
+\item
+方法名相似度平均：
+在克隆变化实例中，所有的克隆代码所在方法的方法名字相似度平均。
+\item
+总参数名相似度平均：
+在克隆变化实例中，计算任意两个克隆片段的总参数名相似度，然后对所有的相似度进行加权平均。假定两个克隆代码片段所在方法分别为$M$和$N$，$M$和$N$分别包含$m$和$n$个参数，即$(P_1,P_2,…,P_m)$和$(Q_1,Q_2,…,Q_n)$，则总参数名相似度为$Sum(Sim(P_i,Q_j))$。
+\item
+最大参数名相似度平均：
+在克隆变化实例中，计算任意两个克隆片段的最大参数名相似度，然后对所有的相似度进行加权平均。假定两个克隆代码片段所在方法分别为$M$和$N$，$M$和$N$分别包含$m$和$n$个参数，即$(P_1,P_2,…,P_m)$和$(Q_1,Q_2,…,Q_n)$，该最大参数名相似度为$Max(Sim(P_i,Q_j))$。
+\item 
+总参数类型相似度平均：
+在克隆变化实例中，计算任意两个克隆片段的总参数类型相似度，然后对所有的相似度进行加权平均。假定两个克隆代码片段所在方法分别为$M$和$N$，$M$和$N$分别包含$m$和$n$个参数，其参数类型分别为$(P_1,P_2,…,P_m)$和$(Q_1,Q_2,…,Q_n)$，该参数类型相似度为$Sum(Sim(P_i,Q_j))$。
+\item
+块信息标识：
+在克隆变化实例中，所有的克隆代码的上下文信息是否相同，相同为$1$，反之为$0$。
+\end{itemize}
+
+%%\begin{itemize}
+%%\item Average Clone Similarity: 
+%%The average similarity value between each pair of clones in the clone group. 
+%%\item Locality of Clones: 
+%%This flag determines if all the clone fragments reside in the same file. 
+%%\item Average File Name Similarity : 
+%%There are two attributes to average file name similarity: the real similarity and the masked similarity. 
+%%The mask similarity is a flag indicating if all clones exist in one file. 
+%%In the case when not all the clones are in one file, the real similarity is the average of the similarity measure between the names of the files containing clones. 
+%%Here, Levenshtein distance-based similarity \cite{Navarro2001} is used. 
+%%\item Average Method Name Similarity: 
+%%This is the average of the similarity between the names of the methods in which a clone in the clone group belongs.
+%%\item Average Sum of Parameter Similarity (ASPS): 
+%%First, we compute the ``sum of parameter similarity'' (SPS) for each clone pair in the group, %%as follows: Let $M_1$ and $M_2$ be the two clones with parameters ($P_1$, $P_2$, $\ldots$, $P_m$) and ($Q_1$, $Q_2$, $\ldots$, $Q_n$) respectively. 
+%%We define SPS to be: $\sum_{i=1}^{m}\sum_{j=1}^{n} \mathit{Sim}(P_i,Q_j)$. 
+%%The final ASPS is the average of SPS's.
+%%\item Average Sum of Parameter Type Similarity (ASPTS): 
+%%Similar to ASPS measurement, but applying to parameter type names.
+%%\item Average Maximal of Parameter Similarity (AMPS): 
+%%For each pair of clones $pc$, we compute the {\em maximal of parameter similarity (MPS)}, which is defined as: $\mathit{Max}(\mathit{Sim}(P_i,Q_j))$, where $1\leq i\leq m$, $1\leq j\leq n$, and $\mathit{Sim}(x, y)$ denotes the similarity between string $x$ and string $y$. 
+%%The final AMPS is the average of these MPS's. 
+%%\item ``Is-same-block'' Flag:  
+%%This flag indicates if all the clones are enclosed within block statements of the same syntax.
+%%\end{itemize}
+
+（3）演化属性
+%Evolution attributes
+
+克隆变化实例的最后一组属性是，截止到克隆变化实例发生时，克隆变化实例所在的克隆组的历史演化情况。克隆变化实例的演化属性从克隆家系的角度描述了其所在克隆组的演化情况。演化属性包括，克隆寿命、历史演化模式、上次演化时的演化模式克以及克隆组的历史变化等。（具体的演化属性如下所示：
+  %对于这些指标，我们使用克隆生命周期，其生命周期中的克隆模式数量作为指标：
+
+\begin{itemize}
+\item 
+变化实例寿命：
+截止到克隆变化实例发生时，变化实例所在的克隆组的寿命，即在系统中存在的版本数量。
+\item 
+历史演化模式统计：
+截止到克隆变化实例发生时，变化实例所在的克隆组的历史演化模式统计，包括7种克隆演化模式。
+\item 
+当前演化模式：
+截止到克隆变化实例发生时，变化实例所在的克隆组的当前所具有的演化模式，包括7种克隆演化模式。
+\item 
+历史变化统计：
+截止到克隆变化实例发生时，变化实例所在的克隆组的所有的历史变化统计。计算方式如下： 使用克隆变化实例所在克隆组的代码属性变化进行计算。假设克隆变化实例所在的克隆组$CG_j$存在于软件版本$j$中，统计该克隆组从开始出现到此次变化发生时的每一次代码属性的变化。针对每一个代码属性，相邻两个版本之间的代码属性每增加一次，记录为一次正向变化，反之，记录为一次逆向变化。最后，统计每一个代码属性的所有变化，极为历史变化统计。
+\end{itemize}
+
+%\begin{itemize}
+%\item Clone Group Age: 
+%The number of versions the clone group has existed in this repository until now.
+%\item Number of Clone Patterns: 
+%The number of clone patterns which this clone group experiences until now since its inception. 
+%For each clone pattern, we determine the number of occurrences of this pattern in the clone group's history.
+%\item Current Pattern: 
+%The clone pattern of this clone group, as derived from its change (or unchanged) from the previous version (as formally specified in Definition~\ref{defn-2}.)
+%\item Summaries of Clone Changes: 
+%The number of changes of this clone group since its inception until the current version.
+%For each important code syntax (as specified in the set of code attributes), we capture two pieces of information: We summarize the number of times in the clone genealogy (till the present version) that the syntax experiences an increase (and decrease) in its value from one version to the next immediate version. 
+%For instance, suppose that from the clone genealogy, we discover that a clone group originates in version $i$, and evolves till current version $j$ (where $j > i$). 
+%We then compare the {\em changes} in the average number of \verb+if+ statements (one of the clone attributes) between two successive versions: versions $i$ and $i+1$, $\cdots$, versions  $j-1$ and $j$. 
+%This returns to us a series containing positive and negative numbers.
+%We then record the total number of positives and negatives, forming two summaries associated with \verb+if+statements.
+%\end{itemize}
+
+
+%{\bf Change information.} 
+（4）变化信息
+
+最后，对于克隆变化实例，本文还收集了与此次变化相关的一些变化信息，用于描述克隆变化本身。计算方式和演化属性中的“历史变化统计”属性中的计算方法一样。
+
+\begin {itemize}
+\item
+克隆变化信息：
+此次克隆变化发生时，克隆变化实例的变化信息统计。演化属性中的“历史变化统计”属性。
+\end {itemize}
+
+
+%\begin{itemize}
+%\item Current Clone Change: 
+%The change of this clone group from the current version to the immediate next.  
+%We capture this change for each important syntactic construct.
+%\end{itemize}
+
+\BiSection {克隆代码变化时一致性需求预测}
+{Predicting Clone Changing Consistency-Requirement} 
+
+本章将克隆代码变化时的一致性维护需求问题，转化成了克隆变化实例的分类问题，即给定一个克隆变化实例，判别其是否满足克隆变化时的一致性维护需求。本文使用贝叶斯网络方法作为机器学习模型，并使用其预测克隆一致性维护需求。因此，本节先简单介绍贝叶斯网络方法。随后，使用属性化的克隆变化实例构建和训练贝叶斯网络模型，并使用训练好贝叶斯网络在克隆代码变化时预测其一致性维护需求。
+
+\BiSubsection{贝叶斯网络方法}
+{Bayesian Network Method} 
+
+同第二章一样，本章使用贝叶斯网络作为预测方法。贝叶斯网络是一个是一种概率图型，使用已经观察到的事件来预测将来可能发生的事件\cite{friedman1997bayesian}。关于贝叶斯网络的信息可以参考本文第三章节~\ref{lab-bayes}~贝叶斯网络。
+
+\BiSubsection{训练与预测}
+{Training and Predicting}
+
+%%%分成两个小节
+%\BiSubsection{构建与训练预测器}
+%{Building and Training Predictor}
+%\BiSection{一致性预测}
+%{Predicting Clone Consistency}
+
+接下来，使用收集到的克隆变化实例训练贝叶斯网络，并在克隆变化时预测克隆一致性维护需求。
+
+对于每个软件系统，首先，通过收集克隆变化实例并提取相应的属性，用于构建模型训练所需的数据集。然后，调用WEKA中的贝叶斯网络实现构建和训练克隆一致性预测模型。
+
+根据定义~\ref{def-changingrequirement}~，克隆变化实例有两种不同的状态：需要一致性维护和不需要一致性维护。因此在进行一致性维护需求预测时，克隆变化实例也具有两种不同的预测结果：
+\begin{itemize}
+\item 
+需要一致性维护：
+若克隆变化实例的预测结果为“需要”，软件开发人员需要检测克隆变化实例所在的克隆组的一致性问题，考虑一致地修改组内其它的克隆代码。因为，该克隆变化实例，在未来演化的过程中可能会引发一致性变化，遗忘这种变化会向系统中引入缺陷，从而降低软件质量。
+\item
+不需要一致性维护：
+若克隆创建实例的预测结果为“不需要”，软件开发人员可以自由的修改克隆变化实例所在克隆组的克隆片段。因为，该克隆变化实例，在未来演化的过程中不会引发一致性变化，也不会导致一致性缺陷。
+\end{itemize}
+
+在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆变化实例的一致性维护需求。首先，在软件开发环境中需监测程序员对克隆代码的修改，识别由此产生的克隆变化实例。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示该克隆变化实例。最后，使用训练好的预测器预测该克隆变化实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
+
+%在此步骤中，当现有克隆组发生更改时，软件维护人员可以使用我们的预测变量来预测克隆一致性。如图~\ref{}~所示，我们的方法可以集成到一个IDE，如eclipse，可以保持克隆在开发阶段的变化。运行预测变量需要跟踪克隆在软件进化及其变化中的支持。一旦检测到克隆更改，该工具将提取与此更改实例相关的所有属性，预测其一致性要求，并通知开发人员。根据预测，开发者因此可以根据需要一致地保持克隆。
+
+%这需要IDE提供两个基本功能。第一个功能要求开发人员跟踪克隆及其关联的克隆组，第二个功能需要IDE监控克隆的更改。当开发人员可以跟踪和监视代码克隆时，预测变量可以预测克隆发生变化时一致性要求的可能性。 \emph {跟踪克隆和监控克隆更改}。首先，我们跟踪克隆及其在IDE中的更改。\underline {CRD的方法}可以应用于跟踪克隆及其更改。 \emph {提取更改克隆属性和预测一致性要求。}当克隆发生更改时，我们从其关联的克隆组中提取属性。之后，我们将这些数据放入我们的训练模型中，以预测这种一致性要求。 \emph {向开发人员发出警告信号}。我们的预测器将提供描述此更改实例需要一致性要求的概率的分数（介于0和1之间）。这将有助于开发人员考虑是否更改同一组中的克隆。
+
+\BiSection{实验结果与分析}
+{Experiments Results and Analysis}
+
+本节给出本章的实验结果与分析，首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
+
+\BiSubsection{实验系统与实验设置}
+{Experimental Projects and Methodology}
+
+为评估本章方法，本章选取了四个开源软件进行实验。四个实验系统的克隆变化实例统计情况如表~\ref{changesta}~所示。具体来说，第3列和第4列分别给出了不需要一致性维护和需要一致性维护的克隆变化实例的数量和比例。不需要一致性维护的克隆变化实例，该克隆变化不会使其所在的克隆组在未来演化中发生一致性变化，因此程序人员无需关注其克隆组的一致性问题。需要一致性维护的克隆变化实例，该克隆变化可能使其所在克隆组在未来演化过程中发生一致性变化，而遗忘这种变化会导致克隆缺陷，从而降低软件质量。
+
+从表中~\ref{changesta}~可以得出两个发现。第一，每个实验系统中都有数百到上千的克隆变化实例，数量从159到1040个，其中项目{jEdit}是含有最少的克隆变化实例。第二，在这些变化实例中，需要一致性维护的克隆实例比例占相当大的一部分，其比例为33\%到74\%。其中，ArgoUML中大部分的克隆变化实例不需要一致性维护。jEdit和jFreeChart需要和不需要一致性维护的克隆变化实例数量相差不大。而Tuxguitar中的克隆变化实例大部分都需要一致性维护。尽管需要一致性维护的克隆变化实例远远少于克隆创建实例（表~\ref{copysta}~），但是仍在存在数百个需要一致性维护的实例，同时克隆变化实例的危害也更大。因为对克隆变化实例来讲，需要一致性维护的克隆实例比例更大，也更容易导致缺陷。
+
+\begin{table}[htbp]
+\bicaption[changesta]{}{实验系统的克隆变化实例信息统计}
+{Table$\!$}{The statistics for clone creating instances in four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccc}
+\toprule[1.5pt]
+~\multirow{3}{*}{实验系统}& \multicolumn{2}{c}{克隆变化实例的数量（比例）} & \multirow{3}{*}{总数}\\ 
+ \cline{2-3}
+~&{不需要} &{需要} &  ~\\
+~&{一致性维护}&{一致性维护}&~ \\
+%~\multirow{3}{*}{\textbf{Project}}& \multicolumn{2}{c}{\textbf{Number (Percentage) of Changing Instances}} & \multirow{3}{*}{\textbf{Total}}\\ 
+% \cline{2-3}
+ %~& \textbf{Consistency-} &\textbf{Meeting} & ~\\
+% &\textbf{Requirement Free}&\textbf{Consistency-Requirement}&\\
+\midrule[1pt]
+ArgoUML&288(67.45\%)&139(32.55\%)&427\\
+jEdit&78(49.06\%)&81(50.94\%)&159\\
+jFreeChart&452(43.46\%)&588(56.54\%)&1040\\
+Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+%表~\ ref{}~显示从三个项目收集的变更实例的大小的统计信息。中间列显示收集的至少一半的更改实例的大小为2。因此，虽然克隆是丰富的，但它们对系统的引入并不猖獗。{\em  ArgoUML}和{\em jFreeChart}确实有一些超大克隆组; 这些预期在数量上是小的，并且克隆的尺寸也小。
+
+%\begin{table}[htbp]
+%\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics of the size of clone change instances}
+%\vspace{0.5em}\centering\wuhao
+%\begin{tabular}{ccccc}
+%\toprule[1.5pt]
+%\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+%\midrule[1pt]
+%ArgoUML&427&7.5.9271&	26.22377&2\\ \hline
+%jEdit&159&	2.46541&	0.9125&2\\ \hline
+%jFreeChart&1040&	7.85288&	26.92378&2\\ \hline
+%Tuxguitar&354&	3.40395	&3.45232&2\\ 
+%\bottomrule[1.5pt]
+%\end{tabular}
+%\end{table}
+
+%表~\ref{}描述了更改实例的年龄的统计信息。如前所述，变更实例的年龄是自成立以来所经历的软件版本控制的数量（从$ 0 $计算）。一般来说，更改实例的年龄较小。考虑到变更实例的性质，他们将在当前版本中进行一些代码更改，这个统计数据显示大多数克隆组开始在早期体验代码更改。因此，我们尽可能早地执行一致性要求可满足性的预测变得更相关。
+
+%\begin{table}[htbp]
+%\bicaption[dffhg1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics on ages of clone change instances}
+%\vspace{0.5em}\centering\wuhao
+%\begin{tabular}{ccccc}
+%\toprule[1.5pt]
+%\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+%\midrule[1pt]
+%ArgoUML&427&2.09368&2.33078&1\\ \hline
+%jEdit&159&4.48428&3.64371&3\\ \hline	
+%jFreeChart&1040&4.93462&4.99543&3\\ \hline	
+%Tuxguitar&354&1.5565&1.50294&1\\ \hline	
+%\bottomrule[1.5pt]
+%\end{tabular}
+%\end{table}
+
+因为有两种类型的克隆变化实例，即需要一致性维护实例和不需要一致性维护实例。分别对上述两种克隆变化实例进行预测，可将实验划分为“一致性维护需求”实验（需要一致性维护）和“一致性维护自由”实验（不需要一致性维护）。同时，本章使用贝叶斯网络模型预测克隆创建实例的一致性，预测时贝叶斯网络会计算克隆变化实例的概率值，表示该实例需要一致性维护需求的概率(在0~1之间，数值接近于1表示需要一致性维护，接近于0表示不需要一致性维护)。
+
+针对不同的克隆变化实例，与第三章类似，也设置了不同的阈值进行实验分析。对于需要一致性维护的实例，其贝叶斯网络预测值较大（接近于1），选取阈值为0.5、0.6、0.7、0.8和0.9，当预测值大于等于该阈值认定该实例需要一致性维护。对于不需要一致性维护的实例，其预测值较小（接近于0），选取阈值为0.01、0.05、0.10、0.15和0.20，当预测值小于等于给定阈值时认定该实例不需要一致性维护。
+
+相似的，对上述两个实验中也从三个角度进行全面评估本文方法，将实验进一步的划分为全属性实验、属性组实验和交叉验证实验三个部分。
+\begin{itemize}
+\item
+\item
+全属性实验：使用本章提取的所有属性对实验系统进行分析，评估本文方法的预测能力。
+\item
+属性组实验：分别使用两组不同的属性组对实验系统进行分析，评估所提取的属性组对预测能力的影响。
+\item
+交叉验证实验：使用其它系统数据作为训练集训练模型，并使用该模型在新系统上进行实验分析，从而探索模型在应用到新系统的预测能力。
+\end{itemize}
+
+本文使用使用开源软件工具WEKA训练和预测贝叶斯网络。在构建贝叶斯网络时，使用K2搜索算法\cite{}建立网络结构，并设置贝叶斯网络最大父节点个数为4，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。在实验时将克隆变化实例的数据集划分为训练集和测试集，使用训练集训练贝叶斯网络生成预测模型，然后使用测试集评估贝叶斯网络的预测能力。在全属性实验和属性组实验中，对每一个实验系统在数据集上使用十倍交叉验证（10 Cross-Validity\cite{}）评估本文方法。在交叉验证实验中，使用不同系统的克隆创建实例分别作为训练集和测试集。
+
+%我们使用WEKA包建立和培训贝叶斯网络预测模型。在构建我们的模型中，我们选择{\em K2}用于学习网络结构的算法，并且一旦结构已经被学习，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。贝叶斯网络中的父节点的最大数目被设置为$ 4 $，以便适应属性之间的可能的依赖性，同时不过度消耗模型构造所需的过多的存储器和时间。对于每个克隆更改实例，模型将输出一个值，即其{\em consistency-requirement}的概率。接近$ 1 $的概率值意味着由改变实例经历的当前改变满足{\em consistency-requirement}准则的可能性很高。另一方面，更接近$ 0 $的值意味着这个变化实例很可能是{\em consistency-requirement free}。
+
+%基于推断的概率，我们的实验可以自然分为两部分：满足一致性要求和满足无一致性。对于满足一致性要求的更改实例，我们使用{\em Waring Rate，Precision和Recall}来评估我们的方法，该方法尝试警告开发人员可能有一致的更改。另一方面，我们使用{\em Recommendation Rate，Precision and Recall}，当克隆变化被推断为无一致性时，尝试推荐开发人员自由地进行任何改变，具有高概率。这些标准的定义在接下来的两个小节中描述。
+
+%我们在具有Intel（R）Core（TM）i5-4210M CPU @ 2.60GHz和8G RAM的桌面上运行我们的实验。每个实验花费不到一分钟的模型构建，交叉验证少于5分钟。大多数实验时间花费在数据准备，包括家谱建构和克隆变化实例收集，其范围在5至30分钟之间。然而，我们注意到，在实践中，克隆系谱构建和变更实例收集将逐步执行，随着软件发展到新版本。因此，数据准备的开销将不是实际问题。
+
+\BiSubsection{一致性维护需求实验}
+{Clone Changing Consistency-Requirement Experiment}
+
+在本节中，对需要一致性维护的克隆变化实例进行评估。关注需要一致性维护的克隆变化实例，由于该变化可能会导致其所在的克隆组在演化过程中的一致性变化模式，因此需要警告程序开发人员检查克隆组的一致性问题，避免克隆一致性缺陷。实验同样采用三个度量对方法进行评估，即警告率、准确率和召回率：
+
+\begin{itemize}
+\item 
+警告率(Warning Rate)：指所警告的需要一致性维护的克隆变化实例，即预测为需要一致性维护的实例与系统中全部实例的比值。这些克隆变化实例可能会导致一致性缺陷问题，需要确保克隆组的一致性。
+
+\item 
+准确率(Precision)：指警告为需要一致性维护的克隆变化实例的准确率，即在所预测为需要一致性维护的变化实例中，正确预测的实例与全部警告实例的比值。
+
+\item 
+召回率(Recall)：指所警告的需要一致性维护的克隆变化实例的召回率，即预测为需要一致性维护的实例与系统中的真实的需要一致性维护实例的比值。
+\end{itemize}
+
+
+%\begin{itemize}
+%\item \textbf{Warning Rate (WR)}: 
+%This percentage indicates the number of change instances that our model predicts to have met consistency-requirement, and thus warns developers to check for possible consistent change.
+%It is computed as the ratio of the number of warning raised by the model to all change instances tested. 
+%\item \textbf{Precision}: 
+%This assesses the accuracy of the model when it predicts that a change instance under test meets the consistency requirement. 
+%It is computed as the ratio of the number of {\em correct} predictions of change instances meeting consistency-requirement to the number of predictions made by the model about change instances meeting consistency-requirement.
+%\item \textbf{Recall}: 
+%This assesses the effectiveness of the model in discovering all change instances meeting consistency-requirement.
+%It is computed as the ratio of the number of {\em correct} predictions of change instances meeting consistency-requirement to total number of change instances meeting consistency-requirement (i.e., ground truth).
+%\end{itemize}
+
+\BiSubsubsection{全属性组实验}
+{Effectiveness Experiment}
+
+全属性实验使用本章提取的全部属性组在四个实验系统上进行评估，实验结果如表~\ref{changeallmeeting}所示。
+
+所创建的模型在预测{\em jFreeChart}和{\em Tuxguitar}的一致性需求时，预测结果显示非常有效，其中预测的准确度和召回率在80\%左右。同时，{\em jEdit}系统的预测效果虽然不如上面两个系统好，但是也相当不错。原因可能是因为jEdit系统的克隆变化实例规模较小，没有对模型实现较好的预测，但这需要进一步研究。尽管{\em  ArgoUML}的预测效果不如其它系统的预测效果，但其准确率仍然可以达到65\%左右，且召回率在45\%左右。最后，对于四个实验系统，本文所构建的模型均具有有十分合理的警告率，警告率十分接近于满足一致性维护需求的克隆变化实例的比例（如表~\ref {changesta}~中所示）。
+
+%The models created have been very effective in predicting consistency-requirement satisfaction for both the projects {\em jFreeChart} and {\em Tuxguitar}, with both the precision and the recall of the prediction hovering around 80\%.  It performs fairly well, though not as good, for {\em jEdit} repository. This might be due to the small size of the repository, but further investigation is required. Although {\em ArgoUML} do not have a good prediction like the other repositories, it still can predict the requirement with precision around 65\% and recall around 45\%. For all the projects, our models have produced fairly reasonable warning rates; it is around to the percentage of change instances meeting consistency requirements (as listed in Table~\ref{t_1}).
+
+虽然阈值的变化可以影响预测的准确率和召回率，但影响并不是十分的剧烈，对召回率的影响要比准确率的影响更大。这意味着本文所创建的模型可以提供相当准确的预测效果，但仍需进一步增强预测模型的召回能力。因此，开发人员可以较为自信地依赖于本文的预测结果，但需要其它方法来避免那些预测为不需要一致性维护的错误实例，从而帮助提高模型的预测效果。一个简单简单有效的改进方法是在克隆创建时尽量避免避免那些可能会引发一致性维护的克隆实例，具体细节可参考本文第三章提出的克隆创建时克隆一致性预测方法。
+
+%While variation in threshold does affect both the precisions and the recalls, it has stronger impact on the recalls than the precisions. This means that, the models created are pretty stable in providing, but can be further improved on its ability to recall. This implies that developers can quite confidently rely on the warning given by the predictors.
+
+\begin{table}[htbp]
+\bicaption[changeallmeeting]{}{四个实验系统全属性的实验效果}
+{Table$\!$}{The effectiveness for all attribute sets on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{ccccc}
+\toprule[1.5pt]
+{实验系统}&{阈值}&{警告率(\%)}&{精确率(\%)}&{召回率(\%)}\\
+%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
+\midrule[1pt]
+ \multirow{5}{*}{ArgoUML}
+&0.9&	20.14&	69.77&	43.17\\
+&0.8&	21.31&	68.13&	44.60\\
+&0.7&	24.12&	65.05&	48.20\\
+&0.6&	24.59&	63.81&	48.20\\
+&0.5&	25.29&	62.04&	48.20\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.9&	43.40&	73.91&	62.96\\
+&0.8&	47.17&	70.67&	65.43\\
+&0.7&	49.06&	70.51&	67.90\\
+&0.6&	50.31&	70.00&	69.14\\
+&0.5&	50.94&	69.14&	69.14\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.9&	52.50&	82.05&	76.19\\
+&0.8&	55.19&	81.36&	79.42\\
+&0.7&	56.83&	80.71&	81.12\\
+&0.6&	58.65&	80.33&	83.33\\
+&0.5&	60.10&	79.68&	84.69\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.9	&76.55&   80.44&	82.89\\
+&0.8	&78.53&	80.22&	84.79\\
+&0.7	&80.51&	80.00&	86.69\\
+&0.6	&81.64&	79.24&	87.07\\
+&0.5    &83.33&	79.32&	88.97\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+\BiSubsubsection{属性组实验}
+{Attribute Set Experiment}
+
+本章提取的了三组属性表示克隆变化实例，从不同的角度描述了变化实例的特征。为评估不同的属性组对预测效果的作用，本节进行了属性组实验。表~\ref{changesetmeeting}~中给出了属性组的评估实验结果。其中，分别给出了使用全部属性和删除每一组属性后的实验结果，即“全部属性”、“无代码属性”、“无上下文属性”和“无演化属性”。
+
+从表中可以看出，属性组对预测结果的影响并无一致性结论。但是，代码属性和上下文属性与全属性组对比表明，这两组属性对预测的召回率有显著影响。但是，无演化组属性的实验结果表明其对实验结果的影响没有预想的那么大。尽管如此，这些属性组依然对预测效果有影响，但需要进一步的研究去寻找这种差异背后的真正原因。
+
+%To quantitatively assess the impact of each attributes, we conducted a one-tail t-test for the significance of difference between two means of correlated pairs, with the null hypothesis set as {\em the mean of precision/recall of all-attribute sample is the same as that of the sample without one set of attributes}.  The details are shown in the Appendix. The t-tail results reveal that there is a significant decrease in the recall-ability of consistency-requirement when either code attributes or context attributes were absent. However, the differences for the case of absence of evolution is not as significant as desired. Further investigation shows that evolution attributes do not aid significantly in the recall-ability in the {\em ArgoUML} repository. However, these attributes do contribute significantly to the other repositories. Further investigation is required to discover the true reasoning behind this discrepancy.  
+
+此外，本文还对所选用的属性组进行了属性选择实验，使用WEKA提供的功能选取了最佳属性集。然而，通过比对全属性组的实验结果，发现发现全属性组实验结果要优于字属性组实验结果，所采用的属性具有积极的意义。虽然一些属性组可能对实验结果没有显着的影响，但是其也不具有消极的影响。本文建议在进行一致性预测时，需要保留全部属性组，因为在应用到其它系统是可能会起到积极的左右。
+
+%In addition, we employed the attribute selection function to obtain a best subset of attributes which can be used to perform prediction. The subsets obtained varies according to different experiment data (ie., different software repositories). We then compared these results with those obtained by using full attribute sets. The results consistently show that all-attribute can predict better than subset-attributes. While some of the attributes might not have significant contribution to the experiment results, none has adverse impact either. Nevertheless, it's important to keep these attributes as their contribution might become significant for other repositories. 
+
+\begin{sidewaystable} 
+%\begin{table}[htbp]
+\bicaption[changesetmeeting]{}{在四个实验系统上属性组实验效果}
+{Table$\!$}{The effectiveness for attribute set on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccccccccccc}
+\toprule[1.5pt]
+\multirow{2}{*}{实验系统}&\multirow{2}{*}{阈值}&\multicolumn{3}{c}{全部属性(\%)}&\multicolumn{3}{c}{无代码属性(\%)}&\multicolumn{3}{c}{无上下文属性(\%)}&\multicolumn{3}{c}{无演化属性(\%)}\\
+\cline{3-14}
+&&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}\\
+%\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{c}{\textbf{All(\%)}}&\multicolumn{3}{c}{\textbf{Without Code(\%)}}&\multicolumn{3}{c}{\textbf{Without Context(\%)}}&\multicolumn{3}{c}{\textbf{Without Evolution(\%)}}\\
+%\cline{3-14}
+%&&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}\\
+\midrule[1pt]
+\multirow{5}{*}{ArgoUML}
+&0.9&20.14&	69.77&	43.17&14.29&	73.77&	32.37&17.56&	72.00&	38.85&21.78&	69.89&	46.76\\
+&0.8&	21.31&	68.13&	44.60&	20.37&	70.11&	43.88&	19.91&	69.41&	42.45&	24.12&	66.02&	48.92\\
+&0.7&	24.12&	65.05&	48.20&	23.89&	65.69&	48.20&	21.78&	64.52&	43.17&	26.00&	63.96&	51.08\\
+&0.6&	24.59&	63.81&	48.20&	25.76&	63.64&	50.36&	24.12&	63.11&	46.76&	28.10&	60.00&	51.80\\
+&0.5&	25.29&	62.04&	48.20&	29.27&	61.60&	55.40&	26.00&	59.46&	47.48&	29.51&	60.32&	54.68\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.9&	43.40&	73.91&	62.96&	38.99&	75.81&	58.02&	40.88&	75.38&	60.49&	44.03&	71.43&	61.73\\
+&0.8&	47.17&	70.67&	65.43&	43.40&	72.46&	61.73&	46.54&	70.27&	64.20&	47.80&	69.74&	65.43\\
+&0.7&	49.06&	70.51&	67.90&	47.17&	70.67&	65.43&	47.80&	71.05&	66.67&	49.69&	68.35&	66.67\\
+&0.6&	50.31&	70.00&	69.14&	48.43&	71.43&	67.90&	47.80&	71.05&	66.67&	51.57&	65.85&	66.67\\
+&0.5&	50.94&	69.14&	69.14&	53.46&	69.41&	72.84&	50.94&	67.90&	67.90&	52.83&	65.48&	67.90\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.9&	52.50&	82.05&	76.19&	44.42&	84.63&	66.50&	51.06&	81.92&	73.98&	50.19&	81.42&	72.28\\
+&0.8&	55.19&	81.36&	79.42&	49.42&	82.10&	71.77&	54.13&	80.99&	77.55&	53.56&	80.07&	75.85\\
+&0.7&	56.83&	80.71&	81.12&	53.17&	80.83&	76.02&	56.92&	79.39&	79.93&	56.06&	78.39&	77.72\\
+&0.6&	58.65&	80.33&	83.33&	55.10&	80.10&	78.06&	59.33&	78.12&	81.97&	57.50&	77.93&	79.25\\
+&0.5&	60.10&	79.68&	84.69&	57.79&	78.20&	79.93&	60.48&	78.06&	83.50&	59.13&	77.56&	81.12\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.9&	76.55&	80.44&	82.89&	68.64&	79.01&	73.00&	75.14&	78.57&	79.47&	71.75&	80.71&	77.95\\
+&0.8&	78.53&	80.22&	84.79&	74.01&	79.01&	78.71&	78.53&	78.42&	82.89&	74.01&	80.92&	80.61\\
+&0.7&	80.51&	80.00&	86.69&	78.25&	78.34&	82.51&	80.79&	77.97&	84.79&	76.55&	80.81&	83.27\\
+&0.6&	81.64&	79.24&	87.07&	79.94&	78.09&	84.03&	82.20&	77.32&	85.55&	78.53&	80.94&	85.55\\
+&0.5&	83.33&	79.32&	88.97&	83.33&	77.63&	87.07&	84.18&	76.85&	87.07&	79.66&	80.50&      86.31\\
+\bottomrule[1.5pt]
+\end{tabular}
+%\end{table}
+\end{sidewaystable}
+
+%\begin{sidewaystable} 
+%\begin{table}[htbp]
+%\bicaption[changesetmeeting]{}{在四个实验系统上属性组实验效果}
+%{Table$\!$}{The effectiveness for attribute set on four projects}
+%\vspace{0.5em}
+%\centering
+%\wuhao
+%\begin{tabular}{cccccccccccccc}
+%\toprule[1.5pt]
+%\multirow{2}{*}{实验系统}&\multirow{2}{*}{阈值}&\multicolumn{3}{c}{\textbf{全部属性(\%)}}&\multicolumn{3}{c}{无代码属性(\%)}&\multicolumn{3}{c}{无上下文属性(\%)}&\multicolumn{3}{c}{无演化属性(\%)}\\
+%\cline{3-14}
+%&&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}\\
+%%\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{c}{\textbf{All(\%)}}&\multicolumn{3}{c}{\textbf{Without Code(\%)}}&\multicolumn{3}{c}{\textbf{Without Context(\%)}}&\multicolumn{3}{c}{\textbf{Without Evolution(\%)}}\\
+%%\cline{3-14}
+%%&&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}&\textbf{Precision}&\textbf{Recall}&\textbf{WR}\textbf{Precision}&\textbf{Recall}\\
+%\midrule[1pt]
+%ArgoUML&0.9&20.14&	69.77&	43.17&14.29&	73.77&	32.37&17.56&	72.00&	38.85&21.78&	69.89&	46.76\\
+%jEdit&0.9&	43.40&	73.91&	62.96&	38.99&	75.81&	58.02&	40.88&	75.38&	60.49&	44.03&	71.43&	61.73\\
+%jFreeChart&0.9&	52.50&	82.05&	76.19&	44.42&	84.63&	66.50&	51.06&	81.92&	73.98&	50.19&	81.42&	72.28\\
+%Tuxguitar&0.9&	76.55&	80.44&	82.89&	68.64&	79.01&	73.00&	75.14&	78.57&	79.47&	71.75&	80.71&	77.95\\
+%\hline
+%ArgoUML&0.8&	21.31&	68.13&	44.60&	20.37&	70.11&	43.88&	19.91&	69.41&	42.45&	24.12&	66.02&	48.92\\
+%jEdit&0.8&	47.17&	70.67&	65.43&	43.40&	72.46&	61.73&	46.54&	70.27&	64.20&	47.80&	69.74&	65.43\\
+%jFreeChart&0.8&	55.19&	81.36&	79.42&	49.42&	82.10&	71.77&	54.13&	80.99&	77.55&	53.56&	80.07&	75.85\\
+%Tuxguitar&0.8&	78.53&	80.22&	84.79&	74.01&	79.01&	78.71&	78.53&	78.42&	82.89&	74.01&	80.92&	80.61\\
+%\hline
+%ArgoUML&0.7&	24.12&	65.05&	48.20&	23.89&	65.69&	48.20&	21.78&	64.52&	43.17&	26.00&	63.96&	51.08\\
+%jEdit&0.7&	49.06&	70.51&	67.90&	47.17&	70.67&	65.43&	47.80&	71.05&	66.67&	49.69&	68.35&	66.67\\
+%jFreeChart&0.7&	56.83&	80.71&	81.12&	53.17&	80.83&	76.02&	56.92&	79.39&	79.93&	56.06&	78.39&	77.72\\
+%Tuxguitar&0.7&	80.51&	80.00&	86.69&	78.25&	78.34&	82.51&	80.79&	77.97&	84.79&	76.55&	80.81&	83.27\\
+%\hline
+%ArgoUML&0.6&	24.59&	63.81&	48.20&	25.76&	63.64&	50.36&	24.12&	63.11&	46.76&	28.10&	60.00&	51.80\\
+%jEdit&0.6&	50.31&	70.00&	69.14&	48.43&	71.43&	67.90&	47.80&	71.05&	66.67&	51.57&	65.85&	66.67\\
+%jFreeChart&0.6&	58.65&	80.33&	83.33&	55.10&	80.10&	78.06&	59.33&	78.12&	81.97&	57.50&	77.93&	79.25\\
+%Tuxguitar&0.6&	81.64&	79.24&	87.07&	79.94&	78.09&	84.03&	82.20&	77.32&	85.55&	78.53&	80.94&	85.55\\
+%\hline
+%ArgoUML&0.5&	25.29&	62.04&	48.20&	29.27&	61.60&	55.40&	26.00&	59.46&	47.48&	29.51&	60.32&	54.68\\
+%jEdit&0.5&	50.94&	69.14&	69.14&	53.46&	69.41&	72.84&	50.94&	67.90&	67.90&	52.83&	65.48&	67.90\\
+%jFreeChart&0.5&	60.10&	79.68&	84.69&	57.79&	78.20&	79.93&	60.48&	78.06&	83.50&	59.13&	77.56&	81.12\\
+%Tuxguitar&0.5&	83.33&	79.32&	88.97&	83.33&	77.63&	87.07&	84.18&	76.85&	87.07&	79.66&	80.50&      86.31\\
+%\bottomrule[1.5pt]
+%\end{tabular}
+%%\end{table}
+%\end{sidewaystable}
+
+
+\BiSubsubsection{项目交叉实验}
+{Cross-Projects Experiment}
+
+在系统开发的初始阶段，系统内可能没有足够的克隆变化实例，从而导致模型训练不完全，进一步使得预测结果不够理想。为解决此问题，本文在不同的系统上进行了交叉验证实验，即使用已有系统的克隆变化实例训练一致性预测模型，并用于预测其它系统的一致性维护需求。在此实验中，使用中三个系统的变化实例作为训练集，然后使用另外一个系统作为测试集测试模型的有效性。
+
+实验结果如表~\ref{changecrossmeeting}~所示。从表中可以看出，与全属性实验相比，交叉验证实验的预测效果也大大下降，准确率和召回率都下降。因此，本文建议使用本文的预测模型预测自身系统的克隆变化实例。如果在软件开发的初始阶段，项目可能没有足够的克隆变化实例，本文建议使用第三章提出的方法在创建克隆代码时检测克隆代码的一致性问题。当随着软件演化以后，系统自身的变化实例将会变得更多，此时可以使用自身数据训练模型并预测克隆代码的一致性。
+
+%From Table~\ref{t_6}, we notice that, all precisions and recalls suffer when prediction models are built and used across different projects. Combining this result and that from the first experiment, we can safely recommend that our model is effective in its prediction for repository that have already evolved for quite some time, where there are sufficient change instances.
+
+%At the initial stage of software development, project may not have enough clone change instances from its software repository to train its own prediction well. How then could we perform prediction for such a new software development?
+
+%Our suggestion is as follows: At the start of software development, we require developers to be vigilant in checking for consistency-requirement whenever clone groups are created. Cross-project models can be used to assist at this point with caution, or the model built by Wang et al. \cite{Wang2014} can be used when copy-and-paste operations are performed. Later, as software evolves through several versions, it's advisable that we retrain the model by progressively reducing the amount of cross-project data and increasing the amount of data from its own repository.
+
+\begin{table}[htbp]
+\bicaption[changecrossmeeting]{}{四个实验系统上项目交叉实验效果}
+{Table$\!$}{The effectiveness for cross-project on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{ccccc}
+\toprule[1.5pt]
+{测试系统}&{阈值}&{警告率(\%)}&{精确率(\%)}&{召回率(\%)}\\
+%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
+\midrule[1pt]
+\multirow{5}{*}{ArgoUML}
+&0.9&	40.28&	33.72&	41.73\\
+&0.8&	49.88&	35.21&	53.96\\
+&0.7&	57.85&	34.01&	60.43\\
+&0.6&	62.06&	34.34&	65.47\\
+&0.5&	65.34&	34.41&	69.06\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.9&	26.42&	59.52&	30.86\\
+&0.8&	31.45&	54.00&	33.33\\
+&0.7&	37.11&	54.24&	39.51\\
+&0.6&	42.14&	56.72&	46.91\\
+&0.5&	45.91&	56.16&	50.62\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.9&	21.15&	62.73&	23.47\\
+&0.8&	26.44&	62.55&	29.25\\
+&0.7&	31.44&	60.86&	33.84\\
+&0.6&	35.38&	60.60&	37.93\\
+&0.5&	38.65&	59.95&	40.99\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.9&	18.08&	70.31&	17.11\\
+&0.8&	22.60&	70.00&	21.29\\
+&0.7&	26.27&	70.97&	25.10\\
+&0.6&	31.07&	71.82&	30.04\\
+&0.5&	35.88&	72.44&	34.98\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+\BiSubsection{一致性维护自由实验}
+{Clone Creating Consistency Free Experiment}
+
+本实验对不需要一致性维护的克隆变化实例进行预测评估。将关注不需要一致性维护的克隆实例，从而让程序开发人员可以更加自由的修改克隆代码，而不需要考虑克隆变化所引发的一致性维护问题，可以更加快速有效的开发系统。此实验使用三个度量评估预测效果，分别为：推荐率、准确率和召回率。
+在本实验中，我们计算以下三个指标，用于评估我们的模型的一致性无需求的可预测性：
+
+\begin{itemize}
+\item 
+推荐率(Recommendation Rate)：指的是所推荐的不需要一致性维护的克隆变化实例与所有实例的比例，即预测为不需要一致性维护的克隆变化实例与系统中全部变化实例的比值。
+\item 
+精确率(Precision)：指所预测的不需要一致性维护克隆变化实例的准确率，即在预测为不需要一致性维护的克隆变化实例中，正确预测的实例与所预测实例的比值。
+\item  
+召回率(Recall)：指所推荐的不需要一致性维护的克隆变化实例的查全率，即预测为不需要一致性维护的变化实例，与系统中的不需要一致性维护的实例的比值。
+\end{itemize}
+
+%\begin{itemize}
+%\item \textbf{Recommendation Rate (RR)}: 
+%This percentage indicates the number of change instances that our model predicts to have met consistency-requirement free, and thus recommends developers to change code clone freely.
+%It is computed as the ratio of the number of recommendations raised by the model to all change instances tested.
+%\item \textbf{Precision}: 
+%This assesses the accuracy of the model when it predicts that a change instance under test to be consistency-free. It is computed as the ratio of the number of {\em correct} predictions of change instances to be consistency-free to the total number of predictions made by the model about change instances to be consistency-free.
+%\item \textbf{Recall}: 
+%This assesses the effectiveness of the model in discovering all change instances meeting the requirement of consistency-free.
+%It is computed as the ratio of the number of {\em correct} predictions of change instances to be consistency-free to total number of change instances meeting the requirement of consistency-free(i.e., ground truth).
+%\end{itemize}
+
+\BiSubsubsection{全属性组实验}
+{Effectiveness Experiment}
+
+全属性实验使用全部属性在四个实验系统上进行评估，实验结果如表~\ref{changeallfree}~所示。由表中可以看出，本文方法在预测不需要一致性维护的克隆变化实例时，在四个系统上均取得了不错的预测效果。其中，在系统ArgoUML和 jFreeChart取得了较好的效果，精确率在80\%左右，并且召回率在70\%左右。在系统 jEdit的预测效果尽管没有上面两个系统的预测效果好，但也具有不错的预测效果。然而不幸的是，本文的方法在系统Tuxguitar上预测效果不够理想，准确率在50\%左右，召回率更低。可能是由于Tuxguitar的不满足一致性维护需求的克隆变化实例太少，没有对预测模型训练完全，但是仍需进一步的研究确认。同时，本文所构建的模型在四个系统上都具有十分合理的推荐率，推荐率和系统本身的不需要一致性维护的克隆变化的比例相差不大（如表~\ref{changesta}~中所列）。
+
+%The models built for projects {\em ArgoUML} and {\em jFreeChart} respectively have very effective prediction of consistency-free, with the precision hovering around 80\%, and  recall around 70\%. It performs fairly well, though not as good, for {\em jEdit} repository.  Unfortunately, our model can not predict good enough for {\em Tuxguitar}.This might be due to the small size of the change instance set (being consistency-free), but further investigation is required. For all the projects, our models have produced fairly reasonable recommendation rates.
+
+不同的阈值会影响到准确率和召回率，但是阈值对于召回率的影响要大于大于准确率的影响。这意味着本文所构建的模型可以提高比较稳定的预测效果（准确率差不大），但系统的召回率仍需要进一步的提升。简而言之，本文的方法所构建的预测模型可以对不需要一致性维护的克隆变化实例提供一个相对稳定的预测，并且具有相当好的准确度和召回率，软件开发人员可以据此对克隆变化实例进行有效的预测。
+
+%%While variation in threshold does affect both the precisions and the recalls, it has stronger impact on the recalls than the precisions. 
+%%This means that, the models created are pretty stable in providing, but can be further improved on its ability to recall. 
+%%This implies that developers can quite confidently rely on the warning given by the predictors, but may need other means to help in further identify those cases where the predictors remain silent. 
+%In short, our approach produces models that offer a stable prediction with reasonably well precisions and recalls, bringing confidence to software developers about replying on the inference produced by the models. 
+
+\begin{table}[htbp]
+\bicaption[changeallfree]{}{四个实验系统的全属性组实验效果}
+{Table$\!$}{The effectiveness for all attribute on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{ccccc}
+\toprule[1.5pt]
+{系统}&{阈值}&{推荐率(\%)}&{准确率(\%)}&{召回率(\%)}\\
+%\textbf{Project}&\textbf{Threshold}&\textbf{RR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
+\midrule[1pt]
+\multirow{5}{*}{ArgoUML}
+&0.01&	51.99&	83.33&	64.24\\
+&0.05&	60.42&	82.95&	74.31\\
+&0.1&	63.93&	81.32&	77.08\\
+&0.15&	65.81&	80.43&	78.47\\
+&0.2&	67.45&	80.21&	80.21\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.01&	20.13&	84.38&	34.62\\
+&0.05&	30.19&	79.17&	48.72\\
+&0.1&	33.96&	74.07&	51.28\\
+&0.15&	38.36&	70.49&	55.13\\
+&0.2&	39.62&	69.84&	56.41\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.01&	28.65&	84.56&	55.75\\
+&0.05&	32.50&	83.73&	62.61\\
+&0.1&	34.23&	82.02&	64.60\\
+&0.15&	35.58&	80.81&	66.15\\
+&0.2&	36.06&	80.53&	66.81\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.01&	7.91&	53.57&	16.48\\
+&0.05&	9.32&	57.58&	20.88\\
+&0.1&	9.89&	54.29&	20.88\\
+&0.15&	12.15&	48.84&	23.08\\
+&0.2&	13.28&	48.94&	25.27\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+
+
+\BiSubsubsection{属性组实验}
+{Attribute Set Experiment}
+
+同样，对不需要一致性维护的克隆变化实例，本文同样进行了属性组实验，以评估不同的属性组对预测效果的影响。实验结果如表~\ref{changesetfree}~所示，其中，分别给出了使用全部属性和删除每一组属性后的实验结果，即“全部属性”、“无代码属性”、“无上下文属性”和“无演化属性”。
+
+从表中可以看出，属性组对“一致性维护自由”实验的预测结果的影响并无一致性结论。但是，代码属性和上下文属性与全属性组对比表明，这两组属性对预测的召回率有显著影响。但是，无演化组属性的实验结果表明其对实验结果的影响没有预想的那么大。尽管如此，这些属性组依然对预测效果有影响，但需要进一步的研究去寻找这种差异背后的真正原因。
+
+%Similar with the case of consistency-requirement prediction, we also performed one-tail t-tests. The details are also shown in section appendices. According to the results, we have high level of confidence that none of the attribute sets whose absence will have significant adverse impact -- in comparison with others -- on the precision. On the other hand,  the absence of {\em any one} of these attribute sets will {\em have significant adverse impact} on the recall values of the models trained. 
+
+此外，本文还对所选用的属性组进行了属性选择实验，使用WEKA提供的功能选取了最佳属性集。然而，通过比对全属性组的实验结果，发现发现全属性组实验结果要好于最佳属性子集的实验结果，因此，所采用的属性具有积极的意义。虽然一些属性组可能对实验结果没有显着的影响，但是其也不具有消极的影响。
+
+%We also build predictors by choosing the best subsets of attributes, obtained from WEKA's attribute selection function, aiming at exploring the effect of each attributes. Comparing with full attribute sets, the results consistently show that {\em all-attributes predictor has better predictive power than subset-attribute predictors.\/} 
+
+尽管一些属性组可能对实验结果没有极为重要的贡献，但是属性组同样也没有产生消极的影响。因此，本文建议将所有属性保留在构建预测模型中，因为某些属性可能对一些未经实验验证的系统具有重要且积极的影响。
+
+%Although some of the attributes might not have significant contribution to the experiment results, none of them has adversary impact either. Consequently, we recommend keeping all the  attributes in constructing prediction model, as some attributes might turn out to have significant contributions for some yet-to-be-explored repositories.
+
+\begin{sidewaystable} 
+%\begin{table}[htbp]
+\bicaption[changesetfree]{}{在四个实验系统上属性组实验效果}
+{Table$\!$}{The effectiveness for attribute set on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccccccccccc}
+\toprule[1.5pt]
+\multirow{2}{*}{实验系统}&\multirow{2}{*}{阈值}&\multicolumn{3}{c}{全部属性(\%)}&\multicolumn{3}{c}{无代码属性(\%)}&\multicolumn{3}{c}{无上下文属性(\%)}&\multicolumn{3}{c}{无演化属性(\%)}\\
+\cline{3-14}
+&&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}\\
+%\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{c}{\textbf{All(\%)}}&\multicolumn{3}{c}{\textbf{Without Code(\%)}}&\multicolumn{3}{c}{\textbf{Without Context(\%)}}&\multicolumn{3}{c}{\textbf{Without Evolution(\%)}}\\
+%\cline{3-14}
+%&&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}\\
+\midrule[1pt]
+\multirow{5}{*}{ArgoUML}
+&0.01&	51.99&	83.33&	64.24&	36.77&	89.17&	48.61&	48.01&	83.41&	59.38&	44.03&	85.64&	55.90\\
+&0.05&	60.42&	82.95&	74.31&	49.18&	85.71&	62.50&	59.48&	79.92&	70.49&	51.99&	84.23&	64.93\\
+&0.1&	63.93&	81.32&	77.08&	56.67&	83.06&	69.79&	63.00&	79.18&	73.96&	58.31&	83.53&	72.22\\
+&0.15&	65.81&	80.43&	78.47&	60.42&	83.72&	75.00&	65.11&	78.78&	76.04&	60.66&	83.01&	74.65\\
+&0.2&	67.45&	80.21&	80.21&	62.53&	82.77&	76.74&	65.81&	78.65&	76.74&	62.76&	83.21&	77.43\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.01&	20.13&	84.38&	34.62&	18.87&	80.00&	30.77&	22.64&	80.56&	37.18&	23.27&	81.08&	38.46\\
+&0.05&	30.19&	79.17&	48.72&	27.04&	79.07&	43.59&	30.19&	77.08&	47.44&	27.04&	79.07&	43.59\\
+&0.1&	33.96&	74.07&	51.28&	30.82&	79.59&	50.00&	33.96&	74.07&	51.28&	28.93&	78.26&	46.15\\
+&0.15&	38.36&	70.49&	55.13&	33.96&	77.78&	53.85&	36.48&	70.69&	52.56&	32.08&	76.47&	50.00\\
+&0.2&	39.62&	69.84&	56.41&	37.11&	76.27&	57.69&	38.36&	70.49&	55.13&	32.70&	76.92&	51.28\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.01& 28.65&	84.56&	55.75&	18.94&	89.34&	38.94&	23.75&	84.62&	46.24&	26.73&	84.53&	51.99\\
+&0.05&	32.50&	83.73&	62.61&	24.71&	84.44&	48.01&	28.65&	81.54&	53.76&	31.35&	82.21&	59.29\\
+&0.1&	34.23&	82.02&	64.60&	28.75&	82.61&	54.65&	31.44&	81.35&	58.85&	32.79&	80.94&	61.06\\
+&0.15&	35.58&	80.81&	66.15&	30.77&	81.56&	57.74&	32.88&	81.58&	61.73&	34.62&	78.89&	62.83\\
+&0.2&	36.06&	80.53&	66.81&	32.98&	80.17&	60.84&	34.13&	79.72&	62.61&	35.87&	78.02&	64.38\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.01&	7.91&	53.57&	16.48&	3.11&	27.27&	3.30&	5.37&	47.37&	9.89&	9.89&	57.14&	21.98\\
+&0.05&	9.32&	57.58&	20.88&	8.19&	41.38&	13.19&	8.19&	48.28&	15.38&	11.58&	51.22&	23.08\\
+&0.1&	9.89&	54.29&	20.88&	9.89&	48.57&	18.68&	9.89&	48.57&	18.68&	13.28&	48.94&	25.27\\
+&0.15&	12.15&	48.84&	23.08&	11.02&	46.15&	19.78&	10.73&	44.74&	18.68&	14.97&	52.83&	30.77\\
+&0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15.82&	55.36&	34.07\\
+\bottomrule[1.5pt]
+\end{tabular}
+%\end{table}
+\end{sidewaystable} 
+
+%\begin{table}[htbp]
+%\bicaption[changesetfree]{}{在四个实验系统上属性组实验结果}
+%{Table$\!$}{The effectiveness for attribute set on four projects}
+%\vspace{0.5em}
+%\centering
+%\wuhao
+%\begin{tabular}{cccccccccccccc}
+%\toprule[1.5pt]
+%\multirow{2}{*}{\textbf{Project}}&\multirow{2}{*}{\textbf{Threshold}}&\multicolumn{3}{|c|}{\textbf{All(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Code(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Context(\%)}}&\multicolumn{3}{|c|}{\textbf{Without Evolution(\%)}}\\
+%\cline{3-14}
+%&&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}&\textbf{RR}&\textbf{Precision}&\textbf{Recall}\\
+%\midrule[1pt]
+%ArgoUML&0.01&	51.99&	83.33&	64.24&	36.77&	89.17&	48.61&	48.01&	83.41&	59.38&	44.03&	85.64&	55.90\\
+%jEdit&0.01&	20.13&	84.38&	34.62&	18.87&	80.00&	30.77&	22.64&	80.56&	37.18&	23.27&	81.08&	38.46\\
+%jFreeChart&0.01& 28.65&	84.56&	55.75&	18.94&	89.34&	38.94&	23.75&	84.62&	46.24&	26.73&	84.53&	51.99\\
+%Tuxguitar&0.01&	7.91&	53.57&	16.48&	3.11&	27.27&	3.30&	5.37&	47.37&	9.89&	9.89&	57.14&	21.98\\
+%\hline
+%ArgoUML&0.05&	60.42&	82.95&	74.31&	49.18&	85.71&	62.50&	59.48&	79.92&	70.49&	51.99&	84.23&	64.93\\
+%jEdit&0.05&	30.19&	79.17&	48.72&	27.04&	79.07&	43.59&	30.19&	77.08&	47.44&	27.04&	79.07&	43.59\\
+%jFreeChart&0.05&	32.50&	83.73&	62.61&	24.71&	84.44&	48.01&	28.65&	81.54&	53.76&	31.35&	82.21&	59.29\\
+%Tuxguitar&0.05&	9.32&	57.58&	20.88&	8.19&	41.38&	13.19&	8.19&	48.28&	15.38&	11.58&	51.22&	23.08\\
+%\hline
+%ArgoUML&0.1&	63.93&	81.32&	77.08&	56.67&	83.06&	69.79&	63.00&	79.18&	73.96&	58.31&	83.53&	72.22\\
+%jEdit&0.1&	33.96&	74.07&	51.28&	30.82&	79.59&	50.00&	33.96&	74.07&	51.28&	28.93&	78.26&	46.15\\
+%jFreeChart&0.1&	34.23&	82.02&	64.60&	28.75&	82.61&	54.65&	31.44&	81.35&	58.85&	32.79&	80.94&	61.06\\
+%Tuxguitar&0.1&	9.89&	54.29&	20.88&	9.89&	48.57&	18.68&	9.89&	48.57&	%18.68&	13.28&	48.94&	25.27\\
+%\hline
+%ArgoUML&0.15&	65.81&	80.43&	78.47&	60.42&	83.72&	75.00&	65.11&	78.78&	76.04&	60.66&	83.01&	74.65\\
+%jEdit&0.15&	38.36&	70.49&	55.13&	33.96&	77.78&	53.85&	36.48&	70.69&	52.56&	32.08&	76.47&	50.00\\
+%jFreeChart&0.15&	35.58&	80.81&	66.15&	30.77&	81.56&	57.74&	32.88&	81.58&	61.73&	34.62&	78.89&	62.83\\
+%Tuxguitar&0.15&	12.15&	48.84&	23.08&	11.02&	46.15&	19.78&	10.73&	44.74&	18.68&	14.97&	52.83&	30.77\\
+%\hline
+%ArgoUML&0.2&	67.45&	80.21&	80.21&	62.53&	82.77&	76.74&	65.81&	78.65&	76.74&	62.76&	83.21&	77.43\\
+%jEdit&0.2&	39.62&	69.84&	56.41&	37.11&	76.27&	57.69&	38.36&	70.49&	55.13&	32.70&	76.92&	51.28\\
+%jFreeChart&0.2&	36.06&	80.53&	66.81&	32.98&	80.17&	60.84&	34.13&	79.72&	62.61&	35.87&	78.02&	64.38\\
+%Tuxguitar&0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15.82&	55.36&	34.07\\
+%\bottomrule[1.5pt]
+%\end{tabular}
+%\end{table}
+
+\BiSubsubsection{交叉验证实验}
+{Cross-Projects Experiment}
+
+在这个实验中，我们探讨使用跨项目在预测不需要一致性维护的克隆变化实例。同样，使用其它软件系统的克隆变化实例作为训练集，并使用另外系统作为测试集。实验结果如表~\ref{changecrossfree}~所示。
+
+%%In this experiment, we explore the effectiveness of using cross-project in predicting consistency-requirement-free. we determine if models trained using data from other software repositories can be used to predict consistency-requirement satisfaction for a different software repository. With four subject repositories, in this experiment, we take turns to use data from three repositories to train a prediction model, and use the model to predict consistency-requirement-free of a clone change in the remaining repositories. 
+
+从表中可以看出，所有的准确率和召回率都受到了严重的影响。结合全属性实验的实验结果（表~\ref{changeallfree}~），可以发现当使用自身系统的数据作为训练集且训练集足够大时，本文的预测模型有效的，例如软件系统经过长时间的演化具有了大量的克隆变化实例。因此，本文建议使用系统自身的数据进行一致性预测。然而，在软件开发的初期阶段，由于缺乏足够数量的克隆变化实例，不能很好的训练模型时，开发人员可以使用本文第三章提出的方法在克隆创建时预测克隆代码的一致性，从而仅允许那些不需要一致性维护的克隆实例产生。在软件演化到了足够的版本时，随着来自其自己的克隆变化数据的增加，开发人员可以使用自身数据重新训练模型以预测项目中克隆变化的一致性。
+
+%%table~\ref{t_9} shows that all precisions and recalls suffer comparing with the effective experiment. Combining this result and the (first) Effectiveness Experiment, we observe that prediction model is effective when it is trained from its own repository having sufficient number of change instances; ie., when the repository has already evolved for quite some time. Therefore, we recommend that, at the infancy stage of software development, due to a lack of sufficient number of clone change instances for training the model well, the developer can use the model bulit by Wang {\sl et al.} \cite{Wang2014} that detects copy-and-paste operations to avoid clones. After several versions of evolution of the software, and with increasing amount of data from its own repository, the developer can retrain the model to predict consistency-free of clone changes in the project.
+
+\begin{table}[htbp]
+\bicaption[changecrossfree]{}{四个实验系统上项目交叉实验效果}
+{Table$\!$}{The effectiveness for cross-project on four projects}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{ccccc}
+\toprule[1.5pt]
+{测试系统}&{阈值}&{警告率(\%)}&{精确率(\%)}&{召回率(\%)}\\
+%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\\begin{table}[htbp]
+\midrule[1pt]
+\multirow{5}{*}{ArgoUML}
+&0.01&	6.09&	73.08&	6.60\\
+&0.05&	13.11&	76.79&	14.93\\
+&0.1&	16.63&	74.65&	18.40\\
+&0.15&	20.84&	75.28&	23.26\\
+&0.2&	23.19&	71.72&	24.65\\
+\hline
+\multirow{5}{*}{jEdit}
+&0.01&	9.43&	60.00&	11.54\\
+&0.05&	21.38&	50.00&	21.79\\
+&0.1&	31.45&	44.00&	28.21\\
+&0.15&	37.74&	50.00&	38.46\\
+&0.2&	42.14&	49.25&	42.31\\
+\hline
+\multirow{5}{*}{jFreeChart}
+&0.01&	26.44&	46.91&	28.54\\
+&0.05&	37.60&	46.55&	40.27\\
+&0.1&	43.27&	47.56&	47.35\\
+&0.15&	46.92&	46.72&	50.44\\
+&0.2&	49.33&	46.39&	52.65\\
+\hline
+\multirow{5}{*}{Tuxguitar}
+&0.01&	16.67&	27.12&	17.58\\
+&0.05&	33.62&	24.37&	31.87\\
+&0.1&	42.37&	26.67&	43.96\\
+&0.15&	46.61&	26.67&	48.35\\
+&0.2&	49.72&	26.14&	50.55\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+\BiSubsection{讨论}
+{Discussion}
+
+本节从不同的角度评估了所建立的贝叶斯网络模型的预测能力，同时对不需要一致性维护和需要一致性维护的克隆变化实例进行了一致性预测。实验结果表明，当系统使用自身的克隆变化实例进行全属性预测时，本章的模型在一致性维护需求和一致性维护自由的实验上均具有有效的预测能力。同时，属性组实验中，发现每一个属性组在不同角度和程度上对预测模型的效果有着积极的作用。因此，本文鼓励开发人员使用全属性组进行克隆变化实例的一致性维护需求预测，从而将其适用到其它系统是达到最佳的预测效果。
+
+%We evaluated the prediction power of Bayesian network model built to predict both on consistency-requirement and free for all the clone change instances. Based on the results of our experiments, our models have effective prediction ability, on both consistency-requirement and consistency-free prediction, when they are trained with full attributes for all instances.  The experiments on omitting single attribute set reveal each of the attribute sets contribute significantly -- to various degree -- to the quality of the prediction model. Therefore, developers should be encouraged to add in other attributes along these three dimensions to further sharpen the predictability of the constructed model. 
+
+然而，跨项目的实验表明，本章所提出的预测模型的有效性会依赖于系统自身的某些特征。这意味着使用本章所提取的属性构建一个“通用”预测模型时，可能较为困难的预测所某一特定系统的一致性维护需求。换句话说，本文建议开发人员为不同的系统构建和训练不同的模型，已达到满意的预测效果。试图构建一个全新的预测器，并可以适用于其它的项目中也并非完全不可取的。在软件缺陷预测领域中存在一些跨项目预测的研究，可以考虑对其进行进一步的研究使之运用到跨项目的克隆一致性需求维护中。
+
+
+%The cross-project experiment shows that prediction model effectiveness is highly dependent of the specific characteristics of the repository on which the model is to be applied. This implies that it may be ineffective to build a "universal" predictive model that can predict consistency-requirement/-free of clone changes for all repositories. In other words, developers will need to create different models for different repositories. This is certainly not entirely desirable, and we feel that further investigation is required here.
+
+在软件开发初期，系统自身缺乏克隆变化实例而无法构建预测模型，同时跨项目的模型也无法对其进行预测。为了解决此问题，本文建议建议开发人员在软件开发的早期阶段使用本文第二章提出的克隆代码创建时克隆一致性维护需求预测方法，尽量避免会导致一致性变化的克隆代码，或者仅仅允许不会导致一致性变化的克隆代码的产生。
+
+%The ineffectiveness of predictive power of model coming from cross-project repositories also implies that the current approach has a limitation in bootstrapping itself during model building, as there are not sufficient change instances at the infancy stage of software development to support the construction of prediction model. Here, we recommend that developers to use the model developed by Wang {\sl et.al.} at the early stage of software development, and use our model as the software has evolved for some versions.
+
+
+%\BiSection{威胁}{Related Work}
+%作为一个实证研究，我们的实验结果受到两个有效威胁。首先，构建有效性的威胁关注在我们的实验的构建和评估中使用的度量是否适当。这里有两个潜在的威胁：（1）我们对克隆组的“一致改变”模式的定义可能不是最准确，因为克隆组可以具有多于两个克隆，在克隆组中留下一些克隆不真正匹配模式条件。然而，这不是真正意义重大，有两个原因：在存储库中发现的大多数克隆组的大小为2;此外，我们认为，当需要进行一致性检查时，开发人员应该检查组中的所有克隆是否一致。（2）我们通过所有克隆从一个版本到下一个版本的平均变化近似实际代码变化。这可能不能很好地反映实际的代码更改。我们对这个论点的辩护是，一致性检查仅在软件即将升级到新版本之前进行，而不是每当组中的一段代码改性。因此，预测只有在几乎所有修改时才开始到克隆，并且使用变化的平均值是最适当的度量。
+
+%第二，关于我们的结果可能不会这样.推广到更广泛的软件存储库，我们注意到我们在构建模型中采用了一个整体视图：我们不仅考虑了代码属性，克隆上下文，还包括克隆组的历史，在构建模型的输入。这意味着构建的预测模型是针对个体存储库定制的，因此在概念上是一般的。
+
+%NiCad作为我们的克隆检测工具，可以从软件源代码中产品克隆组。克隆组的大小对于不同的项目是非常不同的。大多数克隆组只有两个克隆片段，也有一些是相当大的。对于更大的克隆组，我们的预测模型可能不能很好地处理。在将来，我们将考虑不同大小的克隆组使用不同的属性。并且，还要适应我们的模型更多的检测工具。我们使用三个组属性来代替克隆更改实例，并且还使用它们来决定贝叶斯网络的节点。在这些属性中。这些属性对结果有不同的影响。虽然组属性实验可以给出一些关于对组的影响的信息，但这些信息仍然不够准确。因为，我们列出每个克隆片段的克隆组的平均值。因此，我们也可以考虑不同大小的克隆组的真实属性。
+
+%\ textcolor {blue} {此段落与最后一节重复。我对讨论和限制感到困惑。 }}
+%我们也不考虑克隆进化中的晚期繁殖。根据我们的标签一致性要求，我们将一些不一致的更改实例（从版本j到j + 1）标记为需要一致的要求，其在版本后（版本j + 1之后）经历一致的改变。这可能在这里引入一些噪音，如果这个克隆组改变了很多时间。我们仍然使用这个标签，因为有很少的人经历更多的时间。然而，如果该项目的克隆组经历了很多变化，我们的模型可能会引入更多的噪声。在未来，我们将处理这种更准确的晚生育和这种变化频繁的实例。
+
+\BiSection{本章结论}
+{Summary of this Chapter}
+
+在软件演化过程中，发生变化的克隆代码可能会导致一致性变化而引发克隆一致性缺陷，从而增加了软件维护的代价。为了帮助程序开发人员避免克隆一致性缺陷，降低软件维护代价，本章提出了一个克隆代码变化时一致性维护需求预测方法，在克隆代码发生变化时预测该变化是否会导致克隆一致性缺陷，从而提醒程序开发人员对克隆代码进行一致性维护。通过构建软件系统的克隆家系收集系统中的克隆变化实例，并用于构建和训练克隆代码一致性预测的贝叶斯网络模型。同时，为了表示克隆变化实例，本章从克隆组的角度提取了三组属性描述克隆变化实例的特征，分别代码属性、上下文属性和演化属性。对四个开源软件项目进行了一致性维护需求和自由实验，从而验证所构建模型的预测能力。实验结果表明，实验结果表明本章方法可以以合理的准确率和召回率有效地预测克隆代码的一致性维护需求。%对于两个较大的存储库具有良好的精确度和召回率，并且对于最小的存储库具有合理的精确度和召回率。
+此外，提取的三组属性对预测效果起到了积极的作用，并对预测结果的召回率有较强的影响。同时，对于克隆变化实例不足的系统，跨项目所构建的模型还不能够达到让人满意的预测效果，因此建议采用第二章提出的方法在克隆代码创建时预测其一致性。
+
+%预测器构造的主要成本来自存储库的变化实例收集;这种成本可以容易地在软件演进上摊销，使得这种方法可扩展。为了跟进，我们打算通过引入新的属性或属性选择来提高预测变量的回忆能力。通过引入一致性的预测{\em free}来补充现有的一致性需求预测。此外，我们打算将这个模型构建和预测过程集成到一个IDE中，如Eclipse。我们认为，这种整体方法可以提高软件可维护性以提高软件质量，因为开发人员现在可以更清楚地了解何时需要调查克隆组的一致性要求，避免一致性缺陷的潜在风险。
+
+%The presence of clones in software adds to the burden of software maintenance due to the potential need to maintain consistent change in clones when software evolves.  In this paper, we propose an approach to predict clone consistency-requirement for any clone group which has some of its constituent clone fragments undergoing code modification. We build clone genealogies from the software repositories to extract clone change instances. For each change instance, we extract three sets of attributes.  Specifically, we introduce a set of {\em evolution attributes} to capture the characteristics of evolution history. Consequently, our attributes {\em provide a holistic view about code change, from perspectives of individual, environment, and evolution.  We use these data to build a Bayesian network for each repository, implemented using WEKA.  We conduct experiments on four open source software projects to investigate three perspectives of the prediction models.  The experimental results show that the prediction models have reasonable rate: it has good precision and recall rates for two larger piece of repositories, and reasonable precision and recall rates for the smallest repository.In addition, all three sets of attributes have strong impact on recall rates of the prediction models. Our experiment indicates that cross-project prediction may not be a good choice for quality prediction.
+
+%The main cost of predictor construction arises from change instance collection from repositories; this cost can easily be amortized over software evolution, making this approach scalable. To follow up, we intend to enhance the recall-ability of the predictor by introducing new attributes or attributes selection.We also intend to build a general cross-project predictor to enhance the ability for new software repository which do not have enough data to train its model well. With this cross-project predictor, developers can ignore the training steps at the developing, which can really save the time of clone consistency prediction.We believe that this holistic approach can be a solid boost to software maintainability to improve software quality, as developers can now be more aware of when consistency-requirement of a clone group need to be investigated, avoiding the potential risk of consistency-defects. 
