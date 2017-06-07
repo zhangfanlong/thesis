@@ -8,7 +8,7 @@
 
 由于日益增长的软件开发的需求，软件中存在大量的由开发人员复用既有代码所产生的克隆代码。在随着软件系统演化的过程中，克隆组内的某一克隆代码片段可能会被软件开发员修改而发生变化。同时，由于克隆组内的克隆片段的相似性，该克隆片段的变化可能会导致其所在克隆组在未来演化过程中发生一致性变化。遗忘这种克隆代码的一致性变化，会引入与之相关的克隆一致性缺陷，从而增大系统的维护代价。本章将由克隆代码变化所导致的其所在克隆组未来演化过程中发生的一致性变化，称为克隆代码变化时的一致性维护需求。在克隆代码变化时时预测克隆代码的一致性维护需求，可以帮助避免克隆代码的一致性缺陷，从而帮助提高软件质量和可维护性。
 
-鉴于此，本章与第三章相似，在定义克隆代码变化时的一致性变化和一致性维护需求的基础上，使用机器学习方法在克隆代码变化时预测其一致性维护需求。为训练克隆代码变化时一致性预测模型，首先通过构建软件系统的克隆家系来收集系统中所有的克隆变化实例（发生变化的克隆代码）。然后，提取了代码属性、上下文属性和演化属性三组属性值表示克隆代码变化实例。最后，训练机器学习模型预测克隆代码变化时的一致性维护需求。在四个开源软件系统上对本章方法进行了评估，实验结果表明本章方法以合理的准确率和召回率有效地预测克隆代码变化时的一致性维护需求。本章所提出的预测方法同样可以帮助开发人员在克隆代码变化时预测克隆代码的一致性，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
+鉴于此，本章与第三章相似，在定义克隆代码变化时的一致性变化和一致性维护需求的基础上，使用机器学习方法在克隆代码变化时预测其一致性维护需求。为训练克隆代码变化时一致性预测模型，首先通过构建软件系统的克隆家系来收集系统中所有的克隆变化实例（发生变化的克隆代码）。然后，提取了代码属性、上下文属性和演化属性三组属性值表示克隆代码变化实例。最后，训练机器学习模型预测克隆代码变化时的一致性维护需求。在四个开源软件系统上对本章方法进行了评估，实验结果表明本章方法以合理的精确率和召回率有效地预测克隆代码变化时的一致性维护需求。本章所提出的预测方法同样可以帮助开发人员在克隆代码变化时预测克隆代码的一致性，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
 
 \BiSection{克隆代码变化时一致性维护需求}
 {Clone Changing Consistency-Requirement}
@@ -93,7 +93,6 @@
 
 \begin{definition}[克隆变化实例] 
 \label{def-changinginstance}
-克隆变化实例：
 软件版本 $j$中的一个克隆组$CG$是克隆变化实例，如果克隆组$CG$中至少两个克隆代码片段发生变化，且版本$j+1$ 中至少存在一个克隆组$CG'$与之对应(在同一克隆家系$CGE$中)。 
 \end{definition}
 
@@ -347,7 +346,7 @@ Halstead属性平均：
 %%%{algorithm description}
 
 \BiSection{实验结果与分析}
-{Experiments Results and Analysis}
+{Experimental Results and Analysis}
 
 本节给出本章的实验结果与分析，首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
 
@@ -366,10 +365,9 @@ Halstead属性平均：
 \wuhao
 \begin{tabular}{cccc}
 \toprule[1.5pt]
-~\multirow{3}{*}{实验系统}& \multicolumn{2}{c}{克隆变化实例的数量（比例）} & \multirow{3}{*}{总数}\\ 
+~\multirow{2}{*}{实验系统}& \multicolumn{2}{c}{克隆变化实例的数量（比例）} & \multirow{2}{*}{总数}\\ 
  \cline{2-3}
-~&{不需要} &{需要} &  ~\\
-~&{一致性维护}&{一致性维护}&~ \\
+~&{不需要维护} &{需要维护} & ~\\
 \midrule[1pt]
 ArgoUML&288(67.45\%)&139(32.55\%)&427\\
 jEdit&78(49.06\%)&81(50.94\%)&159\\
@@ -379,75 +377,117 @@ Tuxguitar&91(25.71\%)&263(74.29\%)&354\\
 \end{tabular}
 \end{table}
 
-表~\ref{}~显示从三个项目收集的变更实例的大小的统计信息。中间列显示收集的至少一半的更改实例的大小为2。因此，虽然克隆是丰富的，但它们对系统的引入并不猖獗。{\em  ArgoUML}和{\em jFreeChart}确实有一些超大克隆组; 这些预期在数量上是小的，并且克隆的尺寸也小。
+表~\ref{changeclonenumbersta}~给出了四个实验系统中克隆变化实例所包含的克隆代码的数量的统计信息。表中最后一列显示了克隆代码数量为2。因此，系统中虽然有大量的克隆代码，但是变化实例所包含的克隆数量并不是很多。同时，ArgoUML和 jFreeChart系统中存在少量的超大克隆组，从而导致了平均值和标准差较大。
 
 \begin{table}[htbp]
-\bicaption[table1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics of the size of clone change instances}
-\vspace{0.5em}\centering\wuhao
+\bicaption[changeclonenumbersta]{}{克隆变化实例的克隆代码数量信息统计}
+{Table$\!$}{Statistics of the size of clone change instances}
+\vspace{0.5em}
+\centering
+\wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
-\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+{实验系统}&{数量}&{Mean}&{Standard Deviation}&{Median}\\ 
 \midrule[1pt]
-ArgoUML&427&7.5.9271&	26.22377&2\\ \hline
-jEdit&159&	2.46541&	0.9125&2\\ \hline
-jFreeChart&1040&	7.85288&	26.92378&2\\ \hline
-Tuxguitar&354&	3.40395	&3.45232&2\\ 
+ArgoUML&427&7.593&	26.224&2\\
+jEdit&159&	2.465&	0.913&2\\ 
+jFreeChart&1040&	7.853&	26.924&2\\
+Tuxguitar&354&	3.404	&3.452&2\\ 
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
 
-表~\ref{}描述了更改实例的年龄的统计信息。如前所述，变更实例的年龄是自成立以来所经历的软件版本控制的数量（从$ 0 $计算）。一般来说，更改实例的年龄较小。考虑到变更实例的性质，他们将在当前版本中进行一些代码更改，这个统计数据显示大多数克隆组开始在早期体验代码更改。因此，我们尽可能早地执行一致性要求可满足性的预测变得更相关。
+%%%%\begin{table}[htbp]
+%%%%\bicaption[changeclonenumbersta]{}{克隆变化实例的克隆代码数量信息统计}
+%%%%{Table$\!$}{Statistics of the size of clone change instances}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{ccccc}
+%%%%\toprule[1.5pt]
+%%%%\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ 
+%%%%\midrule[1pt]
+%%%%ArgoUML&427&7.5.9271&	26.22377&2\\
+%%%%jEdit&159&	2.46541&	0.9125&2\\ 
+%%%%jFreeChart&1040&	7.85288&	26.92378&2\\
+%%%%Tuxguitar&354&	3.40395	&3.45232&2\\ 
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{table}
+
+表~\ref{changelifesta}描述了克隆变化实例发生变化时的寿命统计信息。如前所述，克隆变化实例寿命年龄是自其所在的克隆组在发生变化时，所经历的所有软件版本的数量(从$0$开始计算)。从表中可以看出，克隆变化实例的寿命普遍偏小。考虑到克隆变化实例的本质，即被开发人员修改的克隆代码。克隆代码变化可能会较早的出现，因此需要尽可能早地执行克隆的一致性要求，从而避免引入过多的克隆一致性缺陷。
 
 \begin{table}[htbp]
-\bicaption[dffhg1]{}{符合研究生院绘图规范的表格}{Table$\!$}{Statistics on ages of clone change instances}
-\vspace{0.5em}\centering\wuhao
+\bicaption[changelifesta]{}{克隆变化实例寿命信息统计}
+{Table$\!$}{Statistics for clone life of clone change instances}
+\vspace{0.5em}
+\centering
+\wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
-\textbf{Project}&\textbf{Total}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ \hline
+{实验系统}&{数量}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ 
 \midrule[1pt]
-ArgoUML&427&2.09368&2.33078&1\\ \hline
-jEdit&159&4.48428&3.64371&3\\ \hline	
-jFreeChart&1040&4.93462&4.99543&3\\ \hline	
-Tuxguitar&354&1.5565&1.50294&1\\ \hline	
+ArgoUML&427&2.094&2.331&1\\ 
+jEdit&159&4.484&3.644&3\\ 
+jFreeChart&1040&4.935&4.995&3\\ 
+Tuxguitar&354&1.557&1.503&1\\ 
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
 
-因为有两种类型的克隆变化实例，即需要一致性维护实例和不需要一致性维护实例。分别对上述两种克隆变化实例进行预测，可将实验划分为“一致性维护需求”实验（需要一致性维护）和“一致性维护自由”实验（不需要一致性维护）。
+%%%%\begin{table}[htbp]
+%%%%\bicaption[changelifesta]{}{克隆变化实例寿命信息统计}
+%%%%{Table$\!$}{Statistics for clone life of clone change instances}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{ccccc}
+%%%%\toprule[1.5pt]
+%%%%{实验系统}&{数量}&\textbf{Mean}&\textbf{Standard Deviation}&\textbf{Median}\\ 
+%%%%\midrule[1pt]
+%%%%ArgoUML&427&2.09368&2.33078&1\\ 
+%%%%jEdit&159&4.48428&3.64371&3\\ 
+%%%%jFreeChart&1040&4.93462&4.99543&3\\ 
+%%%%Tuxguitar&354&1.5565&1.50294&1\\ 
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{table}
 
-同时，本章也首先使用贝叶斯网络模型预测克隆创建实例的一致性，预测时贝叶斯网络会计算克隆变化实例的概率值，表示该实例需要一致性维护需求的概率(在0~1之间，数值接近于1表示需要一致性维护，接近于0表示不需要一致性维护)。然后，在其它五种不同的机器学习方法上进行了实验，对比选择最优的机器学习方法。
+本节首先使用贝叶斯网络模型预测克隆创建实例的一致性，预测时贝叶斯网络会计算克隆变化实例的概率值，表示该实例需要一致性维护需求的概率(在0~1之间，数值接近于1表示需要一致性维护，接近于0表示不需要一致性维护)。然后，在其它五种不同的机器学习方法上进行了实验，对比选择最优的机器学习方法。
 
-相似的，对上述两个实验中也从三个角度进行全面评估本文方法，将实验进一步的划分为全属性实验、属性组实验两个个部分。
+为全面评估本文方法，将实验进一步的划分为全属性实验、属性组实验两：
+
 \begin{itemize}
 \item
-全属性实验：使用本章提取的所有属性对实验系统进行分析，评估本文方法的预测能力。
+全属性实验：
+使用本章提取的所有属性对实验系统进行分析，评估本文方法的预测能力。
 \item
-属性组实验：分别使用两组不同的属性组对实验系统进行分析，评估所提取的属性组对预测能力的影响。
+属性组实验：
+分别使用两组不同的属性组对实验系统进行分析，评估所提取的属性组对预测能力的影响。
 %%%\item
 %%%交叉验证实验：使用其它系统数据作为训练集训练模型，并使用该模型在新系统上进行实验分析，从而探索模型在应用到新系统的预测能力。
 \end{itemize}
 
 %我们在具有Intel（R）Core（TM）i5-4210M CPU @ 2.60GHz和8G RAM的桌面上运行我们的实验。每个实验花费不到一分钟的模型构建，交叉验证少于5分钟。大多数实验时间花费在数据准备，包括家谱建构和克隆变化实例收集，其范围在5至30分钟之间。然而，我们注意到，在实践中，克隆系谱构建和变更实例收集将逐步执行，随着软件发展到新版本。因此，数据准备的开销将不是实际问题。
 
-
 \BiSubsection{贝叶斯网络实验}
 {Clone Changing Consistency-Requirement Experiment}
 
+本节使用使用开源软件工具WEKA训练和预测贝叶斯网络。在构建贝叶斯网络时，使用K2搜索算法\cite{}建立网络结构，并设置贝叶斯网络最大父节点个数为4，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。在实验时，采用十倍交叉验证(10-folds Cross-Validity)的方式，将克隆变化实例的数据集划分为训练集和测试集，使用训练集训练贝叶斯网络生成预测模型，然后使用测试集评估贝叶斯网络的预测能力。
+
 针对不同的克隆变化实例，与第三章类似，也设置了不同的阈值进行实验分析。对于需要一致性维护的实例，其贝叶斯网络预测值较大（接近于1），选取阈值为0.5、0.6、0.7、0.8和0.9，当预测值大于等于该阈值认定该实例需要一致性维护。对于不需要一致性维护的实例，其预测值较小（接近于0），选取阈值为0.01、0.05、0.10、0.15和0.20，当预测值小于等于给定阈值时认定该实例不需要一致性维护。
 
-本文使用使用开源软件工具WEKA训练和预测贝叶斯网络。在构建贝叶斯网络时，使用K2搜索算法\cite{}建立网络结构，并设置贝叶斯网络最大父节点个数为4，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。在实验时将克隆变化实例的数据集划分为训练集和测试集，使用训练集训练贝叶斯网络生成预测模型，然后使用测试集评估贝叶斯网络的预测能力。在全属性实验和属性组实验中，对每一个实验系统在数据集上使用十倍交叉验证（10 Cross-Validity\cite{}）评估本文方法。在交叉验证实验中，使用不同系统的克隆创建实例分别作为训练集和测试集。
-
 \BiSubsubsection{一致性维护需求实验}
-{Clone Changing Consistency-Requirement Experiment}
+{Clone Changing Consistency Experiment}
 
-在本节中，对需要一致性维护的克隆变化实例进行评估。关注需要一致性维护的克隆变化实例，由于该变化可能会导致其所在的克隆组在演化过程中的一致性变化模式，因此需要警告程序开发人员检查克隆组的一致性问题，避免克隆一致性缺陷。实验同样采用三个度量对方法进行评估，即警告率、准确率和召回率：
+在本节中，对需要一致性维护的克隆变化实例进行评估。关注需要一致性维护的克隆变化实例，由于该变化可能会导致其所在的克隆组在演化过程中的一致性变化模式，因此需要警告程序开发人员检查克隆组的一致性问题，避免克隆一致性缺陷。实验采用三个度量对方法进行评估，即警告率、精确率和召回率，描述如下：
 
 \begin{itemize}
 \item 
 警告率(Warning Rate)：指所警告的需要一致性维护的克隆变化实例，即预测为需要一致性维护的实例与系统中全部实例的比值。这些克隆变化实例可能会导致一致性缺陷问题，需要确保克隆组的一致性。
 
 \item 
-准确率(Precision)：指警告为需要一致性维护的克隆变化实例的准确率，即在所预测为需要一致性维护的变化实例中，正确预测的实例与全部警告实例的比值。
+精确率(Precision)：指警告为需要一致性维护的克隆变化实例的精确率，即在所预测为需要一致性维护的变化实例中，正确预测的实例与全部警告实例的比值。
 
 \item 
 召回率(Recall)：指所警告的需要一致性维护的克隆变化实例的召回率，即预测为需要一致性维护的实例与系统中的真实的需要一致性维护实例的比值。
@@ -460,9 +500,9 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 
 全属性实验使用本章提取的全部属性组在四个实验系统上进行评估，实验结果如表~\ref{changeallmeeting}所示。
 
-所创建的模型在预测{\em jFreeChart}和{\em Tuxguitar}的一致性需求时，预测结果显示非常有效，其中预测的准确度和召回率在80\%左右。同时，{\em jEdit}系统的预测效果虽然不如上面两个系统好，但是也相当不错。原因可能是因为jEdit系统的克隆变化实例规模较小，没有对模型实现较好的预测，但这需要进一步研究。尽管{\em  ArgoUML}的预测效果不如其它系统的预测效果，但其准确率仍然可以达到65\%左右，且召回率在45\%左右。最后，对于四个实验系统，本文所构建的模型均具有有十分合理的警告率，警告率十分接近于满足一致性维护需求的克隆变化实例的比例（如表~\ref {changesta}~中所示）。
+所创建的模型在预测jFreeChart和Tuxguitar的一致性需求时，预测结果显示非常有效，其中预测的准确度和召回率在80\%左右。同时，jEdit系统的预测效果虽然不如上面两个系统好，但是也相当不错。原因可能是因为jEdit系统的克隆变化实例规模较小，没有对模型实现较好的预测，但这需要进一步研究。尽管ArgoUML的预测效果不如其它系统的预测效果，但其精确率仍然可以达到65\%左右，且召回率在45\%左右。最后，对于四个实验系统，本文所构建的模型均具有有十分合理的警告率，警告率十分接近于满足一致性维护需求的克隆变化实例的比例(如表~\ref {changesta}~中所示)。
 
-虽然阈值的变化可以影响预测的准确率和召回率，但影响并不是十分的剧烈，对召回率的影响要比准确率的影响更大。这意味着本文所创建的模型可以提供相当准确的预测效果，但仍需进一步增强预测模型的召回能力。因此，开发人员可以较为自信地依赖于本文的预测结果，但需要其它方法来避免那些预测为不需要一致性维护的错误实例，从而帮助提高模型的预测效果。一个简单简单有效的改进方法是在克隆创建时尽量避免避免那些可能会引发一致性维护的克隆实例，具体细节可参考本文第三章提出的克隆创建时克隆一致性预测方法。
+虽然阈值的变化可以影响预测的精确率和召回率，但影响并不是十分的剧烈，对召回率的影响要比精确率的影响更大。这意味着本文所创建的模型可以提供相当准确的预测效果，但仍需进一步增强预测模型的召回能力。因此，开发人员可以较为自信地依赖于本文的预测结果，但需要其它方法来避免那些预测为不需要一致性维护的错误实例，从而帮助提高模型的预测效果。一个简单简单有效的改进方法是在克隆创建时尽量避免避免那些可能会引发一致性维护的克隆实例，具体细节可参考本文第三章提出的克隆创建时克隆一致性预测方法。
 
 \begin{table}[htbp]
 \bicaption[changeallmeeting]{}{四个实验系统全属性的实验效果}
@@ -514,10 +554,9 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 
 从表中可以看出，属性组对预测结果的影响并无一致性结论。但是，代码属性和上下文属性与全属性组对比表明，这两组属性对预测的召回率有显著影响。但是，无演化组属性的实验结果表明其对实验结果的影响没有预想的那么大。尽管如此，这些属性组依然对预测效果有影响，但需要进一步的研究去寻找这种差异背后的真正原因。
 
-此外，本文还对所选用的属性组进行了属性选择实验，使用WEKA提供的功能选取了最佳属性集。然而，通过比对全属性组的实验结果，发现发现全属性组实验结果要优于字属性组实验结果，所采用的属性具有积极的意义。虽然一些属性组可能对实验结果没有显着的影响，但是其也不具有消极的影响。本文建议在进行一致性预测时，需要保留全部属性组，因为在应用到其它系统是可能会起到积极的左右。
+此外，本章还对所选用的属性组进行了属性选择实验，使用WEKA提供的功能选取了最佳属性集。然而，通过比对全属性组的实验结果，发现发现全属性组实验结果要优于最佳属性组实验结果，所采用的属性具有积极的意义。虽然一些属性组可能对实验结果没有显着的影响，但是其也不具有消极的影响。本章建议在进行一致性预测时，需要保留全部属性组，因为在应用到其它系统是可能会起到积极的作用。
 
 \begin{sidewaystable} 
-%\begin{table}[htbp]
 \bicaption[changesetmeeting]{}{在四个实验系统上属性组实验效果}
 {Table$\!$}{The effectiveness for attribute set on four projects}
 \vspace{0.5em}
@@ -527,7 +566,7 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 \toprule[1.5pt]
 \multirow{2}{*}{实验系统}&\multirow{2}{*}{阈值}&\multicolumn{3}{c}{全部属性(\%)}&\multicolumn{3}{c}{无代码属性(\%)}&\multicolumn{3}{c}{无上下文属性(\%)}&\multicolumn{3}{c}{无演化属性(\%)}\\
 \cline{3-14}
-&&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}\\
+&&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.9&20.14&	69.77&	43.17&14.29&	73.77&	32.37&17.56&	72.00&	38.85&21.78&	69.89&	46.76\\
@@ -558,31 +597,34 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 &0.5&	83.33&	79.32&	88.97&	83.33&	77.63&	87.07&	84.18&	76.85&	87.07&	79.66&	80.50&      86.31\\
 \bottomrule[1.5pt]
 \end{tabular}
-%\end{table}
 \end{sidewaystable}
 
 \BiSubsubsection{一致性维护自由实验}
-{Clone Creating Consistency Free Experiment}
+{Clone Changing Consistency Free Experiment}
 
-本实验对不需要一致性维护的克隆变化实例进行预测评估。将关注不需要一致性维护的克隆实例，从而让程序开发人员可以更加自由的修改克隆代码，而不需要考虑克隆变化所引发的一致性维护问题，可以更加快速有效的开发系统。此实验使用三个度量评估预测效果，分别为：推荐率、准确率和召回率。
-在本实验中，我们计算以下三个指标，用于评估我们的模型的一致性无需求的可预测性：
+本节实验对不需要一致性维护的克隆变化实例进行预测评估。将关注不需要一致性维护的克隆实例，从而让程序开发人员可以更加自由的修改克隆代码，而不需要考虑克隆变化所引发的一致性维护问题，可以更加快速有效的开发系统。此实验使用三个度量评估预测效果，分别为：推荐率、精确率和召回率，如下所示：
 
 \begin{itemize}
 \item 
-推荐率(Recommendation Rate)：指的是所推荐的不需要一致性维护的克隆变化实例与所有实例的比例，即预测为不需要一致性维护的克隆变化实例与系统中全部变化实例的比值。
+推荐率(Recommendation Rate)：
+指的是所推荐的不需要一致性维护的克隆变化实例与所有实例的比例，即预测为不需要一致性维护的克隆变化实例与系统中全部变化实例的比值。
 \item 
-精确率(Precision)：指所预测的不需要一致性维护克隆变化实例的准确率，即在预测为不需要一致性维护的克隆变化实例中，正确预测的实例与所预测实例的比值。
+精确率(Precision)：
+指所预测的不需要一致性维护克隆变化实例的精确率，即在预测为不需要一致性维护的克隆变化实例中，正确预测的实例与所预测实例的比值。
 \item  
-召回率(Recall)：指所推荐的不需要一致性维护的克隆变化实例的查全率，即预测为不需要一致性维护的变化实例，与系统中的不需要一致性维护的实例的比值。
+召回率(Recall)：
+指所推荐的不需要一致性维护的克隆变化实例的查全率，即预测为不需要一致性维护的变化实例，与系统中的不需要一致性维护的实例的比值。
 \end{itemize}
-
 
 %%\BiSubsubsection{全属性组实验}
 %%{Effectiveness Experiment}
 (1)全属性实验
-全属性实验使用全部属性在四个实验系统上进行评估，实验结果如表~\ref{changeallfree}~所示。由表中可以看出，本文方法在预测不需要一致性维护的克隆变化实例时，在四个系统上均取得了不错的预测效果。其中，在系统ArgoUML和 jFreeChart取得了较好的效果，精确率在80\%左右，并且召回率在70\%左右。在系统 jEdit的预测效果尽管没有上面两个系统的预测效果好，但也具有不错的预测效果。然而不幸的是，本文的方法在系统Tuxguitar上预测效果不够理想，准确率在50\%左右，召回率更低。可能是由于Tuxguitar的不满足一致性维护需求的克隆变化实例太少，没有对预测模型训练完全，但是仍需进一步的研究确认。同时，本文所构建的模型在四个系统上都具有十分合理的推荐率，推荐率和系统本身的不需要一致性维护的克隆变化的比例相差不大（如表~\ref{changesta}~中所列）。
 
-不同的阈值会影响到准确率和召回率，但是阈值对于召回率的影响要大于大于准确率的影响。这意味着本文所构建的模型可以提高比较稳定的预测效果（准确率差不大），但系统的召回率仍需要进一步的提升。简而言之，本文的方法所构建的预测模型可以对不需要一致性维护的克隆变化实例提供一个相对稳定的预测，并且具有相当好的准确度和召回率，软件开发人员可以据此对克隆变化实例进行有效的预测。
+全属性实验使用全部属性在四个实验系统上进行评估，实验结果如表~\ref{changeallfree}~所示。
+
+由表中可以看出，本文方法在预测不需要一致性维护的克隆变化实例时，在四个系统上均取得了不错的预测效果。其中，在系统ArgoUML和 jFreeChart取得了较好的效果，精确率在80\%左右，并且召回率在70\%左右。在系统 jEdit的预测效果尽管没有上面两个系统的预测效果好，但也具有不错的预测效果。然而不幸的是，本文的方法在系统Tuxguitar上预测效果不够理想，精确率在50\%左右，召回率更低。可能是由于Tuxguitar的不满足一致性维护需求的克隆变化实例太少，没有对预测模型训练完全，但是仍需进一步的研究确认。同时，本文所构建的模型在四个系统上都具有十分合理的推荐率，推荐率和系统本身的不需要一致性维护的克隆变化的比例相差不大（如表~\ref{changesta}~中所列）。
+
+不同的阈值会影响到精确率和召回率，但是阈值对于召回率的影响要大于大于精确率的影响。这意味着本文所构建的模型可以提高比较稳定的预测效果（精确率差不大），但系统的召回率仍需要进一步的提升。简而言之，本文的方法所构建的预测模型可以对不需要一致性维护的克隆变化实例提供一个相对稳定的预测，并且具有相当好的准确度和召回率，软件开发人员可以据此对克隆变化实例进行有效的预测。
 
 
 \begin{table}[htbp]
@@ -593,7 +635,7 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
-{系统}&{阈值}&{推荐率(\%)}&{准确率(\%)}&{召回率(\%)}\\
+{系统}&{阈值}&{推荐率(\%)}&{精确率(\%)}&{召回率(\%)}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	51.99&	83.33&	64.24\\
@@ -632,19 +674,15 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 %%%{Attribute Set Experiment}
 （2）属性组实验
 
-同样，对不需要一致性维护的克隆变化实例，本文同样进行了属性组实验，以评估不同的属性组对预测效果的影响。实验结果如表~\ref{changesetfree}~所示，其中，分别给出了使用全部属性和删除每一组属性后的实验结果，即“全部属性”、“无代码属性”、“无上下文属性”和“无演化属性”。
+同样，对不需要一致性维护的克隆变化实例，本章同样进行了属性组实验，以评估不同的属性组对预测效果的影响。实验结果如表~\ref{changesetfree}~所示，其中，分别给出了使用全部属性和删除每一组属性后的实验结果，即“全部属性”、“无代码属性”、“无上下文属性”和“无演化属性”。
 
 从表中可以看出，属性组对“一致性维护自由”实验的预测结果的影响并无一致性结论。但是，代码属性和上下文属性与全属性组对比表明，这两组属性对预测的召回率有显著影响。但是，无演化组属性的实验结果表明其对实验结果的影响没有预想的那么大。尽管如此，这些属性组依然对预测效果有影响，但需要进一步的研究去寻找这种差异背后的真正原因。
 
-
 此外，本文还对所选用的属性组进行了属性选择实验，使用WEKA提供的功能选取了最佳属性集。然而，通过比对全属性组的实验结果，发现发现全属性组实验结果要好于最佳属性子集的实验结果，因此，所采用的属性具有积极的意义。虽然一些属性组可能对实验结果没有显着的影响，但是其也不具有消极的影响。
-
 
 尽管一些属性组可能对实验结果没有极为重要的贡献，但是属性组同样也没有产生消极的影响。因此，本文建议将所有属性保留在构建预测模型中，因为某些属性可能对一些未经实验验证的系统具有重要且积极的影响。
 
-
 \begin{sidewaystable} 
-%\begin{table}[htbp]
 \bicaption[changesetfree]{}{在四个实验系统上属性组实验效果}
 {Table$\!$}{The effectiveness for attribute set on four projects}
 \vspace{0.5em}
@@ -654,7 +692,7 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 \toprule[1.5pt]
 \multirow{2}{*}{实验系统}&\multirow{2}{*}{阈值}&\multicolumn{3}{c}{全部属性(\%)}&\multicolumn{3}{c}{无代码属性(\%)}&\multicolumn{3}{c}{无上下文属性(\%)}&\multicolumn{3}{c}{无演化属性(\%)}\\
 \cline{3-14}
-&&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}&{警告率}&{准确率}&{召回率}\\
+&&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}&{警告率}&{精确率}&{召回率}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	51.99&	83.33&	64.24&	36.77&	89.17&	48.61&	48.01&	83.41&	59.38&	44.03&	85.64&	55.90\\
@@ -685,31 +723,36 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 &0.2&	13.28&	48.94&	25.27&	11.86&	45.24&	20.88&	11.86&	42.86&	19.78&	15.82&	55.36&	34.07\\
 \bottomrule[1.5pt]
 \end{tabular}
-%\end{table}
 \end{sidewaystable} 
 
-\BiSubsection{不同机器学习方法对比实验}
-{Discussion}
+\BiSubsection{五种机器学习方法对比实验}
+{Comparing Five Employed Machine Learning Methods}
 
-在克隆更改时间，其他机器学习方法是否可以用于克隆一致性要求预测，属性集是否对我们的预测产生积极或消极的影响？
-在此实验中，本章使用五种不同的机器学习方法，并同时对需要一致性维护的克隆实例和不需要一致性维护的克隆实例进行预测。在实验中，首先，将数据集分为10个数据集作10倍交叉验证，用于评估预测效果。然后，分别计算满足一致性维护需求和不满足一致性维护需求的准确率（Precision）、召回率（Recall）和F值（F-measure），用于评估不同类型实例的预测效果。最后，将这两组预测结果进行加权平均，使用平均准确率（Average Precision）、平均召回率（Average Recall）和平均F值（Average F-measure）作为实验指标，评估预测模型的预测能力。
+在此实验中，本节讨论五种机器学习方法的预测能力，帮助程序开发人员选择合适的机器学习模型。因此，对每一个实验系统，同时使用五种不同的机器学习方法，同时对需要和不需要一致性维护的克隆实例进行预测。
 
-在本章的实证研究中，使用五种不同的机器学习方法来验证预测帮助程序开发人员选择合适的机器学习模型。值得注意的是，本文没有对机器学习方法本身做进一步的改进。在培训这五种型号时，必须进行一些设置。大多数这些设置默认设置在WEKA中，无需进一步调整。这意味着有可能进一步增强这些方法的有效性的机会。在我们的实验中，例如，{\ em BayesNet}被训练为克隆创建实例的父节点数设置为3，克隆更改为4。 {\ em Native}只有一个父节点。这两个模型都使用0.5作为两个一致性标签的阈值 - 默认设置为{\ em WEKA}。对于{\ em SVM \ /}方法，我们使用{\ em多项式内核\ /}作为内核函数。对于{\ em Tree \ /}，我们使用具有0.75置信因子的J48算法。在{\ em KNN \ /}中，我们使用欧几里德距离作为距离函数与1个邻居进行预测。
+在本章的实证研究中，使用五种不同的机器学习方法来验证预测帮助程序开发人员选择合适的机器学习模型。值得注意的是，本文没有对机器学习方法本身做进一步的改进。在培训这五种型号时，必须进行一些设置。大多数这些设置默认设置在WEKA中，无需进一步调整。这意味着有可能进一步增强这些方法的有效性的机会。
+
+\BiSubsubsection{实验设置}
+{Experimental Methodology}
+
+所采用方法的参数设置如下：BayesNet方法使用和本章上一节一致的参数，贝叶斯网络的父节点数设置为4，并且设置阈值为0.5。 Native方法只有一个父节点，同样设置阈值为0.5。在SVM方法中，本章选择用{\em polynomial kernel\/}作为核函数。对Decision Tree 方法，采用了J48算法作为预测方法，并设置置信度为0.75。对KNN方法，使用{\em Euclidean Distance\/}为距离函数，并且设置邻居个数为1。
+
+在本节实验中，首先，使用10-folds Cross-Validity将数据集分为训练集和测试集，评估不同机器学习方法的预测能力。然后，分别计算满足和不满足一致性维护需求的克隆创建实例的精确率(Precision)、召回率(Recall)和F值(F-measure)，用于评估不同类型实例的预测效果。最后，将这两组预测结果根据实际实例的数量进行加权平均，计算平均精确率(Average Precision)、平均召回率(Average Recall)和平均F值(Average F-measure)作为评价指标，计算方式如下所示：
 
 \begin{itemize}
 \item
-{平均准确率：} 该指标评估克隆实例一致性维护需求预测的准确程度，包含了满足和不满足一致性维护需求的实例。首先，计算预测中满足一致性维护需求的克隆实例的准确率``$P_1$''，即预测为满足一致性维护需求的克隆实例中正确预测的数量与全部预测数量的比值。然后，相似的计算不满足一致性维护需求克隆实例的准确率``$P_2$''。最后，将这两个值进行加权平均，作为整个模型的准确率。 ``$P_1$'' 是满足一致性维护需求的准确率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$P_2$''为不满足一致性维护需求的准确率，且 ``$N_2$''为实例数量。平均准确率（Average Precision）计算如下,
+{平均精确率：} 该指标评估克隆实例一致性维护需求预测的准确程度，包含了满足和不满足一致性维护需求的实例。首先，计算预测中满足一致性维护需求的克隆实例的精确率``$P_1$''，即预测为满足一致性维护需求的克隆实例中正确预测的数量与全部预测数量的比值。然后，相似的计算不满足一致性维护需求克隆实例的精确率``$P_2$''。最后，将这两个值进行加权平均，作为整个模型的精确率。 ``$P_1$'' 是满足一致性维护需求的精确率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$P_2$''为不满足一致性维护需求的精确率，且 ``$N_2$''为实例数量。平均精确率（Average Precision）计算如下,
 \[
 \mbox{\it Ave-Precision} ~=~ {\frac {P_1 \times N_1 + P_2 \times N_2}{N_1 + N_2}}
 \]
 \item
-{平均召回率：} 该指标评估克隆实例一致性维护预测的查全能力，包含了满足一致性维护需求和不满足一致性维护需求的实例。同准确率，分别计算满足和不满足一致性维护需求的实例的召回率，然后对两者进行加权平均。$R_1$'' 是满足一致性维护需求的召回率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$R_2$''为不满足一致性维护需求的召回率，且 ``$N_2$''为实例数量。平均召回率（Average Recall）计算如下,
+{平均召回率：} 该指标评估克隆实例一致性维护预测的查全能力，包含了满足一致性维护需求和不满足一致性维护需求的实例。同精确率，分别计算满足和不满足一致性维护需求的实例的召回率，然后对两者进行加权平均。$R_1$'' 是满足一致性维护需求的召回率，并且训练集中所有满足一致性的实例数量为``$N_1$'' ；类似地， ``$R_2$''为不满足一致性维护需求的召回率，且 ``$N_2$''为实例数量。平均召回率（Average Recall）计算如下,
 \[
 \mbox{\it Ave-Recall} ~=~ {\frac  {R_1 \times N_1 + R_2 \times N_2}{N_1 + N_2}}.
 \]
 
 \item
-{平均F值：} 该指标可以评估所有克隆实例的准确率和召回率的平均有效性。相似地，先分别计算满足和不满足一致性维护需求的克隆实例的F值，然后根据实例的数量进行加权平均。给定一个预测的准确率为precision、召回率为 recall，则该预测的F-Measure可计算如下,
+{平均F值：} 该指标可以评估所有克隆实例的精确率和召回率的平均有效性。相似地，先分别计算满足和不满足一致性维护需求的克隆实例的F值，然后根据实例的数量进行加权平均。给定一个预测的精确率为precision、召回率为 recall，则该预测的F-Measure可计算如下,
 \[  
 \mbox{\it F-measure} =2 \times {\frac {\mbox{\it precision} \times \mbox{\it recall} }{ \mbox{\it precision} + \mbox{\it recall} } }
 \]
@@ -719,33 +762,56 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 \]
 \end{itemize}
 
-%\begin{itemize}
-%\item
-%{\bf Precision:} This assesses the accuracy of the model in predicting if a clone instance meet the consistency-requirement and free.  Specifically, we first compute the ratio of the number of {\em correct} predictions of clone instances meeting consistency-requirement to the number of predictions made by the model about instances meeting consistency-requirement. Then, we compute similar ratio for consistency-free. Taking clone-creating prediction as an example, we have two precision values, ``$P_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$P_2$'' is for consistency-free instances with number ``$N_2$''. The average precision for clone-creating prediction is computed as follows,
-%\[
-%\mbox{\it Ave-Precision} ~=~ {\frac {P_1 \times N_1 + P_2 \times N_2}{N_1 + N_2}}
-%\]
-%We employ this ``Average Precision'' as the assessing metric ``{\bf Precision} '' for this prediction.
-%\item
-%{\bf Recall:} This assesses the effectiveness of the model in discovering all clone instances meeting either consistency-requirement or free. We similarly compute two different {\em recalls\/}  corresponding to two categories -- consistent-requirement and consistent-requirement free -- of clone instances, then calculate the {\em average recall\/} according to their weight of each clone category's counts. Specifically, the first recall is computed as the ratio of the number of {\em correct} predictions of clone instances meeting consistency-requirement to total number of clone instances meeting consistency-requirement (i.e., ground truth). Taking clone-creating prediction as an example, we have two recall values, ``$R_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$R_2$'' is for consistency-free instances with number ``$N_2$''. The average recall for this clone-creating prediction is computed as follows,
-%\[
-%\mbox{\it Ave-Recall} ~=~ {\frac  {R_1 \times N_1 + R_2 \times N_2}{N_1 + N_2}}.
-%\]
-%We employ this ``Average Recall'' as the assessing metric ``{\bf Recall} '' for this prediction.
-%\item
-%  {\bf F-measure:} This assesses the weighted average effectiveness of the precision and recall both for all clone instances. It is a measure of the prediction's accuracy. We compare the {\em average F-Measure\/} for both two categories of clone instances according to  their weight of each category's counts. Given the precision and the recall value of a prediction for one of the two categories of clone instances, the {\em F-Measure} is computed as follows,
-%\[  
-%\mbox{\it F-measure} =2 \times {\frac {\mbox{\it precision} \times \mbox{\it recall} }{ \mbox{\it precision} + \mbox{\it recall} } }
-%\]
-%Taking clone-creating prediction as an example, we have two F-measure values, ``$F_1$'' is for meeting consistency instances with number of  ``$N_1$'' and ``$F_2$'' is for consistency-free instances with number ``$N_2$''. The average F-measure for this clone-creating prediction is computed as follows,
-%\[
-%\mbox{\it Ave-F-measure} ~=~ {\frac  {F_1 \times N_1 + F_2 \times N_2}{N_1 + N_2}}.
-%\]
-%We employ this ``Average F-measure'' as the assessing metric ``{\bf F-measure} ''for this prediction.
-%\end{itemize}
+\BiSubsubsection{五种机器学习方法的实验结果}
+{Experimental Results for Five Machine Learning Method}
 
-使用五种不同的机器学习方法在克隆代码变化时进行一致性维护预测，实验结果如表~\ref{changingallavg}~和表~\ref{changingsetavg}~所示。
+采用五种不同的机器学习方法，预测克隆变化时时的克隆代码的一致性维护需求。本节实验分成了两个部分，分别为全属性实验和属性组实验，实验结果如表~\ref{changingallavg}~和表~\ref{changingsetavg}~所示。
 
+（1）全属性实验
+
+表~\ref{changingallavg}~给出了使用全属性组在五种不同机器学习方法上的克隆变化实例的预测结果。
+从这个表可以看出，克隆变化实例在这五种机器学习方法上具有可以接受的预测效果。精确率的范围从58.1\%到79.3 \%，召回率从57.9\%到79.1 \%，而F-measure从57.3 \%到79 \%。
+
+根据这四个系统的预测结果，通过比较发现预测效果最好的系统是jFreeChart，三个评价指标中拥有最多的最大值，同时jFreeChart中的克隆变化实例的个数也是最多的。然而，系统jEdit是所有系统中预测效果最差的。其原因在于预测模型需要足够的训练集进行训练，然而jEdit中的训练数据太少导致所建立的模型训练不充分，jEdit仅有159个克隆变化实例。因此可以得出结论，在进行克隆变化的一致性预测是，预测效果将取决于不同项目的训练集规模大小。
+本文建议在对克隆代码进行一致性预测时，需要对模型进行充分的训练，以达到最佳的预测效果。
+
+此外，通过对比五种机器学习方法在四个系统上的有效性，除基于决策树的方法外，另外三种方法的预测能力十分相似，没有明显的差异。同时，相对而言SVM方法具有相对较好的预测效果。具体来说，SVM对{\em jEdit，jFreeChart和Tuxguitar}具有最好的结果，KNN和SVM对于{\em ArgoUML}是最好的。
+基于贝叶斯的方法（贝叶斯网络和朴素贝叶斯方法）具有十分友好的预测结果，其预测结果是可以接受的。应该注意的是，{\em KNN}和{\em Decisions Tree}这两种机器学习方法相对而言预测能力不如其他的机器学习方法，尤其是{\em Decisions Tree}方法。
+
+因此，建议开发人员在预测克隆变化实例时也可以考虑SVM，但是贝叶斯的方法也具有不错的预测能力，仅比SVM相差一点点。
+
+\begin{table}[htbp]
+\bicaption[changingallavg]{}{克隆变化实例的一致性维护需求平均预测结果}
+{Table$\!$}{The average effectiveness of changing instances}
+\centering
+\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+{指标}&{系统}&{ArgoUML}&{jEdit}&{jFreeChart}&{Tuxguitar}\\
+\midrule[1pt]
+\multirow{5}{*}{Precision}
+&{BayesNet}&0.724&	0.686&	0.791&0.72\\
+&{Native}& 0.734&	0.696	&0.778&	0.729\\
+&{SVM}&0.744	&0.704&0.793	&0.733\\
+&{KNN}&0.733	&0.597&	0.772&	0.672\\
+&{Tree}&0.682	&0.581	&0.742	&0.637\\
+\hline
+\multirow{5}{*}{Recall}
+&{BayesNet}&0.735	&	0.686&0.791&0.746\\
+&{Native}&0.726&	0.692&0.778&0.737\\
+&{SVM}&0.752	&0.704&0.791&0.734\\
+&{KNN}&0.731	&	0.597	&	0.77	&	0.706\\
+&{Tree}&0.698&	0.579	&	0.742&0.672\\
+\hline
+\multirow{5}{*}{F-Measure}
+&{BayesNet}&	0.726	&	0.686	&0.79	&0.726\\
+&{Native}&0.729&	0.689&0.778&0.733\\
+&{SVM}&0.729&0.704	&0.789&	0.733\\
+&{KNN}&0.732	&0.597	&0.771	&	0.683\\
+&{Tree}&0.632	&	0.573&	0.739&0.651\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
 
 %
 %\begin{table}[htbp]
@@ -816,67 +882,11 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 %\end{tabular}
 %\end{table}
 
+（2）属性组实验
 
-表~\ref{changingallavg}~给出了使用全属性组在五种不同机器学习方法上的克隆变化实例的预测结果。
-从这个表可以看出，克隆变化实例在这五种机器学习方法上具有可以接受的预测效果。准确率的范围从58.1\%到79.3 \%，召回率从57.9\%到79.1 \%，而F-measure从57.3 \%到79 \%。
-%Table~\ref{changingall} shows the effectiveness of clone-changing consistency prediction. From the table, we observe that the effectiveness of clone-changing prediction is {\em acceptable\/}, having precision values range between 58.1\% and 79.3\%, recall values between 57.9 \% and 79.1\%, and F-measure values between 57.3\% to 79\%.
+为探索属性组对预测能力的影响，同样进行在五种不同的机器学习方法上进行了属性组实验，实验结果如表找到属性的贡献，我们还进行属性集的实验，依次删除一个属性集。属性集的有效性如表~\ref{changingsetavg}~所示。依次移除代码属性、上下文属性和演化属性，“All”列是使用全部属性组的实验结果，“Code”、“Cont”、“Evo”分别是是删除Code， Context，Evolution属性组后的实验结果。
 
-根据这四个系统的预测结果，通过比较发现预测效果最好的系统是jFreeChart，三个评价指标中拥有最多的最大值，同时jFreeChart中的克隆变化实例的个数也是最多的。然而，系统jEdit是所有系统中预测效果最差的。其原因在于预测模型需要足够的训练集进行训练，然而jEdit中的训练数据太少导致所建立的模型训练不充分，jEdit仅有159个克隆变化实例。%因此可以得出结论，在进行克隆变化的一致性预测是，预测效果将取决于不同项目的训练集规模大小。
-本文建议在对克隆代码进行一致性预测时，需要对模型进行充分的训练，以达到最佳的预测效果。
-
-%Comparing the prediction results on these four projects, we observe that the best prediction is project {\em jFreeChart\/}, which has the best results for all three metrics; and the project {\em jEdit\/} yet has the worst prediction in four projects.The reason is that this prediction need more training data to build its predictor well. However, the {\em jEdit\/} subject has the least number data with only 159 counts of clone-changing instances, resulting in worst training for the predictor. \textcolor{red}{the following in blue sounds obvious. need to say it?} \textcolor{blue}{We therefore conclude that the effectiveness for different projects is dependent on the {\em size\/} of the specific project.}
-
-此外，通过对比五种机器学习方法在四个系统上的有效性，除基于决策树的方法外，另外三种方法的预测能力十分相似，没有明显的差异。同时，相对而言SVM方法具有相对较好的预测效果。%具体来说，SVM对{\em jEdit，jFreeChart和Tuxguitar}具有最好的结果，KNN和SVM对于{\em ArgoUML}是最好的。
-基于贝叶斯的方法（贝叶斯网络和朴素贝叶斯方法）具有十分友好的预测结果，其预测结果是可以接受的。应该注意的是，{\em KNN}和{\em Decisions Tree}这两种机器学习方法相对而言预测能力不如其他的机器学习方法，尤其是{\em Decisions Tree}方法。
-
-因此，建议开发人员在预测克隆变化实例时也可以考虑SVM，但是贝叶斯的方法也具有不错的预测能力，仅比SVM相差一点点。
-
-
-%Furthermore, by comparing the effectiveness among the five machine learning methods, we observe that {\em SVM\/} remains the top predictor on these four projects, with most of the best results in precisions, recalls and F-measures. 
-%Specifically, SVM have the best results for{\em jEdit, jFreeChart, and Tuxguitar}, and KNN and SVM have the best for {\em ArgoUML}.Meanwhile, both the Bayesian Network and Native Bayes have {\em acceptable\/} predictions. In contrast, the remaining two machine learning methods, {\em KNN\/} and {\em Decisions Tree\/}, do not have sufficiently good results, particularly for {\em Decisions Tree\/}.
-%We therefore suggest that the developers should consider {\em SVM\/} as their preference  when performing creating consistency prediction.
-
-\begin{table}[htbp]
-\bicaption[changingallavg]{}{克隆变化实例的一致性维护需求平均预测结果}
-{Table$\!$}{The average effectiveness of changing instances}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{指标}&{系统}&{ArgoUML}&{jEdit}&{jFreeChart}&{Tuxguitar}\\
-%{\textbf{Project}}&{\textbf{Metric}}&{\textbf{ArgoUML}}&{\textbf{jEdit}}&{\textbf{jFreeChart}}&{\textbf{Tuxguitar}}\\
-\midrule[1pt]
-\multirow{5}{*}{Precision}
-&{BayesNet}&0.724&	0.686&	0.791&0.72\\
-&{Native}& 0.734&	0.696	&0.778&	0.729\\
-&{SVM}&0.744	&0.704&0.793	&0.733\\
-&{KNN}&0.733	&0.597&	0.772&	0.672\\
-&{Tree}&0.682	&0.581	&0.742	&0.637\\
-\hline
-\multirow{5}{*}{Recall}
-&{BayesNet}&0.735	&	0.686&0.791&0.746\\
-&{Native}&0.726&	0.692&0.778&0.737\\
-&{SVM}&0.752	&0.704&0.791&0.734\\
-&{KNN}&0.731	&	0.597	&	0.77	&	0.706\\
-&{Tree}&0.698&	0.579	&	0.742&0.672\\
-\hline
-\multirow{5}{*}{F-Measure}
-&{BayesNet}&	0.726	&	0.686	&0.79	&0.726\\
-&{Native}&0.729&	0.689&0.778&0.733\\
-&{SVM}&0.729&0.704	&0.789&	0.733\\
-&{KNN}&0.732	&0.597	&0.771	&	0.683\\
-&{Tree}&0.632	&	0.573&	0.739&0.651\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
-
-为探索属性组对预测能力的影响，同样进行在五种不同的机器学习方法上进行了属性组实验，实验结果如表找到属性的贡献，我们还进行属性集的实验，依次删除一个属性集。属性集的有效性如表~\ref{changingsetavg}~所示。依次移除代码属性、上下文属性和演化属性，“All”列是使用全部属性组的实验结果，“Code”、“Cont”、“Evo”分别是是删除{\em Code， Context，Evolution }属性组后的实验结果。
-%To explore the contribution for each attribute set, we also construct the attribute set experiment with removing one attribute set in sequence. The effectiveness of attributes set is  shown in Table~\ref{changingset}~. In this table, the ``All'' columns are the results using full attribute sets, and ``Code'', ``Cont'' and ``Evo'' columns are the results for removing {\em Code, Context, Evolution\/} attribute set respectively.
-
-
-从表中可以看出，三个属性集中任何一个都没有在预测中起到决定性的作用，同时它们任何一个也没有起到消极的作用。尽管如此，三个属性组中的任何一个可能在预测中仅起到了有限的一点积极作用，但三个属性组作为一个整体却仍然可以以可以接受的准确率和召回率有效的预测克隆代码的一致性维护需求。另外，不同的属性集在预测中可能会发挥不同的作用。通过比较五种机器学习方法的预测结果，可以得出与全属性实验相似的结论，即方法之间的差异并不会导致预测结果的明显差异，并取得来的相一致的预测能力。但是，支持向量机似乎拥有相对最佳的预测能力，同样贝叶斯的方法同样也可以取得不错的预测效果。因此在预测中本文需要保留所有属性集，并优先选择SVM方法
-
-%From this table, we can see that each of these three attribute sets may not play a significant impact for thus prediction, and they also do not have the negative impact either. Nonetheless, each of them may have some limited positive impact, yet the whole of them do predict changing instances {\em acceptable\/}. By comparing the results among these five employed machine learning methods, we can get the same conclusions, that the effectiveness showing that the {\em SVM\/} have the nicer ability for this prediction, and {\em KNN\/} and {\em Decision Tree\/} have the worst prediction. Thus, recommended that leave all the attribute sets in this prediction, and prefer {\em SVM\/} technique firstly.
+从表中可以看出，三个属性集中任何一个都没有在预测中起到决定性的作用，同时它们任何一个也没有起到消极的作用。尽管如此，三个属性组中的任何一个可能在预测中仅起到了有限的一点积极作用，但三个属性组作为一个整体却仍然可以以可以接受的精确率和召回率有效的预测克隆代码的一致性维护需求。另外，不同的属性集在预测中可能会发挥不同的作用。通过比较五种机器学习方法的预测结果，可以得出与全属性实验相似的结论，即方法之间的差异并不会导致预测结果的明显差异，并取得来的相一致的预测能力。但是，支持向量机似乎拥有相对最佳的预测能力，同样贝叶斯的方法同样也可以取得不错的预测效果。因此在预测中本文需要保留所有属性集，并优先选择SVM方法
 
 \begin{sidewaystable} [htbp]
 \footnotesize
@@ -888,7 +898,6 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 \toprule[1.5pt]
 \multirow{2}{*}{\textbf{Metric}}&\multirow{2}{*}{\textbf{Method}}&\multicolumn{4}{c}{\textbf{ArgoUML}}&\multicolumn{4}{c}{\textbf{jEdit}}&\multicolumn{4}{c}{\textbf{jFreeChart}}&\multicolumn{4}{c}{\textbf{Tuxguitar}}\\
 \cline{3-18}
-%%&&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}&\textbf{All}&\textbf{Code}&\textbf{Context}&\textbf{Evolution}~\\
 &&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Cont}&\textbf{Evo}&\textbf{All}&\textbf{Code}&\textbf{Con}&\textbf{Evo}~\\
 \midrule[1pt]
 \multirow{5}{*}{Percision}
@@ -991,31 +1000,19 @@ Tuxguitar&354&1.5565&1.50294&1\\ \hline
 %\end{tabular}
 %\end{sidewaystable} 
 
-
-
-
-
-
 \BiSubsection{讨论}
 {Discussion}
 
-本节从不同的角度评估了所建立的贝叶斯网络模型的预测能力，同时对不需要一致性维护和需要一致性维护的克隆变化实例进行了一致性预测。实验结果表明，当系统使用自身的克隆变化实例进行全属性预测时，本章的模型在一致性维护需求和一致性维护自由的实验上均具有有效的预测能力。同时，属性组实验中，发现每一个属性组在不同角度和程度上对预测模型的效果有着积极的作用。因此，本文鼓励开发人员使用全属性组进行克隆变化实例的一致性维护需求预测，从而将其适用到其它系统是达到最佳的预测效果。
+本节从不同的角度评估了本章所提出的克隆代码变化时一致性维护需求预测，同时对需要不不需要一致性维护需求的克隆变化实例进行了预测，并从不同的角度评估了不同的机器学习方法的预测能力。
 
-根据对克隆变化实例的预测结果（表~\ref{changingallavg}~和~\ref{changingsetavg}~），可以对RQ2进行回答。当克隆代码发生变化时，五种机器学习方法在现有的属性值上都具有可以接受的预测能力，合理的准确率、召回率和F值。尽管SVM方法具有相对较好的预测效果，但是彼此之间的相差并不大。同时，所提起的属性组作为一个整体在预测中起到了积极的作用。所有属于整体的属性都对这一预测产生了积极的影响。因此建议开发人员在预测时使用全部的属性组，并使用SVM作为预测模型。
+在使用贝叶斯网络的预测中，全属性实验结果表明：本章的模型在一致性维护需求和一致性维护自由的实验上均具有有效的预测能力。同时，属性组实验表明每一个属性组在不同角度和程度上对预测模型的效果有着积极的作用。因此，鼓励开发人员使用全属性组进行克隆变化实例的一致性维护需求预测，从而将其适用到其它未验证的系统中，使之达到最佳的预测效果。
 
-
-
-%%然而，跨项目的实验表明，本章所提出的预测模型的有效性会依赖于系统自身的某些特征。这意味着使用本章所提取的属性构建一个“通用”预测模型时，可能较为困难的预测所某一特定系统的一致性维护需求。换句话说，本文建议开发人员为不同的系统构建和训练不同的模型，已达到满意的预测效果。试图构建一个全新的预测器，并可以适用于其它的项目中也并非完全不可取的。在软件缺陷预测领域中存在一些跨项目预测的研究，可以考虑对其进行进一步的研究使之运用到跨项目的克隆一致性需求维护中。
-
-
-%%在软件开发初期，系统自身缺乏克隆变化实例而无法构建预测模型，同时跨项目的模型也无法对其进行预测。为了解决此问题，本文建议建议开发人员在软件开发的早期阶段使用本文第二章提出的克隆代码创建时克隆一致性维护需求预测方法，尽量避免会导致一致性变化的克隆代码，或者仅仅允许不会导致一致性变化的克隆代码的产生。
-
+在机器学习方法对比中，在克隆代码变化时，五种机器学习方法都可应用于克隆代码的一致性维护需求预测中，并具有相似的预测能力，预测结果具有合理的精确率、召回率和F值。更重要的是，不同机器学习模型的预测能力仅具有较小的差异，但SVM方法拥有相对最佳的预测效果。因此，建议优先推荐使用SVM方法，预测克隆代码变化时的一致性维护需求。与此同时，所提取的属性组作为一个整体在不同机器学习方法中，同样起到了积极的作用。因此，建议开发人员在预测时使用全部的属性组，并使用SVM作为预测模型。
 
 \BiSection{本章结论}
 {Summary of this Chapter}
 
-在软件演化过程中，发生变化的克隆代码可能会导致一致性变化而引发克隆一致性缺陷，从而增加了软件维护的代价。为了帮助程序开发人员避免克隆一致性缺陷，降低软件维护代价，本章提出了一个克隆代码变化时一致性维护需求预测方法，在克隆代码发生变化时预测该变化是否会导致克隆一致性缺陷，从而提醒程序开发人员对克隆代码进行一致性维护。通过构建软件系统的克隆家系收集系统中的克隆变化实例，并用于构建和训练克隆代码一致性预测的贝叶斯网络模型。同时，为了表示克隆变化实例，本章从克隆组的角度提取了三组属性描述克隆变化实例的特征，分别代码属性、上下文属性和演化属性。对四个开源软件项目进行了一致性维护需求和自由实验，从而验证所构建模型的预测能力。实验结果表明，实验结果表明本章方法可以以合理的准确率和召回率有效地预测克隆代码的一致性维护需求。%对于两个较大的存储库具有良好的精确度和召回率，并且对于最小的存储库具有合理的精确度和召回率。
-此外，提取的三组属性对预测效果起到了积极的作用，并对预测结果的召回率有较强的影响。同时，对于克隆变化实例不足的系统，跨项目所构建的模型还不能够达到让人满意的预测效果，因此建议采用第二章提出的方法在克隆代码创建时预测其一致性。
+在软件演化过程中，克隆代码的变化会可能会导致一致性变化，从而增加了软件维护的代价。为了帮助软件开发人员避免克隆一致性缺陷，降低软件维护代价，本章提出了一个克隆代码变化时一致性维护需求预测方法。可在克隆代码发生变化时，预测该变化的一致性维护需求，从而帮助软件开发人员避免克隆代码的一致性缺陷。通过构建软件系统的克隆家系收集系统中的克隆变化实例，并使用其构建和训练不同的机器学习模型预测其一致性维护需求。同时，为了表示克隆变化实例，本章从克隆组的角度提取了三组属性描述克隆变化实例的特征，分别代码属性、上下文属性和演化属性。在四个开源软件系统上进行实验，验证所构建模型的预测能力。实验结果表明，实验结果表明本章方法可以以合理的精确率和召回率有效地预测克隆代码的一致性维护需求。此外，提取的三组属性对预测效果起到了积极的作用，并对预测结果的召回率有较强的影响。
 
 %预测器构造的主要成本来自存储库的变化实例收集;这种成本可以容易地在软件演进上摊销，使得这种方法可扩展。为了跟进，我们打算通过引入新的属性或属性选择来提高预测变量的回忆能力。通过引入一致性的预测{\em free}来补充现有的一致性需求预测。此外，我们打算将这个模型构建和预测过程集成到一个IDE中，如Eclipse。我们认为，这种整体方法可以提高软件可维护性以提高软件质量，因为开发人员现在可以更清楚地了解何时需要调查克隆组的一致性要求，避免一致性缺陷的潜在风险。
 
