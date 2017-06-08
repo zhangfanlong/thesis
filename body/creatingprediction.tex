@@ -347,6 +347,7 @@ Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429\\
 
 \BiSubsection{贝叶斯网络实验}
 {Clone Cloning Consistency Free Experiment}
+\label{ref-creatingbayesianmetrics}
 
 本节使用开源软件工具WEKA训练和预测贝叶斯网络。在构建贝叶斯网络时，使用K2搜索算法建立网络结构，并设置贝叶斯网络最大父节点个数为3，使用{\em  SimpleEstimator}来估计贝叶斯网络的条件概率表。在实验时，采用十倍交叉验证(10-folds Cross-Validity)的方式，将克隆创建实例的数据集划分为训练集和测试集，使用训练集训练贝叶斯网络生成预测模型，然后使用测试集评估贝叶斯网络的预测能力。
 
@@ -645,6 +646,7 @@ Tuxguitar(Wang)&61.50\%&	60.10\%\\
 
 \BiSubsection{五种机器学习方法对比实验}
 {Comparing Five Employed Machine Learning Methods}
+\label{ref-creatingmethodmetrics}
 
 在此实验中，本节讨论五种机器学习方法的预测能力，帮助程序开发人员选择合适的机器学习模型。因此，对每一个实验系统，同时使用五种不同的机器学习方法，同时对需要和不需要一致性维护的克隆实例进行预测。
 

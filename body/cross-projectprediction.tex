@@ -27,14 +27,14 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 
 为了解决本章的研究问题，将从不同的角度研究跨项目的克隆代码的一致性维护需求预测问题。在预测克隆一致性的过程中充分考虑并结合软件开发过程，从而帮助开发人员实际开发环境中执行克隆代码一致性预测，具体地，本文章研究问题可以细分为以下三个子问题，如下所示：
 
-%%{\bf RQ1：}
-%%能否使用跨项目的数据
-%%
-%%{\bf RQ2：}
-%%在预测克隆代码变化时的一致性维护需求时，哪些机器学习方法可以用于该预测中，且所提取得度量值能否应用于其他的机器学习方法中，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
-%%
-%%
-%%{\bf RQ3：}
+{\bf RQ1：}
+在软件开发初期，在项目自身训练数据不充分的情况下，能否使用其它系统的数据进行克隆一致性需求预测？
+
+{\bf RQ2：}
+在进行跨项目的克隆一致性维护需求预测时，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
+
+{\bf RQ3：}
+在进行跨项目的克隆一致性维护需求预测时，训练数据的规模是否对预测效果产生决定性影响？
 %%在实际开发过程中，程序开发人员应该如何结合软件开发过程选择合适的机器学习模型和预测时间，并对克隆代码进行一致性维护需求进行预测，从而都够达到最佳的预测效果？
 
 \BiSubsection{克隆一致性维护需求定义}
@@ -268,7 +268,7 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \BiSubsection{实验系统与实验设置}
 {Experimental Projects and Methodology}
 
-为了解决本章的研究问题，本章选取了和第三章和第四章相同的四个开源项目上进行了实验。跨项目预测所选用的数据集如表~\ref{instancesta}~所示，分别包括克隆创建实例和克隆变化实例。从该表可以看出，系统中克隆创建实例的数据集的规模要大于克隆变化实例的数据集。克隆创建实例数据集规模为为633到3666个，克隆变化实例的数量范围在159到1040个，系统jEdit是克隆规模最小的系统。同时，表中第3和4列给出了不需要和需要一致性维护的克隆实例的数量和比例。
+为了解决本章所提出的研究问题，本节选取了和第三章和第四章相同的四个开源项目上进行实验评估。跨项目预测所选用的数据集如表~\ref{instancesta}~所示，分别包括克隆创建实例和克隆变化实例。从该表可以看出，系统中克隆创建实例的数据集的规模要大于克隆变化实例的数据集。克隆创建实例数据集规模为为633到3666个，克隆变化实例的数量范围在159到1040个，系统jEdit是克隆规模最小的系统。同时，表中第3和4列给出了不需要和需要一致性维护的克隆实例的数量和比例。
 
 \begin{table}[htbp]
 \bicaption[instancesta]{}{跨项目实验系统的数据集信息统计}
@@ -298,34 +298,42 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 
 从表~\ref{instancesta}~中可以观察到两个现象。第一，软件系统中存在大量的克隆创建实例（三个项目中有上千的例子），同时大部分的克隆创建实例在其演化过程中不满足一致性维护要求(比例从59.8\%到88.47\%)。这表明克隆创建操作（即复制和粘贴操作）已经成为开发人员的常用技术，并且它们中的大多数在演化过程中不会在将来引入任何一致的变化，建议开发人员可以使用复制和粘贴操作节省开发时间。第二，在克隆变化实例中，三个系统中只有数百个变化实例，仅有jFreeChart中有1040变化实例。这表明相对于克隆代码在演化过程中不会频繁地发生变化，但也有相当数量的变化。值得注意的，这些变化中需要一致性维护的变化实例比例占相当大的一部分，其比例为33\%到74 \%。克隆代码的一致性变化更容易引发一致性变化，从而导致增加克隆代码一致性缺陷的风险，因此开发人员在软件开发过程中应该更加注意软件开发过程中的克隆变化。
 
-与第四章类似，首先基于贝叶斯网络的机器学习模型，对克隆代码的一致性需求预测问题进行实验，用于观察跨项目能否预测克隆代码的一致性维护需求预测。然后，在五种不同的机器学习方法进行跨项目的克隆代码一致性需求预测研究。
+\textcolor{red}{为解决本章跨项目克隆代码一致性预测问题，本章提出了一个研究问题，即xxx。并将其划分为三个子问题，因此本节实验也可以划分三个部分，分别解决上述问题。(1)跨项目验证实验：使用贝叶斯网络预测跨项目的克隆代码一致性，探讨跨项目预测的可能性。(2)机器学习选择实验：使用不同的机器学习模型进行跨项目克隆一致性预测，帮助软件开发人员选择最佳的机器学习模型。(3)数据集大小实验：使用不同的数据集训练机器学习模型，并在同一系统上测试跨项目预测模型的预测能力。}
 
-在每一个实验中，本章将考虑两种两种时刻的跨项目预测情况，即克隆代码创建时和修改时的跨项目预测。
+\BiSubsection{贝叶斯网络跨项目一致性预测实验}
+{Experiments for Clone Cross-Project Consistency with Bayesian Network}
 
-\BiSubsection{基于贝叶斯网络跨项目一致性预测结果}
-{Experiments for Clone Consistency-Requirement}
+%%%%这是使用的多对一，没使用1对1，因为1对1的实验次数将太大
 
-基于贝叶斯网络的跨项目预测实验方式，同第三章和第四章的评价指标相同。对需要一致性维护的克隆实例，使用警告率、精确率和召回率进行评估。对不需要一致性维护的克隆实例，使用推荐率、精确率和召回率进行评估。详见
+本节将回答本章提出的第一个研究问题：
+
+在贝叶斯网络的实验中，使用其中三个项目的克隆实例训练贝叶斯网络，并在第四个实验系统上进行一致性预测，验证跨项目预测的能力。在克隆代码创建时和变化时两个不同的时刻进行预测。采用和第三章和第四章相同的评价指标，评估跨项目预测的能力。对需要一致性维护的克隆实例，使用警告率(Warning Rate)、精确率(Precision Rate)和召回率(Recall Rate)进行评估；对不需要一致性维护的克隆实例，使用推荐率(Recommendation Rate )、精确率(Precision Rate)和召回率(Recall Rate)进行评估，详见本文第~\ref{ref-creatingbayesianmetrics}~节和第~\ref{ref-changingbayesianmetrics}~节。实验同在两个时刻进行了预测，即克隆代码创建时和克隆代码变化时。
 
 \BiSubsubsection{克隆代码创建时跨项目预测}
 {Cross-Project Prediction at Clone Creating Time}
 
-本节给出在克隆代码创建时，使用贝叶斯网络进行跨项目预测的实验结果与分析。
-在此实验中，使用中三个系统的克隆创建实例作为训练集，构建贝叶斯网络模型。然后，使用另外一个系统作为测试集测试模型的有效性。在四个系统上的实验结果如表~\ref{copycrossfree}~和~\ref{copycrossmeeting}所示。
+本节在克隆代码创建时，使用贝叶斯网络进行跨项目克隆一致性维护需求预测。
+在此实验中，使用中三个系统的克隆创建实例作为训练集，构建贝叶斯网络模型。然后，使用另外一个系统作为测试集测试模型的有效性。同时，对两种状态下的克隆变化实例都进行了预测，在四个系统上的实验结果如表~\ref{copycrossfreebaysian}~和~\ref{copycrossmeetingbaysian}所示。
 
+（1）不需要一致性维护实验
 
-首先，对不需要一致性维护的克隆创建实例进行跨项目预测，预测结果如表~\ref{copycrossfree}~所示。从中可以看出，四个系统的准确率和召回率依然达到了较高的水平，其中准确率在60.01\%--91.20\%之间，召回率56.06\%--91.43\%之间。同时，通过对比发现jEdit的预测效果最好(准确率较高)，而jFreeChart预测效果最差。分析原因可能是由于jEdit系统的训练集最大，模型训练最充分，而jFreeChart则与之相反。将实验结果与第三章的全属性实验（表~\ref{copyallfree}~）对比发现，四个系统的预测效果都大幅下降。因此，预测模型的预测能力会依赖于自身系统数据的训练。鉴于此，本文建议优先选用系统自身的数据进行一致性为需求预测；在自身系统数据较少，不足以较好的训练模型的情况下，可以使用其它系统的数据对模型进行训练预测。
+对于克隆创建实例，由统计结果可以看出(~表\ref{instancesta}~)，系统中大部分的实例都是不需要进行一致性维护的克隆实例，其比例为59.80-88.47\%。对其进行跨项目一致性预测，其预测结果如表~\ref{copycrossfreebaysian}~所示。
+
+从表中可以看出，四个系统的精确率和召回率依然达到了较高的水平，其中精确率在60.01\%--91.20\%之间，召回率56.06\%--91.43\%之间。同时，通过对比发现jEdit的预测效果最好(精确率较高)，而jFreeChart预测效果最差。分析原因可能是由于jEdit系统的训练集最大，模型训练最充分，而jFreeChart则与之相反。
+
+将实验结果与第三章的全属性实验进行对比(表~\ref{copyallfree}~)，可以发现四个系统的预测效果都有了不同程度的下降，但是目跨项目的预测效果依然是可以接受的。
+
+因此，预测模型的预测能力会依赖于自身系统数据，建议优先选用系统自身的数据进行一致性为需求预测；在软件开发初期，自身系统训练数据较少，而不足以较好的训练模型的情况下，可以使用其它系统的数据对模型进行跨项目预测。
 
 \begin{table}[htbp]
-\bicaption[copycrossfree]{}{贝叶斯网络方法的跨项目预测实验结果(自由)}
-{Table$\!$}{The effectiveness for cross-project on four projects based on Bayesian network(Free)}
+\bicaption[copycrossfreebaysian]{}{贝叶斯网络跨项目预测实验结果(不需维护)}
+{Table$\!$}{The effectiveness for cross-project with Bayesian network(free)}
 \vspace{0.5em}
 \centering
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 {测试系统}&{阈值}&{推荐率(\%)}&{精确率(\%)}&{召回率(\%)}\\
-%\textbf{Project}&\textbf{Threshold}&\textbf{RR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	59.16&	73.03&	56.06\\
@@ -358,12 +366,19 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \end{tabular}
 \end{table}
 
+（2）需要一致性维护实验
 
-然后，对需要一致性维护的克隆创建实例进行跨项目预测，实验结果如~\ref{copycrossmeeting}所示。从表中可以看出，四个系统的预测效果都较差，准确率在15.36\%--61.01\%之间，召回率则更低，仅在10\%徘徊。与全属性实验（表~\ref{copyallmeeting}~）对比发现，四个系统的预测效果下降的都十分极为严重。分析原因是克隆创建中大部分的数据是不需要一致性维护需求，而需要一致性维护的实例数量太少，从而预测模型训练不够完善。因此， 在跨项目的预测中，本文不建议使用跨项目的方式对需要一致性维护的克隆创建实例进行预测。
+对于克隆创建实例，由统计结果可以看出(~表\ref{instancesta}~)，系统中仅有少量的实例满足一致性维护需求，其比例为11.53-40.20\%。对其进行跨项目一致性预测，实验结果如~\ref{copycrossmeetingbaysian}所示。
+
+从表中可以看出，四个系统的预测效果都比较差，精确率在15.36\%--61.01\%之间，召回率则更低，仅在10\%徘徊。分析原因是克隆创建实例的样本不平衡，其中大部分的数据是不需要一致性维护。所以，所训练的模型不够完善，跨项目预测能力无法达到实际应用的水平。
+
+与第三章全属性实验进行对比(表~\ref{copyallmeeting}~)，发现四个系统的跨项目预测效果下降的均十分严重。因此，对需要一致性维护的克隆创建实例，不建议使用跨项目的方式进行克隆一致性预测。
+
+因此， 对于需要一致性维护的克隆创建实例，本文同样不建议使用跨项目的方式对需要一致性维护的克隆创建实例进行预测，而是选择自身数据进行预测。在开发初期由于缺乏数据问题，建议程序开发人员选择对不需要的克隆实例进行预测。
 
 \begin{table}[htbp]
-\bicaption[copycrossmeeting]{}{贝叶斯网络方法的跨项目预测实验结果(需要)}
-{Table$\!$}{The effectiveness for cross-project on four projects based on Bayesian network(meeting)}
+\bicaption[copycrossmeetingbaysian]{}{贝叶斯网络方法的跨项目预测实验结果(需要维护)}
+{Table$\!$}{The effectiveness for cross-project with Bayesian network(meeting)}
 \vspace{0.5em}
 \centering
 \wuhao
@@ -402,28 +417,39 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \end{tabular}
 \end{table}
 
-因此，跨项目的预测实验中，所构建的预测模型的有效性会依赖于系统自身的某些特征。因此，本文建议优先选用自身的数据进行模型训练，并对自身系统进行预测。当自身系统的数据太少而不足以训练模型时，应该尽量使用大量的数据训练模型从而使模型训练完备。同时，对需要一致性维护的克隆创建实例，本文不建使用系统交叉的方式进行一致性维护进行预测，可以通过其进行克隆创建的避免。
+（3）小结
 
-\BiSubsubsection{克隆代码修改时跨项目一致性预测}
+在克隆创建时跨项目的预测中，所构建的预测模型的有效性会依赖于系统自身的某些特征。因此，本文建议优先选用自身的数据进行模型训练，并对自身系统进行预测。
+
+当自身系统的数据太少而不足以训练模型时，由于系统具有较多的不需要一致性维护的克隆创建实例，而需要实例较少。所训练的跨项目预测模型可以较好的预测不需要一致性维护的克隆实例，而对需要维护的预测效果较差。因此，对需要一致性维护的克隆创建实例，本文不建使用系统交叉的方式进行一致性维护进行预测。
+
+在软件开发初期，可以使用跨项目预测的方式，对克隆创建实例进行不需要一致性维护需求预测，仅仅允许此类的克隆实例产生，从而避免一致性维护代价。
+
+\BiSubsubsection{克隆代码变化时跨项目预测}
 {Cross-Project Prediction at Clone Changing Time}
 
 本节给出在克隆代码变化时，使用贝叶斯网络进行跨项目预测的实验结果与分析。
-在此实验中，同样使用中三个系统的克隆变化实例作为训练集，构建贝叶斯网络模型。然后，使用另外一个系统作为测试集测试模型的有效性。在四个系统上的实验结果如表~\ref{changecrossfree}~和~\ref{changecrossmeeting}所示。
+在此实验中，同样使用中三个系统的克隆变化实例作为训练集，构建贝叶斯网络模型。然后，使用另外一个系统作为测试集测试模型的有效性。同时，对两种状态下的克隆变化实例都进行了预测，在四个系统上的实验结果如表~\ref{changecrossfreebaysian}~和~\ref{changecrossmeetingbaysian}所示。
 
-从表中可以看出，所有的准确率和召回率都较差。结合全属性实验的实验结果（表~\ref{changeallfree}~），可以发现当使用自身系统的数据作为训练集且训练集足够大时，预测模型有效的。因此，本文建议使用系统自身的数据进行一致性预测，不建议使用跨项目的形式进行预测。
+（1）不需要一致性维护实验
+
+对于克隆变化实例，根据统计结果(~表\ref{instancesta}~)，在系统ArgoUML中，不需要维护的变化实例较多(比例为67.45\%)，其它三个系统中不需要一致性维护的实例较少(比例为25.71-49.06\%)。其中，系统Tuxguitar具有最少的需要维护的实例，比例为25.71\%，剩余两个系统中需要和不需要维护的实例数量相差不大。
+
+对不需要一致性维护的克隆变化实例，跨项目一致性预测结果如表~\ref{changecrossfreebaysian}~所示。从表中可以看出，ArgoUML的精确率最好，达71.72\%以上，系统jEdit和jFreeChart的预测效果在50\%左右，而Tuxguitar的预测效果最差。结合数据的不平衡性，发现预测效果向需要一致性维护的实例偏移。因此，精确度预测效果与样本自身的特征有关联关系，即最好选择向数据较多的一侧进行预测。同时，四个系统的召回率都不尽如意，未能达到较好的预测效果。分析原因，是由于样本之间具有较大的差异，跨项目数据无法较好的拟合被测试系统的样本数据。
+
+结合全属性实验的实验结果（表~\ref{changeallfree}~），可以发现当使用自身系统的数据作为训练集且训练集足够大时，预测模型有效的。因此，本文建议使用系统自身的数据进行一致性预测，不建议使用跨项目的形式进行预测。
 
 然而，在软件开发的初期阶段，由于缺乏足够数量的克隆变化实例，不能很好的训练模型时，开发人员可以使用本文第三章提出的方法在克隆创建时预测克隆代码的一致性，从而仅允许那些不需要一致性维护的克隆实例产生。在软件演化到了足够的版本时，随着来自其自己的克隆变化数据的增加，开发人员可以使用自身数据重新训练模型以预测项目中克隆变化的一致性。
 
 \begin{table}[htbp]
-\bicaption[changecrossfree]{}{贝叶斯网络方法的跨项目预测实验结果(自由)}
-{Table$\!$}{The effectiveness for cross-project on four projects based on Bayesian network(Free)}
+\bicaption[changecrossfreebaysian]{}{贝叶斯网络方法的跨项目预测实验结果(不需维护)}
+{Table$\!$}{The effectiveness for cross-project with Bayesian network(free)}
 \vspace{0.5em}
 \centering
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 {测试系统}&{阈值}&{推荐率(\%)}&{精确率(\%)}&{召回率(\%)}\\
-%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\\begin{table}[htbp]
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.01&	6.09&	73.08&	6.60\\
@@ -456,17 +482,26 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \end{tabular}
 \end{table}
 
+（2）需要一致性维护实验
+
+对于克隆变化实例，根据统计结果(~表\ref{instancesta}~)，在系统ArgoUML中，需要维护的变化实例较少(比例为32.55\%)，其它三个系统中不需要一致性维护的实例较少(比例为50.94-74.29\%)。其中，系统Tuxguitar具有最多的需要维护的实例，比例为74.29\%，剩余两个系统中需要和不需要维护的实例数目相差不大。
+对需要一致性维护的克隆变化实例，跨项目一致性预测结果如表~\ref{changecrossmeetingbaysian}~所示。
+
+从表中可以看出，Tuxguitar的精确率最好，达70\%以上，系统jEdit和jFreeChart的预测效果在60\%左右，而Tuxguitar的预测效果最差，仅在33\%左右。结合数据的不平衡性，发现预测效果向需要一致性维护的实例偏移。因此，精确度预测效果与样本自身的特征有关联关系，即最好选择向数据较多的一侧进行预测。同时，四个系统的召回率都不尽如意，未能达到较好的预测效果。分析原因，是由于样本之间具有较大的差异，跨项目数据无法较好的拟合被测试系统的样本数据。
+
+结合全属性实验的实验结果（表~\ref{changeallmeeting}~），可以发现当使用自身系统的数据作为训练集且训练集足够大时，预测模型有效的。因此，本文建议优先使用系统自身的数据进行一致性预测，当数据不足以预测自身项目时，可以使用跨项目的形式进行预测。
+
+同时，在软件开发的初期阶段，由于缺乏足够数量的克隆变化实例，不能很好的训练模型时，开发人员依然可以使用本文第三章提出的方法在克隆创建时预测克隆代码的一致性，从而仅允许那些不需要一致性维护的克隆实例产生。在软件演化到了足够的版本时，随着来自其自己的克隆变化数据的增加，开发人员可以使用自身数据重新训练模型以预测项目中克隆变化的一致性。
 
 \begin{table}[htbp]
-\bicaption[changecrossmeeting]{}{贝叶斯网络方法的跨项目预测实验结果(Meeting)}
-{Table$\!$}{The effectiveness for cross-project on four projects based on Bayesian network(Meeting)}
+\bicaption[changecrossmeetingbaysian]{}{贝叶斯网络方法的跨项目预测实验结果(需要维护)}
+{Table$\!$}{The effectiveness for cross-project on four projects with Bayesian network(meeting)}
 \vspace{0.5em}
 \centering
 \wuhao
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 {测试系统}&{阈值}&{警告率(\%)}&{精确率(\%)}&{召回率(\%)}\\
-%\textbf{Project}&\textbf{Threshold}&\textbf{WR(\%)}&\textbf{Precision(\%)}&\textbf{Recall(\%)}\\
 \midrule[1pt]
 \multirow{5}{*}{ArgoUML}
 &0.9&	40.28&	33.72&	41.73\\
@@ -499,253 +534,555 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \end{tabular}
 \end{table}
 
+（3）小节
 
-然而，跨项目的实验表明，本章所提出的预测模型的有效性会依赖于系统自身的某些特征。这意味着使用本章所提取的属性构建一个“通用”预测模型时，可能较为困难的预测所某一特定系统的一致性维护需求。换句话说，本文建议开发人员为不同的系统构建和训练不同的模型，已达到满意的预测效果。试图构建一个全新的预测器，并可以适用于其它的项目中也并非完全不可取的。在软件缺陷预测领域中存在一些跨项目预测的研究，可以考虑对其进行进一步的研究使之运用到跨项目的克隆一致性需求维护中。
+对于克隆变化实例，实验表明跨项目预测模型的有效性会依赖于系统自身的某些特征。本文建议开发人员优先选用自身的数据进行模型训练，以达到满意的预测效果。
 
+当自身系统的数据太少而不足以训练模型时，跨项目预测效果将依赖于数据集的分布情况。对于被测试的软件系统，需要尽量选择哪些具有相似分别地测试系统，从而训练模型进行跨项目预测。以本文使用的实验系统为例，对于其中三个系统，其需要维护的克隆变化实例较多，因此所训练的跨项目模型，在需要一致性维护的预测中预测效果要优于不需要维护的预测。
 
-在软件开发初期，系统自身缺乏克隆变化实例而无法构建预测模型，同时跨项目的模型也无法对其进行预测。为了解决此问题，本文建议建议开发人员在软件开发的早期阶段使用本文第二章提出的克隆代码创建时克隆一致性维护需求预测方法，尽量避免会导致一致性变化的克隆代码，或者仅仅允许不会导致一致性变化的克隆代码的产生。
+同时，在软件开发初期，系统自身缺乏克隆变化实例而无法构建预测模型。当跨项目的模型也无法使用时，建议建议开发人员使用本文第三章的方法，在克隆代码创建时进行一致性维护需求预测，尽量避免会导致一致性变化的克隆代码。
+
+\BiSubsubsection{讨论}
+{Discussion}
+
+综上所述，本节实验可以完成对子问题1的回答：
+
+首先，于项目之间的差异性，测试集和训练集也具有较大差异，跨项目预测能力达不到项目内预测的能力。因此，建议开发人员优先选择项目内的预测方式。
+
+其次，在软件开发初期，由于缺乏系统自身的数据而无法训练机器学习模型时，可以使用跨项目的克隆一致性预测，帮助避免由于克隆代码所导致的维护代价。但由于训练数据的样本不平衡性，跨项目预测能力会向数据较多的一侧倾斜，因此建议选择数据较多的一个角度进行预测。以本文为例：(1)在克隆代码创建时，建议对不需要一致性维护的克隆实例进行预测。(2)克隆代码变化时，建议对需要一致性维护的克隆实例进行预测。
+
+最后，在进行选择跨项目预测时，软件开发人员可以根据自身需求，选择具有相似分布的训练系统，以达到较好的预测效果。如何选择相似的系统，将是本文未来的研究工作。
 
 \BiSubsection{其它机器学习的跨项目克隆一致性需求预测}
 {Clone Consistency-Requirement for Cross-Project}
 
-本章不仅在贝叶斯网络上进行了实验，本节还在其它的机器学习方法上进行了预测。本节用于评估实验效果的指标，同本文第三章和第四章相同。采用准确率、召回率和F值进行评价。
+本节将回答本章提出的第二个研究问题：
+
+因此，不仅在贝叶斯网络上进行了实验，还在其它的机器学习方法上进行了跨项目的预测。为了评估本节的实验效果，选择同本文第三章和第四章相同的指标，即采用平均精确率(Average Precision)、平均召回率(Average Recall)和平均F值(Average F-measure)进行评价(见本文第~\ref{ref-creatingmethodmetrics}~节和第~\ref{ref-changingmethodmetrics}~节)。实验同样也在两个时刻进行了预测，即克隆代码创建时和克隆代码变化时。
 
 \BiSubsubsection{克隆代码创建时跨项目预测实验}
 {Cross-Project Clone Consistency Prediction at Creating Time}
 
-使用不同的机器学习方法对克隆代码创建实例进行跨项目预测，实验结果如~\ref{creatingcrossmethodfree}~和~\ref{creatingcrossmethodmeeting}所示。
-
-首先，先对不需要一致性维护的克隆实例进行跨项目预测，实验结果如表~\ref{creatingcrossmethodfree}~所示。由表中可以看出，预测效果较好，其中准确率非常好，可以较好的预测克隆代码的一致性维护需求。但是，SVM方法的召回率为1，说明跨项目预测中SVM表现太差，无法预测克隆代码的变化的一致性。在预测结果中，对jEdit的预测效果最好，然
-
-\begin{table}[htbp]
-\bicaption[creatingcrossmethodfree]{}{克隆代码创建时多机器学习跨项目预测}
-{Table$\!$}{The effectiveness for cross-project at creating time on free}
-\vspace{0.5em}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
-\midrule[1pt]
-\multirow{5}{*}{Precision}
-&BayesNet&	0.766&	0.891&	0.608&	0.73\\
-&Natvie&	0.764&	0.876&	0.584&	0.725\\
-&SVM&	0.771&	0.885&	0.598&	0.711\\
-&KNN&	0.763&	0.878&	0.65&	0.709\\
-&Tree&	0.767&	0.885&	0.606&	0.746\\
-\hline
-\multirow{5}{*}{Recall}				
-&BayesNet&	0.831&	0.938&	0.941&	0.908\\
-&Natvie&	0.869&	0.832&	0.8	&0.81\\
-&SVM&	1&	1&	1&	1\\
-&KNN&	0.861&	0.821&	0.896&	0.893\\
-&Tree&	0.95&	0.946&	0.94&	0.942\\
-\hline
-\multirow{5}{*}{F-Measure}					
-&BayesNet&	0.797&	0.914&	0.739&	0.81\\
-&Natvie&	0.813&	0.853&	0.675&	0.765\\
-&SVM&	0.87&	0.939&	0.748&	0.831\\
-&KNN&	0.809&	0.849&	0.753&	0.79\\
-&Tree&	0.849&	0.915&	0.737&	0.833\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
-
-\begin{table}[htbp]
-\bicaption[creatingcrossmethodmeeting]{}{克隆代码创建时多机器学习跨项目预测}
-{Table$\!$}{The effectiveness for cross-project at creating time}
-\vspace{0.5em}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
-\midrule[1pt]
-\multirow{5}{*}{Precision}
-&BayesNet&	0.207&	0.205&	0.526	&0.443\\
-&Natvie&	0.182&	0.069&	0.34	&0.344\\
-&SVM&	0&	0&	0&	0\\
-&KNN&	0.178	&0.083&	0.646&	0.268\\
-&J48&	0.162	&0.118&	0.506&	0.599\\	
-\hline
-\multirow{5}{*}{Recall}				
-&BayesNet&	0.148&	0.123&	0.098&	0.179\\
-&Natvie&	0.098&	0.096&	0.153&	0.245\\
-&SVM&	0&	0&	0&	0\\
-&KNN&	0.102&	0.123&	0.283&	0.097\\
-&Tree&	0.033&	0.055&	0.092&	0.213\\
-\hline
-\multirow{5}{*}{F-Measure}				
-&BayesNet&	0.172&	0.154&	0.165&	0.255\\
-&Natvie&	0.127&	0.08&	0.211&	0.286\\
-&SVM&	0&	0&	0	&0\\
-&KNN&	0.13&	0.099&	0.394&	0.142\\
-&Tree&	0.054&	0.075&	0.155&	0.314\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
-
-
+%%%对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodfree}~和~\ref{creatingcrossmethodmeeting}所示。
+%%%
+%%%（1）不需要一致性维护实验
+%%%
+%%%首先，先对不需要一致性维护的克隆实例进行跨项目预测，实验结果如表~\ref{creatingcrossmethodfree}~所示。由表中可以看出，预测效果较好，其中精确率非常好，可以较好的预测克隆代码的一致性维护需求。但是，SVM方法的召回率为1，说明跨项目预测中SVM表现太差，无法预测克隆代码的变化的一致性。在预测结果中，对jEdit的预测效果最好，然
 %%%
 %%%\begin{table}[htbp]
-%%%\bicaption[creatingcrossmethodaverage]{}{克隆代码创建时多机器学习跨项目预测}
-%%%{Table$\!$}{The effectiveness for cross-project at creating time}
+%%%\bicaption[creatingcrossmethodfree]{}{克隆代码创建时多机器学习跨项目预测}
+%%%{Table$\!$}{The effectiveness for cross-project at creating time on free with 5 methods}
 %%%\vspace{0.5em}
 %%%\centering
 %%%\wuhao
 %%%\begin{tabular}{cccccc}
 %%%\toprule[1.5pt]
-%%%{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+%%%{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
 %%%\midrule[1pt]
-%%%\multirow{5}{*}{平均Precision}
-%%%&BayesNet&	0.638	&0.812	&0.575	&0.648\\
-%%%&Natvie&	0.631&	0.783&	0.486&	0.615\\
-%%%&SVM&	0.594&	0.783&	0.358&	0.506\\
-%%%&KNN&	0.629&	0.786&	0.648&	0.581\\
-%%%&Tree&	0.629&	0.796&	0.566&	0.704\\
-%%%\hline
-%%%\multirow{5}{*}{平均Recall}				
-%%%&BayesNet&	0.675&	0.844&	0.602&	0.698\\
-%%%&Natvie&	0.693&	0.747&	0.54&	0.647\\
+%%%\multirow{5}{*}{Precision}
+%%%&BayesNet&	0.766&	0.891&	0.608&	0.73\\
+%%%&Natvie&	0.764&	0.876&	0.584&	0.725\\
 %%%&SVM&	0.771&	0.885&	0.598&	0.711\\
-%%%&KNN&	0.687	&0.741&	0.649&	0.663\\
-%%%&Tree&	0.74&	0.844&	0.599&	0.731\\
+%%%&KNN&	0.763&	0.878&	0.65&	0.709\\
+%%%&Tree&	0.767&	0.885&	0.606&	0.746\\
 %%%\hline
-%%%\multirow{5}{*}{平均F-Measure}			
-%%%&BayesNet&	0.654&	0.826&	0.508&	0.65\\
-%%%&Natvie&	0.656&	0.764&	0.489&	0.627\\
-%%%&SVM&	0.671&	0.831&	0.448&	0.591\\
-%%%&KNN&	0.653&	0.762&	0.609&	0.603\\
-%%%&Tree&	0.667&	0.818&	0.503&	0.683\\
+%%%\multirow{5}{*}{Recall}				
+%%%&BayesNet&	0.831&	0.938&	0.941&	0.908\\
+%%%&Natvie&	0.869&	0.832&	0.8	&0.81\\
+%%%&SVM&	1&	1&	1&	1\\
+%%%&KNN&	0.861&	0.821&	0.896&	0.893\\
+%%%&Tree&	0.95&	0.946&	0.94&	0.942\\
+%%%\hline
+%%%\multirow{5}{*}{F-Measure}					
+%%%&BayesNet&	0.797&	0.914&	0.739&	0.81\\
+%%%&Natvie&	0.813&	0.853&	0.675&	0.765\\
+%%%&SVM&	0.87&	0.939&	0.748&	0.831\\
+%%%&KNN&	0.809&	0.849&	0.753&	0.79\\
+%%%&Tree&	0.849&	0.915&	0.737&	0.833\\
 %%%\bottomrule[1.5pt]
 %%%\end{tabular}
 %%%\end{table}
-
-
-\BiSubsubsection{克隆代码创建时跨项目预测实验}
-{Cross-Project Clone Consistency Prediction at Creating Time}
-
-首先，对克隆代码变化实例进行跨项目预测，实验结果如~\ref{changingcrossmethodfree}~~\ref{changingcrossmethodmeeting}~所示。
-
-
-\begin{table}[htbp]
-\bicaption[changingcrossmethodfree]{}{克隆代码变化时机器学习跨项目预测}
-{Table$\!$}{The effectiveness for cross-project at changing time}
-\vspace{0.5em}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
-\midrule[1pt]
-\multirow{5}{*}{Precision}
-&BayesNet&	0.709&	0.535&	0.456&	0.247\\
-&Natvie&	0.761	&0.544&	0.477	&0.228\\
-&SVM&	0&	0	&0.638&	0.219\\
-&KNN&	0.743&	0.529	&0.453	&0.26\\
-&Tree&	0.771	&0.727	&0.508	0.265\\
-\hline
-\multirow{5}{*}{Recall}				
-&BayesNet	&0.365&	0.59&	0.644&	0.615\\
-&Natvie	&0.299&	0.474	&0.677	&0.637\\
-&SVM	&0	&0	&0.164&	0.637\\
-&KNN	&0.472	&0.59&	0.631&	0.615\\
-&Tree	&0.094&	0.308&	0.135	&0.78\\
-\hline
-\multirow{5}{*}{F-Measure}				
-&BayesNet&	0.482	&0.561&	0.534	&0.352\\
-&Natvie	&0.429&	0.507	&0.56	&0.336\\
-&SVM	&0&	0	&0.261&	0.326\\
-&KNN	&0.577&	0.558	&0.527&	0.366\\
-&Tree	&0.167&	0.432	&0.213&	0.396\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
-
-\begin{table}[htbp]
-\bicaption[changingcrossmethodmeeting]{}{克隆代码变化时机器学习跨项目预测}
-{Table$\!$}{The effectiveness for cross-project at changing time}
-\vspace{0.5em}
-\centering
-\wuhao
-\begin{tabular}{cccccc}
-\toprule[1.5pt]
-{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
-\midrule[1pt]
-\multirow{5}{*}{Precision}
-&BayesNet&	0.344&	0.562&	0.6&	0.724\\
-&Natvie&	0.357&	0.549&	0.634&	0.67\\
-&SVM	&0.326	&0.509&	0.591	&0.629\\
-&KNN	&0.377&	0.556	&0.594&	0.748\\
-&Tree&	0.334	&0.571&	0.575&	0.767\\
-\hline
-\multirow{5}{*}{Recall}					
-&BayesNet&	0.691&	0.506&	0.41&	0.35\\
-&Natvie	&0.806&	0.617&	0.43&	0.255\\
-&SVM	&1	&1&	0.929&	0.213\\
-&KNN	&0.662&	0.494&	0.415&	0.395\\
-&Tree	&0.942&	0.889	&0.9	&0.251\\
-\hline
-\multirow{5}{*}{F-Measure}				
-&BayesNet&	0.459	&0.532&	0.487	&0.472\\
-&Natvie	&0.494&	0.581&	0.513&	0.369\\
-&SVM&	0.491	&0.675&	0.722&	0.318\\
-&KNN&	0.48&	0.523&	0.488&	0.517\\
-&Tree	&0.493&	0.696&	0.702	&0.378\\
-\bottomrule[1.5pt]
-\end{tabular}
-\end{table}
-
-
+%%%
+%%%（2）
+%%%
 %%%\begin{table}[htbp]
-%%%\bicaption[changingcrossmethodaverage]{}{克隆代码变化时机器学习跨项目预测}
-%%%{Table$\!$}{The effectiveness for cross-project at changing time}
+%%%\bicaption[creatingcrossmethodmeeting]{}{克隆代码创建时多机器学习跨项目预测}
+%%%{Table$\!$}{The effectiveness for cross-project at creating time with 5 methods}
 %%%\vspace{0.5em}
 %%%\centering
 %%%\wuhao
 %%%\begin{tabular}{cccccc}
 %%%\toprule[1.5pt]
-%%%{方法}&{度量}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+%%%{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
 %%%\midrule[1pt]
-%%%\multirow{5}{*}{平均Precision}
-%%%&BayesNet&	0.591&	0.549&	0.537&	0.602\\
-%%%&Natvie&	0.629&	0.547&	0.566&	0.556\\
-%%%&SVM&	0.106&	0.26&	0.611&	0.524\\
-%%%&KNN&	0.624&	0.542&	0.533&	0.623\\
-%%%&Tree&	0.629&	0.648&	0.546&	0.638\\
+%%%\multirow{5}{*}{Precision}
+%%%&BayesNet&	0.207&	0.205&	0.526	&0.443\\
+%%%&Natvie&	0.182&	0.069&	0.34	&0.344\\
+%%%&SVM&	0&	0&	0&	0\\
+%%%&KNN&	0.178	&0.083&	0.646&	0.268\\
+%%%&J48&	0.162	&0.118&	0.506&	0.599\\	
 %%%\hline
-%%%\multirow{5}{*}{Recall}					
-%%%&BayesNet&	0.471&	0.547&	0.512&	0.418\\
-%%%&Natvie&	0.464&	0.547	&0.538&	0.353\\
-%%%&SVM&	0.326&	0.509&	0.596&	0.322\\
-%%%&KNN&	0.534&	0.541&	0.509&	0.452\\
-%%%&Tree&	0.37&	0.604&	0.567&	0.387\\
+%%%\multirow{5}{*}{Recall}				
+%%%&BayesNet&	0.148&	0.123&	0.098&	0.179\\
+%%%&Natvie&	0.098&	0.096&	0.153&	0.245\\
+%%%&SVM&	0&	0&	0&	0\\
+%%%&KNN&	0.102&	0.123&	0.283&	0.097\\
+%%%&Tree&	0.033&	0.055&	0.092&	0.213\\
 %%%\hline
-%%%\multirow{5}{*}{平均F-Measure}				
-%%%&BayesNet&	0.474&	0.546	&0.507&	0.441\\
-%%%&Natvie&	0.45&	0.545&	0.533&	0.361\\
-%%%&SVM&	0.16&	0.344&	0.522&	0.32\\
-%%%&KNN&	0.546	&0.54&	0.505&	0.478\\
-%%%&Tree&	0.273&	0.567&	0.489&	0.383\\
+%%%\multirow{5}{*}{F-Measure}				
+%%%&BayesNet&	0.172&	0.154&	0.165&	0.255\\
+%%%&Natvie&	0.127&	0.08&	0.211&	0.286\\
+%%%&SVM&	0&	0&	0	&0\\
+%%%&KNN&	0.13&	0.099&	0.394&	0.142\\
+%%%&Tree&	0.054&	0.075&	0.155&	0.314\\
 %%%\bottomrule[1.5pt]
 %%%\end{tabular}
 %%%\end{table}
 
+对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodaverage}~所示。
 
-%%%\BiSubsection{测试集规模选择实验}
-%%%{Clone Consistency Prediction Experiment}
-%%%
-%%%同时，本节实验还可划分为多对一跨项目预测和一对一跨项目预测两个部分。多对一跨项目预测指的是，使用多个系统的数据集合称为一个大的训练集，并在一个系统上进行跨项目预测。一对一跨项目预测指的是仅使用一个系统的数据作为训练集，另一个系统的数据作为测试集进行跨项目预测。通过对比
+在表中，对于SVM的实验结果使用{*}进行标记表。原因在于：在使用SVM方法进行跨项目预测时，不具备相对应的预测能力，其会将所有的测试数据划分到同一个类别中(规模比较大的类中)。因此，不建议使用SVM进行跨项目的预测。
+
+从表中可以看出，其它的四种机器学习方法，对不同的项目均具有不错的预测效果，并且彼此之间也不存在显著的差异。ArgoUML系统的预测结果较好，其平均F值介于65.3-66.7\%之间。对jEdit系统的预测效果最好，为76.2-82.6\%，jFreeChart最差，也达到了48.9-60.9\%。对于Tuxguitar来说，预测效果也较好，F值为60.3-68.3\%。
+
+尽管如此，不同的机器学习方法在不同的跨项目的预测中，其预测能力不是完全一致。对系统ArgoUML和系统Tuxguitar来说，决策树具有最好的预测效果，其F值分别为66.7\%和68.3\%。贝叶斯网络对jEdit系统具有最好的预测效果，F值为82.6\%。而KNN方法对于系统jFreeChart具有最好的预测效果，F值为60.9\%。
+
+因此，针对不同的系统，不推荐程序开发人员选用SVM的方法；但可以使用其它的机器学习方法进行跨项目的一致性预测中；针对不同的软件系统，程序开发人员可以根据预测结果选择最合适的机器学习方法。
+
+\begin{table}[htbp]
+\bicaption[creatingcrossmethodaverage]{}{克隆创建时多机器学习跨项目预测}
+{Table$\!$}{The effectiveness for cross-project prediction at creating time with 5 methods}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+\midrule[1pt]
+\multirow{5}{*}{平均Precision}
+&BayesNet&	0.638	&0.812	&0.575	&0.648\\
+&Natvie&	0.631&	0.783&	0.486&	0.615\\
+%&SVM&	0.594&	0.783&	0.358&	0.506\\
+&SVM&	0.594*&	0.783*&	0.358*&	0.506*\\
+&KNN&	0.629&	0.786&	0.648&	0.581\\
+&Tree&	0.629&	0.796&	0.566&	0.704\\
+\hline
+\multirow{5}{*}{平均Recall}				
+&BayesNet&	0.675&	0.844&	0.602&	0.698\\
+&Natvie&	0.693&	0.747&	0.54&	0.647\\
+%&SVM&	0.771&	0.885&	0.598&	0.711\\
+&SVM&	0.771*&	0.885*&	0.598*&	0.711*\\
+&KNN&	0.687	&0.741&	0.649&	0.663\\
+&Tree&	0.74&	0.844&	0.599&	0.731\\
+\hline
+\multirow{5}{*}{平均F-Measure}			
+&BayesNet&	0.654&	0.826&	0.508&	0.65\\
+&Natvie&	0.656&	0.764&	0.489&	0.627\\
+%&SVM&	0.671&	0.831&	0.448&	0.591\\
+&SVM&	0.671*&	0.831*&	0.448*&	0.591*\\
+&KNN&	0.653&	0.762&	0.609&	0.603\\
+&Tree&	0.667&	0.818&	0.503&	0.683\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
 
 
-%%%
-%%%(1)创建时
-%%%
-%%%(2)修改时
+\BiSubsubsection{克隆代码创建时跨项目预测实验}
+{Cross-Project Clone Consistency Prediction at Creating Time}
+
+
+%%%%对克隆代码变化实例，使用不同的机器学习方法进行跨项目，实验结果如~\ref{changingcrossmethodfree}~和~\ref{changingcrossmethodmeeting}~所示。
+%%%%
+%%%%（1）
+%%%%
+%%%%\begin{table}[htbp]
+%%%%\bicaption[changingcrossmethodfree]{}{克隆代码变化时机器学习跨项目预测}
+%%%%{Table$\!$}{The effectiveness for cross-project at changing time with 5 methods}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{cccccc}
+%%%%\toprule[1.5pt]
+%%%%{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+%%%%\midrule[1pt]
+%%%%\multirow{5}{*}{Precision}
+%%%%&BayesNet&	0.709&	0.535&	0.456&	0.247\\
+%%%%&Natvie&	0.761	&0.544&	0.477	&0.228\\
+%%%%&SVM&	0&	0	&0.638&	0.219\\
+%%%%&KNN&	0.743&	0.529	&0.453	&0.26\\
+%%%%&Tree&	0.771	&0.727	&0.508	0.265\\
+%%%%\hline
+%%%%\multirow{5}{*}{Recall}				
+%%%%&BayesNet	&0.365&	0.59&	0.644&	0.615\\
+%%%%&Natvie	&0.299&	0.474	&0.677	&0.637\\
+%%%%&SVM	&0	&0	&0.164&	0.637\\
+%%%%&KNN	&0.472	&0.59&	0.631&	0.615\\
+%%%%&Tree	&0.094&	0.308&	0.135	&0.78\\
+%%%%\hline
+%%%%\multirow{5}{*}{F-Measure}				
+%%%%&BayesNet&	0.482	&0.561&	0.534	&0.352\\
+%%%%&Natvie	&0.429&	0.507	&0.56	&0.336\\
+%%%%&SVM	&0&	0	&0.261&	0.326\\
+%%%%&KNN	&0.577&	0.558	&0.527&	0.366\\
+%%%%&Tree	&0.167&	0.432	&0.213&	0.396\\
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{table}
+%%%%
+%%%%（2）
+%%%%
+%%%%\begin{table}[htbp]
+%%%%\bicaption[changingcrossmethodmeeting]{}{克隆代码变化时机器学习跨项目预测}
+%%%%{Table$\!$}{The effectiveness for cross-project at changing time with 5 methods}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{cccccc}
+%%%%\toprule[1.5pt]
+%%%%{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+%%%%\midrule[1pt]
+%%%%\multirow{5}{*}{Precision}
+%%%%&BayesNet&	0.344&	0.562&	0.6&	0.724\\
+%%%%&Natvie&	0.357&	0.549&	0.634&	0.67\\
+%%%%&SVM	&0.326	&0.509&	0.591	&0.629\\
+%%%%&KNN	&0.377&	0.556	&0.594&	0.748\\
+%%%%&Tree&	0.334	&0.571&	0.575&	0.767\\
+%%%%\hline
+%%%%\multirow{5}{*}{Recall}					
+%%%%&BayesNet&	0.691&	0.506&	0.41&	0.35\\
+%%%%&Natvie	&0.806&	0.617&	0.43&	0.255\\
+%%%%&SVM	&1	&1&	0.929&	0.213\\
+%%%%&KNN	&0.662&	0.494&	0.415&	0.395\\
+%%%%&Tree	&0.942&	0.889	&0.9	&0.251\\
+%%%%\hline
+%%%%\multirow{5}{*}{F-Measure}				
+%%%%&BayesNet&	0.459	&0.532&	0.487	&0.472\\
+%%%%&Natvie	&0.494&	0.581&	0.513&	0.369\\
+%%%%&SVM&	0.491	&0.675&	0.722&	0.318\\
+%%%%&KNN&	0.48&	0.523&	0.488&	0.517\\
+%%%%&Tree	&0.493&	0.696&	0.702	&0.378\\
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{table}
+
+对克隆代码变化实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{changingcrossmethodaverage}~所示。
+
+在表中，对于SVM的实验结果使用{*}进行标记。原因在于：在使用SVM方法进行跨项目预测时，不具备相对应的预测能力，其会将所有的测试数据划分到同一个类别中(规模比较大的类中)。因此，不建议使用SVM进行跨项目的预测。
+
+从表中可以看出，其它的四种机器学习方法，对不同的项目的预测效果一般，并且彼此之间也不存在显著的差异。分析其预测能力一般的原因，可能是系统中存在的克隆变化实例较少，而项目之间的克隆代码变化也千差万别，所构建的跨项目预测模型并不具有非常强的泛化能力。
+
+尽管如此，不同的机器学习方法在不同的跨项目的预测中，其预测能力不是完全一致。对系统ArgoUML和系统Tuxguitar来说，KNN具有最好的预测效果，其F值分别为54.6\%和48.7\%。决策树对jEdit系统具有最好的预测效果，F值为56.7\%。而朴素贝叶斯方法对于系统jFreeChart具有最好的预测效果，F值为53.3\%。
+
+结合上一节的贝叶斯网络方法的实验结果，在跨项目的预测中，不推荐程序开发人员选用SVM的方法；但依然可以使用其它的机器学习方法进行跨项目一致性预测，但需要根据项目自身特征，去选择所预测的类别(样本不平衡)，即预测数量较多的克隆变化实例类别；在对不同的软件系统进行预测时，程序开发人员可以根据预测结果选择最合适的机器学习方法。
+
+\begin{table}[htbp]
+\bicaption[changingcrossmethodaverage]{}{克隆代码变化时机器学习跨项目预测}
+{Table$\!$}{The effectiveness for cross-project at changing time with 5 method}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+\midrule[1pt]
+\multirow{5}{*}{平均Precision}
+&BayesNet&	0.591&	0.549&	0.537&	0.602\\
+&Natvie&	0.629&	0.547&	0.566&	0.556\\
+%&SVM&	0.106&	0.26&	0.611&	0.524\\
+&SVM&	0.106*&	0.26*&	0.611*&	0.524*\\
+&KNN&	0.624&	0.542&	0.533&	0.623\\
+&Tree&	0.629&	0.648&	0.546&	0.638\\
+\hline
+\multirow{5}{*}{平均Recall}					
+&BayesNet&	0.471&	0.547&	0.512&	0.418\\
+&Natvie&	0.464&	0.547	&0.538&	0.353\\
+%&SVM&	0.326&	0.509&	0.596&	0.322\\
+&SVM&	0.326*&	0.509*&	0.596*&	0.322*\\
+&KNN&	0.534&	0.541&	0.509&	0.452\\
+&Tree&	0.37&	0.604&	0.567&	0.387\\
+\hline
+\multirow{5}{*}{平均F-Measure}				
+&BayesNet&	0.474&	0.546	&0.507&	0.441\\
+&Natvie&	0.45&	0.545&	0.533&	0.361\\
+%&SVM&	0.16&	0.344&	0.522&	0.32\\
+&SVM&	0.16*&	0.344*&	0.522*&	0.32*\\
+&KNN&	0.546	&0.54&	0.505&	0.478\\
+&Tree&	0.273&	0.567&	0.489&	0.383\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+\BiSubsubsection{讨论}
+{Discussion}
+
+综上所述，根据本节的预测结果，我们可以给出第二个研究问题的答案。
+
+首先，在进行跨项目预测时，不建议选择SVM模型进行预测。然后，其它的机器学习方法的预测能力不具有显著性差异，可以根据不同的系统选取合适的机器学习方法，最后，在进行跨项目预测时，建议根据系统的特征选择所预测的类别，即选择数量较多的克隆实例类别：预测不需要一致性维护的克隆创建实例和需要一致性维护的克隆变化实例。
+
+\BiSubsection{跨项目预测训练集规模实验}
+{Cross-Project Prediction for Data Size}
+
+本节将回答本章提出的第三个研究问题：
+
+在进行克隆代码一致性预测时，训练集的规模会影响到预测的效果。为了探索数据集规模对预测效果的影响，本节实验使用不同的训练集训练模型，并预测克隆代码的一致性。
+
+首先，进行一对一的跨项目预测。一对一跨项目预测指的是仅使用一个系统的数据作为训练集，另一个系统的数据作为测试集进行跨项目预测。然后对目标系统的预测结果进行进行平均，得出一对一预测结果(使用“Average”表示)。然后进行多对一跨项目预测。多对一跨项目预测指的是，使用三个系统的数据集合称为一个大的训练集，并在另一个系统上进行跨项目预测，得出多对一预测结果(使用“All”表示)。%实验结果如表~\ref{creatingcrosssizeaverage}~和表~\ref{changingcrosssizeaverage}~所示。
+
+
+
+\BiSubsubsection{克隆代码创建时跨项目预测实验}
+{Cross-Project Clone Consistency Prediction at Creating Time}
+
+%%%%%%\begin{sidewaystable} [htbp]
+%%%%%%\bicaption[creatingcrosssizefree]{}{跨项目预测数据集选择实验(free)}
+%%%%%%{Table$\!$}{The effectiveness of cross-project for training size selection(free)}
+%%%%%%\vspace{0.5em}
+%%%%%%\centering
+%%%%%%\wuhao
+%%%%%%\begin{tabular}{cccccccccc}
+%%%%%%\toprule[1.5pt]
+%%%%%%~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+%%%%%%\cline{3-10}
+%%%%%%~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+%%%%%%\midrule[1pt]
+%%%%%%\multirow{5}{*}{Precision}
+%%%%%%&BayesNet&	0.763&	0.766&	0.887&	0.891&	0.615&	0.608&0.729&	0.731\\
+%%%%%%&Natvie&	0.760&	0.764&	0.880&	0.876&	0.593&	0.584&	0.720	&0.725\\
+%%%%%%&SVM&	0.809&	0.771	&0.885&	0.885&	0.598&	0.598&	0.711&	0.711\\
+%%%%%%&KNN&	0.762&	0.763	&0.894&	0.878&	0.641&	0.65&	0.709&	0.709\\
+%%%%%%&Tree	&0.785	&0.767&0.882	&0.885&	0.620	&0.606&	0.718&	0.746\\
+%%%%%%\hline
+%%%%%%\multirow{5}{*}{Recall}								
+%%%%%%&BayesNet&	0.829	&0.831	&0.824	&0.938	&0.929	&0.941&	0.866&	0.908\\
+%%%%%%&Natvie&	0.831	&0.869	&0.834	&0.832	&0.862	&0.8&	0.815&	0.81\\
+%%%%%%&SVM&	1&	1&	1&	1&	1&	1	&1	&1\\
+%%%%%%&KNN&	0.853&	0.861&	0.828&	0.821&	0.899&	0.896&	0.873&	0.893\\
+%%%%%%&Tree	&0.958&	0.95&	0.904	&0.946	&0.954&	0.94&	0.935&	0.942\\
+%%%%%%\hline
+%%%%%%\multirow{5}{*}{F-Measure}							
+%%%%%%&BayesNet&	0.792&	0.797&	0.848&	0.914&	0.739&	0.739&	0.789&0.81\\
+%%%%%%&Natvie&	0.793&	0.813	&0.852	&0.853	&0.702	&0.675	&0.764	&0.765\\
+%%%%%%&SVM&	0.893	&0.87	&0.939	&0.939	&0.748	&0.748	&0.831&	0.831\\
+%%%%%%&KNN&	0.804	v0.809&	0.857	&0.849	&0.747	&0.753	&0.781&	0.79\\
+%%%%%%&Tree&	0.863	&0.849&	0.889&	0.915&	0.739&	0.737	&0.810	&0.833\\
+%%%%%%\bottomrule[1.5pt]
+%%%%%%\end{tabular}
+%%%%%%\end{sidewaystable}
+%%%%%%
+%%%%%%\begin{sidewaystable} [htbp]
+%%%%%%\bicaption[creatingcrosssizemeeting]{}{跨项目预测数据集选择实验(meeting)}
+%%%%%%{Table$\!$}{The effectiveness of cross-project for training size selection(meeting)}
+%%%%%%\vspace{0.5em}
+%%%%%%\centering
+%%%%%%\wuhao
+%%%%%%\begin{tabular}{cccccccccc}
+%%%%%%\toprule[1.5pt]
+%%%%%%~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+%%%%%%\cline{3-10}
+%%%%%%~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+%%%%%%\midrule[1pt]
+%%%%%%\multirow{5}{*}{Precision}
+%%%%%%&BayesNet&	0.198&	0.207&	0.214&	0.205&	0.469&	0.526&0.399&	0.443\\
+%%%%%%&Natvie&	0.186&	0.182&	0.113&	0.069&	0.367&	0.34&	0.325	&0.344\\
+%%%%%%&SVM&	0&	0&	0&0&	0&	0&0&	0\\
+%%%%%%&KNN&	0.181&	0.178&	0.208&	0.083&	0.581&	0.646&	0.286&	0.268\\
+%%%%%%&Tree	&0.357&	0.162&	0.067&	0.118&	0.422&	0.506&	0.297&	0.599\\
+%%%%%%\hline
+%%%%%%\multirow{5}{*}{Recall}								
+%%%%%%&BayesNet&0.136&	0.148&	0.205&	0.123&	0.127&	0.098&	0.203&	0.179\\
+%%%%%%&Natvie&	0.123&	0.098&	0.141&	0.096&	0.119&	0.153&	0.219&	0.245\\
+%%%%%%&SVM&	0&	0&	0&	0&	0&	0&	0	&0\\
+%%%%%%&KNN&	0.105&	0.102&	0.251&	0.123&	0.243&	0.283&	0.120&	0.097\\
+%%%%%%&Tree	&0.112	&0.033&	0.023&	0.055&	0.062	&0.092&	0.081	&0.213\\
+%%%%%%\hline
+%%%%%%\multirow{5}{*}{F-Measure}									
+%%%%%%&BayesNet&0.151&	0.172&	0.159&	0.154&	0.184&	0.165&	0.244&	0.255\\
+%%%%%%&Natvie&	0.145&	0.127&	0.110&	0.08&	0.176&	0.211&	0.257&	0.286\\
+%%%%%%&SVM&	0&	0&	0&	0&	0&	0&	0&	0\\
+%%%%%%&KNN&	0.132&	0.13&	0.201&	0.099&	0.328&	0.394&	0.158&	0.142\\
+%%%%%%&Tree&	0.167&	0.054&	0.027&	0.075&	0.105&	0.155&	0.126&	0.314\\
+%%%%%%\bottomrule[1.5pt]
+%%%%%%\end{tabular}
+%%%%%%\end{sidewaystable}
+
+在系统中的克隆创建实例中，系统jFreeChart和系统ArgoUML的规模最大，克隆创建实例分别为3366和3340个；系统Tuxguitar规模居中，为1429个；而jEdit具有最小的规模，实例个数仅为159个。因此，在克隆创建实例规模实验中，训练集规模最大的系统为jEdit，其次为系统Tuxguitar，系统jFreeChart和系统ArgoUML的训练集规模最小。
+
+对克隆创建实例进行预测，实验结果如表实验结果如表~\ref{creatingcrosssizeaverage}~所示。
+
+通过对比不同系统的跨项目预测结果，可以发现(To jEdit)的实验效果最好，其F值在80\%左右；(To ArgoUML)和(To Tuxguitar)的跨项目预测效果次之，其F值在60-70\%左右；(To jFreeChart)的预测效果最差，F值在50\%左右。根据其训练集的规模大小，可以发现跨项目预测效果和训练集规模存在正相关关系，即训练集的大小影响跨项目的预测能力。因此，在进行跨项目克隆创建预测时，建议扩大其训练集的大小，已达到较好的预测效果。但是，如何确认训练集规模的大小，仍需进一步的研究确认。
+
+通过对比每个项目的“Average”和“All”列，在4个系统中全部的F值中，“All”列具有较好的预测效果。但是，通过比较“Average”和“All”列中数据，发现两列的数据相差不大。因此，在对于某一个具体的测试系统，在跨项目预测中，由于项目之间的差异，训练集的大小并不能起到决定性作用。因此，可以考虑在保证一定规模训练数据的基础上，对训练数据进行进一步的过滤，缩小项目之间的差异，从而提升跨项目的预测效果。但是，如何过滤和优选跨项目预测的训练数据，从而缩小项目之间的差异，仍需进一步的研究确认。
+
+\begin{sidewaystable} [htbp]
+\bicaption[creatingcrosssizeaverage]{}{跨项目预测数据集选择实验}
+{Table$\!$}{The effectiveness of cross-project for training size selection}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccccccc}
+\toprule[1.5pt]
+~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+\cline{3-10}
+~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+\midrule[1pt]
+\multirow{5}{*}{平均Precision}
+&BayesNet&0.633&0.638&0.810&	0.812&0.556&0.575&0.633&0.648\\
+&Natvie&0.629&0.631&0.792&0.783&0.502&0.486&	0.606&0.615\\
+&SVM&0.657&0.594&0.783&0.783&	0.358&0.358&0.506&	0.506\\
+&KNN&0.629&0.629&0.815&0.786&	0.617&0.648&0.587&	0.581\\
+&Tree&0.686&	0.629&0.782&0.796&	0.530&0.566&0.594&0.704\\
+\hline
+\multirow{5}{*}{平均Recall}															
+&BayesNet&0.670&0.675&	0.752&0.844&	0.606&0.602&	0.674&0.698\\
+&Natvie&0.669&0.693&	0.754&0.747&	0.564&0.54&0.643&0.647\\
+&SVM&	0.809&0.771&0.885&	0.885&0.598&0.598&0.711&0.711\\
+&KNN&	0.681&0.687&0.762&0.741&0.635&0.649&0.655&	0.663\\
+&Tree	&0.764&	0.74&	0.803&0.844&0.595&	0.599&0.688&0.731\\
+\hline
+\multirow{5}{*}{平均F-Measure}					
+&BayesNet&0.645&0.654&	0.768&0.826&0.516&0.508&0.631&0.65\\
+&Natvie&0.645&0.656&	0.774&0.764	&0.488&	0.489	&0.617&0.627\\
+&SVM&	0.724&0.671&0.831&	0.831&0.448&0.448&	0.591&0.591\\
+&KNN&	0.651&0.653&0.781&	0.762&0.579	&0.609&	0.601	&0.603\\
+&Tree	&0.703&	0.667&0.789&0.818&	0.484	&0.503&	0.612	&0.683\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{sidewaystable}
+
+\BiSubsubsection{克隆代码变化时跨项目预测实验}
+{Cross-Project Clone Consistency Prediction at Changing Time}
+
+%%%%\begin{sidewaystable} [htbp]
+%%%%\bicaption[changingcrosssizefree]{}{跨项目预测数据集选择实验(free)}
+%%%%{Table$\!$}{The effectiveness of cross-project for training size selection(free)}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{cccccccccc}
+%%%%\toprule[1.5pt]
+%%%%~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+%%%%\cline{3-10}
+%%%%~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+%%%%\midrule[1pt]
+%%%%\multirow{5}{*}{Precision}
+%%%%&BayesNet&	0.706	&0.709&	0.455&	0.535&	0.462&	0.456&	0.241&	0.247\\
+%%%%&Natvie&	0.711	&0.761	&0.529	&0.544&	0.464	&0.477	&0.221	&0.228\\
+%%%%&SVM&	0	0&	0.164&	0	&0.145&	0.638&	0.086&	0.219\\
+%%%%&KNN&	0.712&	0.743&	0.502&	0.529&	0.421&	0.453&	0.257&	0.26\\
+%%%%&Tree&	0.750&	0.771&	0.465&	0.727&	0.417&	0.508&	0.317&	0.265\\
+%%%%\hline
+%%%%\multirow{5}{*}{Recall}								
+%%%%&BayesNet&	0.476&	0.365&	0.500&	0.59&	0.624&	0.644&	0.634&	0.615\\
+%%%%&Natvie&	0.421&	0.299&	0.462&	0.474&	0.580&	0.677&	0.531&	0.637\\
+%%%%&SVM	&0&	0	&0.333&	0&	0.333&	0.164&	0.333&	0.637\\
+%%%%&KNN	&0.509&	0.472	&0.496	&0.59&	0.526	&0.631	&0.600&	0.615\\
+%%%%&Tree	&0.127&	0.094&	0.368&	0.308&	0.357&	0.135&	0.425&	0.78\\
+%%%%\hline
+%%%%\multirow{5}{*}{F-Measure}							
+%%%%&BayesNet&	0.521&	0.482&	0.455&	0.561&	0.515&	0.534&	0.343&	0.352\\
+%%%%&Natvie&	0.495&	0.429&	0.487&	0.507&	0.511&	0.56&	0.307&	0.336\\
+%%%%&SVM&	0&	0&	0.219&	0&	0.202&	0.261&	0.136&	0.326\\
+%%%%&KNN&	0.567&	0.577&	0.473&	0.558&	0.451&	0.527&	0.359&	0.366\\
+%%%%&Tree&	0.199&	0.167&	0.355&	0.432&	0.279&	0.213&	0.288&	0.396	\\							
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{sidewaystable}
+%%%%
+%%%%\begin{sidewaystable} [htbp]
+%%%%\bicaption[changingcrosssizemeeting]{}{跨项目预测数据集选择实验(meeting)}
+%%%%{Table$\!$}{The effectiveness of cross-project for training size selection(meeting)}
+%%%%\vspace{0.5em}
+%%%%\centering
+%%%%\wuhao
+%%%%\begin{tabular}{cccccccccc}
+%%%%\toprule[1.5pt]
+%%%%~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+%%%%\cline{3-10}
+%%%%~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+%%%%\midrule[1pt]
+%%%%\multirow{5}{*}{Precision}
+%%%%&BayesNet&	0.365&	0.344&	0.505&	0.562&	0.620&	0.6	&0.69&	0.724\\
+%%%%&Natvie&	0.358	&0.357	&0.552	&0.549	&0.613	&0.634	&0.662	&0.67\\
+%%%%&SVM&	0.326	&0.326&	0.339&	0.509&	0.377&	0.591&	0.495&	0.629\\
+%%%%&KNN&	0.381&	0.377	&0.531&	0.556&	0.588&	0.594&	0.742&	0.748\\
+%%%%&Tree&	0.340&	0.334	&0.514&	0.571&	0.538&	0.575&	0.719&	0.767\\
+%%%%\hline
+%%%%\multirow{5}{*}{Recall}										
+%%%%&BayesNet&	0.590&	0.691&	0.465&	0.506&	0.442&	0.41&	0.304&	0.35\\
+%%%%&Natvie&	0.650&	0.806&	0.617&	0.617&	0.492&	0.43&	0.352&	0.255\\
+%%%%&SVM&	1&	1&	0.667&	1&	0.667&	0.929&	0.667&	0.213\\
+%%%%&KNN&	0.583	&0.662	&0.527	&0.494	&0.476	&0.415&	0.397&	0.395\\
+%%%%&Tree	&0.923&	0.942&	0.630&	0.889&	0.638&	0.9&	0.593&	0.251\\
+%%%%\hline
+%%%%\multirow{5}{*}{F-Measure}									
+%%%%&BayesNet&	0.430&0.459&	0.457&	0.532&	0.490&	0.487&	0.397&	0.472\\
+%%%%&Natvie&	0.452&	0.494&	0.578&	0.581&	0.538&	0.513&	0.442&	0.369\\
+%%%%&SVM&	0.491&	0.491&	0.450&	0.675&	0.481&	0.722&	0.569&	0.318\\
+%%%%&KNN&	0.445&	0.48&	0.506&	0.523&	0.498&	0.488&	0.513&	0.517\\
+%%%%&Tree&	0.496&	0.493&	0.524&	0.696&	0.505&	0.702&	0.573&	0.378\\
+%%%%\bottomrule[1.5pt]
+%%%%\end{tabular}
+%%%%\end{sidewaystable}
+
+在系统中的克隆变化实例中，系统jFreeChart规模最大，克隆变化实例为1040个；系统ArgoUML和系统Tuxguitar的规模居中，分别为427和3549个；而jEdit具有最小的规模，实例个数仅为159个。因此，在克隆变化实例规模实验中，训练集规模最大的系统为jEdit，其次为系统ArgoUML和系统Tuxguitar，系统jFreeChart的训练集规模最小。
+
+对克隆变化实例进行预测，实验结果如表实验结果表~\ref{changingcrosssizeaverage}~所示。
+
+根据数据规模的统计分析，克隆创建实例的数量要远多于克隆变化实例的数量，即创建实例具有上千的规模(633-3366个)，变化实例仅有数百的规模(159-1040)。结合对两种实例的跨项目预测结果，发现前者的跨项目预测效果要优于后者。因此，尽管在不同的时刻进行预测，练数据的规模同样会影响到跨项目的预测效果。建议在可能的情况下，增加训练集的数据。
+
+通过对比不同系统的跨项目预测结果，可以发现(To jEdit)的实验效果最好，其F值除SVM外介于54\%-56.7\%之间；(To jFreeChart)的预测效果次之，F值在48.9\%-53.3\%之间；而(To ArgoUML)和(To Tuxguitar)预测效果最差，大部分的F值低于50\%。根据其训练集的规模大小，可以发现跨项目预测效果和训练集规模也存在一定的正相关关系。但是，其相关性不如克隆创建实例。究其原因可能是因为：克隆变化实的训练集规模仅仅在几百之间，和创建实例的数量相差较大。但是，如何确认训练集具体规模的大小，仍需进一步的研究确认。
+
+通过对比每个项目的“Average”和“All”列，在4个系统中全部的F值中，“All”列具有较好的预测效果。具体地，对系统(To jEdit)和(To jFreeChart)，“All”列的预测效果均优于“Average”列。但是，通过比较“Average”和“All”列中数据，发现两列的数据相差不大。因此，在对于某一个具体的测试系统，在跨项目预测中，由于项目之间的差异，训练集的大小并不能起到决定性作用。因此，可以考虑在保证一定规模训练数据的基础上，对训练数据进行进一步的过滤，缩小项目之间的差异，从而提升跨项目的预测效果。但是，如何过滤和优选跨项目预测的训练数据，从而缩小项目之间的差异，仍需进一步的研究确认。
+
+
+\begin{sidewaystable} [htbp]
+\bicaption[changingcrosssizeaverage]{}{跨项目预测数据集选择实验}
+{Table$\!$}{The effectiveness of cross-project for training size selection}
+\vspace{0.5em}
+\centering
+\wuhao
+\begin{tabular}{cccccccccc}
+\toprule[1.5pt]
+~\multirow{2}{*}{度量}&\multirow{2}{*}{方法}&\multicolumn{2}{c}{To ArgoUML}&\multicolumn{2}{c}{To jEdit}&\multicolumn{2}{c}{To jFreeChart}&\multicolumn{2}{c}{To  Tuxguitar}\\
+\cline{3-10}
+~&~&{Average}&{All}&{Average}&{All}&{Average}&{All}&{Average}&{All}\\
+\midrule[1pt]
+\multirow{5}{*}{平均Precision}
+&BayesNet&	0.595&	0.591&0.480&	0.549&	0.552&	0.537&	0.575&	0.602\\
+&Natvie&	0.596&	0.629	&0.541&	0.547&	0.548&	0.566&	0.548&	0.556\\
+&SVM&	0.106&	0.106&	0.254&	0.26&	0.276	&0.611&	0.390&	0.524\\
+&KNN&	0.605&	0.624&	0.517&	0.542&	0.515&	0.533&	0.617&	0.623\\
+&Tree	&0.616&	0.629&	0.490&	0.648&	0.485	&0.546	&0.616	&0.638\\
+\hline
+\multirow{5}{*}{平均Recall}								
+&BayesNet&	0.513&	0.471&	0.482&	0.547&	0.522	&0.512&	0.389	&0.418\\
+&Natvie&	0.496&	0.464&	0.541	&0.547&0.531	&0.538&0.398	&0.353\\
+&SVM&	0.343&	0.326&	0.491&	0.509&	0.503&	0.596&	0.581&	0.322\\
+&KNN&	0.533&	0.534&	0.512	&0.541&	0.498&	0.509&	0.449&	0.452\\
+&Tree	&0.387	0.37&	0.501	0.604&	0.516&	0.567&	0.550&	0.387\\
+\hline
+\multirow{5}{*}{平均F-Measure}								
+&BayesNet&	0.491	&0.474&	0.456&	0.546	&0.501&	0.507&	0.383	&0.441\\
+&Natvie&	0.481&	0.45&	0.533&	0.545&	0.526&	0.533&	0.407&	0.361\\
+&SVM&	0.160	&0.16	&0.337	&0.344	&0.360	&0.522	&0.457	&0.32\\
+&KNN&	0.453&	0.546	&0.446&	0.54&	0.459	&0.505	&0.474&	0.478\\
+&Tree&	0.296	&0.273	&0.441&	0.567	&0.407&	0.489	&0.500&	0.383\\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{sidewaystable}
+
+\BiSubsubsection{讨论}
+{Discussion}
+
+在跨项目预测中，训练集的大小会影响到预测的效果，大的训练集可以达到较强的预测能力。但是，如何确定训练集大小仍需进一步的研究确定。
+
+但针对某特定的系统来讲，训练集的大小并不能起到决定性的作用，原因可能在于项目自身的差距较大。因此，如何对训练集项目的数据进行优选和过滤，可能会提高跨项目的预测能力，但是如何进行优选跨项目预测的训练数据，从而降低训练系统和测试系统之间的差异，仍需进一步的研究确定。
 
 %%%\BiSubsection{项目内和跨项目的对比}
 %%%{Clone Consistency Prediction Experiment}
-%%%
+
+%%%%%%%%可以参考贝叶斯网络的对比实验
+%%%%%或者直接使用within 5%和90%进行实验
 %%%(1)创建时
 %%%
 %%%(2)修改时
