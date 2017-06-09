@@ -8,34 +8,32 @@
 
 由于日益增长的软件开发的需求，在软件开发过程中复用既有代码，已经成为了一种常见的开发手段。但会向系统中引入了大量克隆代码。而克隆代码在随软件系统演化的过程中，可能会被程序人员修改而引发一致性维护问题。因此，本文第三章和第四章分别在克隆代码创建时和变化时，预测克隆代码的一致性维护需求。但是，上述方法仅可以适用于具有较多克隆创建和变化实例的系统中，因为所使用的机器学习模型需要完全的训练。因此，在软件开发初期，软件系统未经过若干版本的演化，使得所具有的训练数据较少，进而无法训练机器学习模型进行预测。因此，本章在第三章和第四章研究的基础上，对跨项目的克隆代码一致性维护需求预测问题进行实证研究。跨项目的克隆代码的一致性预测，可以在软件开发初期，帮助程序开发人员避免克隆代码导致的额外维护代价和一致性缺陷，从而帮助提高软件质量和可维护性。
 
-鉴于此，本章针对软件开发初期项目缺乏相应的数据的问题，对跨项目的克隆代码的一致性预测问题进行了实证研究。首先，统一克隆代码创建时、变化时的一致性维护需求定义。然后，通过构建软件系统的克隆家系，收集并表示系统中克隆实例（克隆创建实例和克隆变化实例）。然后，将不同的软件系统划分为测试集和训练集，使用机器学习方法在训练系统上训练机器学习模型，在测试系统上验证跨项目模型的预测能力。最后，结合软件开发过程，设计并实现了克隆代码一致性维护需求预测插件，并可以集成开发环境eclipse中，预测克隆代码一致性需求。\textcolor{red}{在四个开源软件系统上进行了实证研究，实验结果表明本文所提取的属性值可以适用于不同的机器学习方法上，且支持向量机方法更适合于克隆代码的一致性维护需求预测中。}本章基于eclipse所实现的插件，可以帮助开发人员在软件开发过程中预测克隆代码的一致性，降低克隆代码导致的额外的维护代价，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
-
+鉴于此，本章针对软件开发初期项目缺乏训练数据的问题，对跨项目的克隆代码的一致性预测问题进行了实证研究。首先，统一克隆代码创建时、变化时的一致性维护需求定义。然后，通过构建软件系统的克隆家系，收集并表示系统中克隆实例（克隆创建实例和克隆变化实例）。然后，将不同的软件系统划分为测试集和训练集，使用机器学习方法在训练系统上训练机器学习模型，在测试系统上验证跨项目模型的预测能力。最后，结合软件开发过程，设计并实现了克隆代码一致性维护需求预测插件，并可以集成开发环境eclipse中，预测克隆代码一致性需求。在四个开源软件系统上进行了跨项目实证研究，实验结果表明：跨项目的克隆一致性预测，可以应用于软件开发初期时克隆一致性预测中；同时，除SVM外四种机器学习方法的预测能力相差不大；跨项目预测效果依赖于具体的系统以及训练数据的规模。基于eclipse实现的一致性预测插件，在软件开发过程中，可以帮助降低克隆代码导致的额外的维护代价，避免克隆变化导致的一致性缺陷，从而提高软件质量和可维护性。
 
 \BiSection{跨项目克隆代码一致性维护需求}
 {Clone Consistency-Requirement}
 
-\BiSubsection{本章研究问题}
-{Research Problem in this Chapter}
+\BiSubsection{研究问题}
+{The Research Problem in this Chapter}
 
-\textcolor{red}{在软件开发过程中，通过复制粘贴操作复用既有代码已经成为一种常见的软件开发手段，但是也会向软件系统中引入大量的克隆代码。这些新创建的克隆代码以及系统已经存在的克隆代码并不是静止不变的，会随着软件系统演化。在演化过程中，克隆片段片段可能会被软件开发员修改而发生变化，并可能进一步引发克隆组的一致性变化。克隆代码的一致性变化问题会影响软件质量和可维护性，原因在于：程序开发人员需要对发生变化的克隆进行一致性维护，会导致额外的一致性维护代价。而遗忘克隆的一致性变化，更会会导致克隆不一致缺陷，从而进一步增加软件的维护代价。}
+在软件开发过程中，复用既有代码已经已经成了一种常见的软件开发手段。这可以在软件开发初期，帮助快速有效的进行软件开发。但是，也会向软件系统中引入大量的克隆代码。引入系统中的克隆代码随着系统进行演化，在演化过程中可能会被软件开发员修改而导致克隆代码的一致性变化。克隆一致性变化问题是影响软件质量和可维护性的重要原因：一致性变化会导致额外的一致性维护代价，而遗忘一致性变化，更会导致克隆不一致缺陷。
 
-为了解决此问题，本文的第三章和第四章分别在克隆代码创建时和变化时对克隆代码的一致性维护需求进行了预测，并取得了不错的预测效果。但是，上述方法中仅仅仅仅考虑了系统中具有充分的数据对机器学习模型进行训练，未考虑训练数据不足的情况。即在软件开发的初始阶段，由于软件系统刚刚开始演化，系统中并没有充足的克隆创建实例和克隆变化实例，因此，使用这些不充足的训练数据会导致模型训练不够完全，从而无法在软件开发的初始阶段对其进行克隆代码的一致性维护需求预测问题。因此，这启发了本章对跨项目的克隆代码的一致性维护需求的研究。
+为了解决该问题，本文的第三章和第四章分别在克隆代码创建时和变化时，对克隆代码的一致性维护需求进行了预测，并取得了不错的预测效果。但是，上述方法中仅仅适用于软件经过若干版本演化后的情况。原因在于：上述方法需要充分的训练数据对机器学习模型进行训练。然而，在软件开发的初始阶段，系统中并没有充足的克隆创建实例和克隆变化实例。因此会导致模型训练不够完全，从而无法在软件开发初期预测克隆代码的一致性维护需求。因此，这启发了本章对跨项目的克隆代码的一致性维护需求的研究。
 
-为了更好地帮助软件开发人员维护克隆代码，并解决软件开发初期训练数据不足的问题，本章将参考缺陷预测中跨项目预测的方法，对克隆代码的一致性维护需求进行跨项目的预测研究。具体地，本章地研究问题如下：
+在软件开发的初始阶段，为更好地帮助软件开发人员维护克隆代码，解决初期项目自身训练数据不足的问题，对克隆代码的一致性维护需求进行跨项目的预测研究。
+因此，本章的研究问题为： 
 
-Research Problem： 能否使用跨项目的数据，去预测克隆代码的一致性维护需求预测，且软件开发人员应如何结合软件开发过程中执行克隆一致性需求预测？\\
+在软件开发早期阶段，能否使用跨项目的数据训练机器学习模型，并应用于其它系统的克隆代码的一致性维护需求预测中；且如何结合软件开发过程，执行克隆一致性需求预测？
 
-为了解决本章的研究问题，将从不同的角度研究跨项目的克隆代码的一致性维护需求预测问题。在预测克隆一致性的过程中充分考虑并结合软件开发过程，从而帮助开发人员实际开发环境中执行克隆代码一致性预测，具体地，本文章研究问题可以细分为以下三个子问题，如下所示：
+本章从不同的角度研究跨项目的克隆代码的一致性维护需求预测问题，将研究问题分为以下三个子问题：
 
-{\bf RQ1：}
-在软件开发初期，在项目自身训练数据不充分的情况下，能否使用其它系统的数据进行克隆一致性需求预测？
+RQ1：在软件开发初期，在项目自身训练数据不充分的情况下，能否使用其它系统的数据进行克隆一致性需求预测？
 
-{\bf RQ2：}
-在进行跨项目的克隆一致性维护需求预测时，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
+ RQ2：在进行跨项目的克隆一致性维护需求预测时，不同的机器学习方法预测效果是否一致，哪一种机器学习的方法能够取得最好的结果？
 
-{\bf RQ3：}
-在进行跨项目的克隆一致性维护需求预测时，训练数据的规模是否对预测效果产生决定性影响？
-%%在实际开发过程中，程序开发人员应该如何结合软件开发过程选择合适的机器学习模型和预测时间，并对克隆代码进行一致性维护需求进行预测，从而都够达到最佳的预测效果？
+RQ3：在进行跨项目的克隆一致性维护需求预测时，训练数据的规模是否对预测效果产生决定性影响？
+
+本章将同在克隆代码创建时和变化时，对跨项目的克隆一致性维护需求进行预测。因此，将这两种不同时刻的一致性维护需求，统一为克隆一致性维护需求。下节将给出统一的定义描述。
 
 \BiSubsection{克隆一致性维护需求定义}
 {The Definitions for Clone Consistency-Requirement}
@@ -298,14 +296,22 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 
 从表~\ref{instancesta}~中可以观察到两个现象。第一，软件系统中存在大量的克隆创建实例（三个项目中有上千的例子），同时大部分的克隆创建实例在其演化过程中不满足一致性维护要求(比例从59.8\%到88.47\%)。这表明克隆创建操作（即复制和粘贴操作）已经成为开发人员的常用技术，并且它们中的大多数在演化过程中不会在将来引入任何一致的变化，建议开发人员可以使用复制和粘贴操作节省开发时间。第二，在克隆变化实例中，三个系统中只有数百个变化实例，仅有jFreeChart中有1040变化实例。这表明相对于克隆代码在演化过程中不会频繁地发生变化，但也有相当数量的变化。值得注意的，这些变化中需要一致性维护的变化实例比例占相当大的一部分，其比例为33\%到74 \%。克隆代码的一致性变化更容易引发一致性变化，从而导致增加克隆代码一致性缺陷的风险，因此开发人员在软件开发过程中应该更加注意软件开发过程中的克隆变化。
 
-\textcolor{red}{为解决本章跨项目克隆代码一致性预测问题，本章提出了一个研究问题，即xxx。并将其划分为三个子问题，因此本节实验也可以划分三个部分，分别解决上述问题。(1)跨项目验证实验：使用贝叶斯网络预测跨项目的克隆代码一致性，探讨跨项目预测的可能性。(2)机器学习选择实验：使用不同的机器学习模型进行跨项目克隆一致性预测，帮助软件开发人员选择最佳的机器学习模型。(3)数据集大小实验：使用不同的数据集训练机器学习模型，并在同一系统上测试跨项目预测模型的预测能力。}
+为解决本章提出的跨项目克隆代码一致性预测问题，本节将从三个不同的角度进行实验分析，并回答三个子问题：
+\begin{enumerate}
+\item
+跨项目验证实验：使用贝叶斯网络预测跨项目的克隆代码一致性，探讨跨项目克隆一致性预测的可能性。
+\item
+机器学习方法选择实验：使用不同的机器学习模型进行跨项目克隆一致性预测，确认不同机器学习方法的预测能力。
+\item
+数据集大小实验：使用不同的数据集训练机器学习模型、在同一系统上测试跨项目预测模型的预测能力，确定训练集规模对跨项目能力的影响。
+\end{enumerate}
 
 \BiSubsection{贝叶斯网络跨项目一致性预测实验}
 {Experiments for Clone Cross-Project Consistency with Bayesian Network}
 
 %%%%这是使用的多对一，没使用1对1，因为1对1的实验次数将太大
 
-本节将回答本章提出的第一个研究问题：
+%本节将回答本章提出的第一个研究问题：
 
 在贝叶斯网络的实验中，使用其中三个项目的克隆实例训练贝叶斯网络，并在第四个实验系统上进行一致性预测，验证跨项目预测的能力。在克隆代码创建时和变化时两个不同的时刻进行预测。采用和第三章和第四章相同的评价指标，评估跨项目预测的能力。对需要一致性维护的克隆实例，使用警告率(Warning Rate)、精确率(Precision Rate)和召回率(Recall Rate)进行评估；对不需要一致性维护的克隆实例，使用推荐率(Recommendation Rate )、精确率(Precision Rate)和召回率(Recall Rate)进行评估，详见本文第~\ref{ref-creatingbayesianmetrics}~节和第~\ref{ref-changingbayesianmetrics}~节。实验同在两个时刻进行了预测，即克隆代码创建时和克隆代码变化时。
 
@@ -545,7 +551,7 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \BiSubsubsection{讨论}
 {Discussion}
 
-综上所述，本节实验可以完成对子问题1的回答：
+综上所述，可以回答第一个研究子问题：
 
 首先，于项目之间的差异性，测试集和训练集也具有较大差异，跨项目预测能力达不到项目内预测的能力。因此，建议开发人员优先选择项目内的预测方式。
 
@@ -553,10 +559,10 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 
 最后，在进行选择跨项目预测时，软件开发人员可以根据自身需求，选择具有相似分布的训练系统，以达到较好的预测效果。如何选择相似的系统，将是本文未来的研究工作。
 
-\BiSubsection{其它机器学习的跨项目克隆一致性需求预测}
-{Clone Consistency-Requirement for Cross-Project}
+\BiSubsection{其它机器学习方法的跨项目克隆一致性需求预测}
+{Clone Consistency-Requirement for Cross-Project with 5 methods}
 
-本节将回答本章提出的第二个研究问题：
+节将回答本章提出的第二个研究问题。
 
 因此，不仅在贝叶斯网络上进行了实验，还在其它的机器学习方法上进行了跨项目的预测。为了评估本节的实验效果，选择同本文第三章和第四章相同的指标，即采用平均精确率(Average Precision)、平均召回率(Average Recall)和平均F值(Average F-measure)进行评价(见本文第~\ref{ref-creatingmethodmetrics}~节和第~\ref{ref-changingmethodmetrics}~节)。实验同样也在两个时刻进行了预测，即克隆代码创建时和克隆代码变化时。
 
@@ -815,14 +821,12 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \BiSubsubsection{讨论}
 {Discussion}
 
-综上所述，根据本节的预测结果，我们可以给出第二个研究问题的答案。
-
-首先，在进行跨项目预测时，不建议选择SVM模型进行预测。然后，其它的机器学习方法的预测能力不具有显著性差异，可以根据不同的系统选取合适的机器学习方法，最后，在进行跨项目预测时，建议根据系统的特征选择所预测的类别，即选择数量较多的克隆实例类别：预测不需要一致性维护的克隆创建实例和需要一致性维护的克隆变化实例。
+综上所述，可以回答第二个研究子问题：首先，在进行跨项目预测时，不建议选择SVM模型进行预测。然后，其它的机器学习方法的预测能力不具有显著性差异，可以根据不同的系统选取合适的机器学习方法，最后，在进行跨项目预测时，建议根据系统的特征选择所预测的类别，即选择数量较多的克隆实例类别：预测不需要一致性维护的克隆创建实例和需要一致性维护的克隆变化实例。
 
 \BiSubsection{跨项目预测训练集规模实验}
 {Cross-Project Prediction for Data Size}
 
-本节将回答本章提出的第三个研究问题：
+本节将回答本章提出的第三个研究问题。
 
 在进行克隆代码一致性预测时，训练集的规模会影响到预测的效果。为了探索数据集规模对预测效果的影响，本节实验使用不同的训练集训练模型，并预测克隆代码的一致性。
 
@@ -1074,6 +1078,8 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 \BiSubsubsection{讨论}
 {Discussion}
 
+综上所述，可以回答第三个研究子问题：
+
 在跨项目预测中，训练集的大小会影响到预测的效果，大的训练集可以达到较强的预测能力。但是，如何确定训练集大小仍需进一步的研究确定。
 
 但针对某特定的系统来讲，训练集的大小并不能起到决定性的作用，原因可能在于项目自身的差距较大。因此，如何对训练集项目的数据进行优选和过滤，可能会提高跨项目的预测能力，但是如何进行优选跨项目预测的训练数据，从而降低训练系统和测试系统之间的差异，仍需进一步的研究确定。
@@ -1087,54 +1093,35 @@ Research Problem： 能否使用跨项目的数据，去预测克隆代码的一
 %%%
 %%%(2)修改时
 
-\BiSubsection{软件开发过程中的克隆代码一致性预测}
-{Predicting Clone Consistency during Development Time}
-
-在这个讨论中，我们比较克隆和变化预测来解决最后一个研究问题。
-子问题3：
-他们应该采用哪种机器学习技术作为他们的偏好？而且，开发人员如何执行这些克隆预测来实现实践中的最佳效果？
-
-%{\bf RQ3:}Which technique of machine learning should they employ as their preference? And, how the developers perform these clone predictions to achieve the preferably effectiveness in practice? 
-
-根本节将据上面两节的实验结果，并结合软件开发过程，帮助程序开发人员在实践中运用克隆代码一致性维护需求预测，从而回答本章提出的上面第三个研究问题。
-
-从机器学习方法的角度上来看，本文使用机器学习方法均取得了不错的预测能力，预测结果具有很大的相似性，表明本文所选择的属性可以很好的表示克隆代码创建实例和变化实例，并不依赖于某个具体的机器学习方法。因此，程序开发人员可以根据自己的喜好或者情况选择合适的机器学习方法。当程序开发人员无法决策使用何种机器学习方法，本文强烈建议使用SVM机器学习方法。因为上面的两个小节的实验结果表明，SVM在克隆创建时和变化时均取得了相对较好的预测能力。除此之外，本文还建议开发人员在克隆创建的时候选择使用于KNN和Tree模型，以及在克隆变化时使用BayesNet和Native Bayes方法，从而可以保证这些方法具有相同或更好的预测能力。对于属性集的选择，本文还建议开发人员应该选择并使用本文所提取的全部属性集，因为这些属性值在预测中起到了积极的作用。除此之外，本文还建议如果开发者能够保证获得有效的结果，开发人员可以探索更多属性和机器学习方法构建自己的预测。
-
-%According to the last two experiments, we can provide our recommendations to help developers in conducting clone consistency maintenance.  From the prespective of selecting right predictive tool, we strongly recommend using {\em SVM\/} machine learning method because of its {\em respectably\/} effectiveness prediction results for these four experimental projects both at creating and changing time. In addition, we also suggest that developer choose the {\em KNN\/} and {\em Tree\/} model for creating instances, and {\em BayesNet and Native Bayes\/} for changing instance when they can guarantee these methods have the same or better prediction ability. From the perspective of selecting attribute sets to enable prediction, we recommend that developers should select {\em all\/} the attribute sets to perform their prediction as these attribute sets demonstrate their positive contribution in prediction.
-
-通过对比克隆创建实例和克隆变化时的预测结果（表~\ref{creatingallavg}~和~表\ref{changingallavg}），发现预测效果的好坏会依赖于具体的系统。具体来说，克隆创建实例的预测效果要好于克隆变化实例的预测效果，而在这两个预测中，系统jEdit就几乎都具有最差的预测结果。原因在于jEdit的克隆实例的规模太小，不能对其自身的预测模型进行较好的训练，从而导致预测效果最差。因此，本文建议开发人员在进行克隆创建和变化实例时，需要在软件演化一定版本后收集到足够的训练数据后再进行训练和预测。在软件开发初始阶段，由于系统中缺少训练数据，可以使用跨项目预测的方法解决该问题，但需要对跨项目预测做进一步的研究，从而达到较好的预测效果。
-
-%%Comparing Tables~\ref{creatingall}~and~\ref{changingall}, we can find that these two predictions have different effectiveness, which are impacted by the specific project's {\em size\/}. Specifically, the effectiveness for clone creating prediction is better than changing prediction, and  in changing prediction project {\em jEdit\/} has almost worst results.We believe that prediction effectiveness is dependent of the {\em scale\/} of the data set from its software's repository, meaning that this clone consistency prediction model needs more training data, specially for clone changing prediction. We therefore recommend that the developer should perform clone consistency prediction when they collect enough clone instances after versions are evolved. 
-%Supposing that there do not have these, the other technique from the defect prediction may enter the developers' mind that using the cross-project prediction.
-%However, the more observation on this cross-project are need before its performing.
-
-为了结合软件开发过程，本文还从软件开发的不同角度给出相关的建议，让开发人员在实践中应用克隆代码一致性维护需求时实现最佳的预测效果。
-%From software development perspective, we recommend that developers aim to achieve preferably effectiveness in practice. 
-
-在软件开发的初始阶段，主要任务是快速的进行软件开发，并同时向系统中添加新的功能。这种特点可能会促使程序开发人员大量的进行复制粘贴操作，复用既有的代码进行快速开发。因此，本文建议开发人员在软件开发的初始阶段使用克隆代码创建时的一致性维护预测方法。进一步地，由于要向软件中引入新的功能，因此，建议使用该模型预测克隆代码的一致性维护自由的克隆，仅仅避免那些可能会引发一致性变化的克隆代码，进而快速的开发软件。但是，由于在最初始的阶段，软件系统可能仅仅具有几个版本，因此系统中的克隆创建实例不够多，导致预测数据不足的数据不足，无法完全的训练预测模型。为了解决这个问题，可以使用跨项目预测方法用于克隆代码创建时的预测，见本文第三章中的跨项目预测部分。
-
-%At the start stage of development, the main task is that developing the software fatly and adding the new function to the software, that may lead to perform creating operation frequently. We therefore recommend developers employ this approach to predict creating consistency. However, if the software may evolve only small versions, this can lead to insufficient data and thus affects its predictive well. In this situation, the cross-project prediction can be construct for code creating prediction, which is utilized in work \cite{wang2014predicting}.
-
-在开发的中间阶段，主要任务是添加新功能并修复包括克隆一致性缺陷在内的暴露缺陷。因此，我们建议开发人员应该同时考虑两者来预测克隆创建实例和克隆变化实例。在大多数开发任务的软件演进之后，可能有足够的克隆克隆实例的培训数据和用于更改实例的训练数据不足。这些足够的数据可以训练克隆预测器，以帮助开发人员关心克隆一致性。对于变化的预测，开发人员应该在work \cite{zhang2016predicting}中描述的跨项目预测中建立和训练模型。
-
-%At the middle stage of development, the main task is that adding the new function and fixing the expose defects including the clone consistency defects. Therefore, we recommend that the developer should consider performing both the predictions for clone-creating instance and clone-changing instances. After these evolutions of software with more task completed during development, there may have sufficient training data for clone creating instance and insufficient training data for clone-changing instances. The issue with insufficient data is that our system {\em cannot\/} train the clone-creating predictor sufficiently well, that troubling developer for these creating consistency.For thus this situation of changing prediction, the developer should build and train the model with cross-project prediction described in previous work \cite{zhang2016predicting}
-
-在开发的最后阶段，主要任务是维护可能导致大量克隆更改一致性的软件。因此，我们建议开发人员对克隆更改实例执行克隆一致性预测。
-由于软件的不断发展，其项目克隆更改实例的数据将足以对预测器进行良好的训练。
-%At the last stage of development, the main task is to maintain the software so that there may be plenty of clone changes consistency instances. At that stage, we thus recommend developers to perform the clone consistency prediction for clone-changing instances. In the case that software undergoing many generations of evolution, the data for clone changing instance of this project itself will have sufficient data for training the predictor well.However, our approach can only help predict the need for change consistency-requirement, {\em not} to help developers to maintain the clone change consistency.
-
-但是，这种方法只能预测变化的一致性要求，不能帮助开发人员维护克隆更改的一致性。为了实现克隆一致性的目标，我们还建议开发人员采取措施，通过一致性维护和管理技术（如\cite{cheng2016rule}和\cite{nguyen2012clone}）执行克隆一致的更改。
-
-%Finally, To accomplish the objective of ensuring clone consistency, we recommend that developers should take in other measures to perform such clone consistent changes, employ the techniques of consistency maintenance and management, such as \cite{cheng2016rule} and \cite{nguyen2012clone}.
+%%%%\BiSubsection{软件开发过程中的克隆代码一致性预测}
+%%%%{Predicting Clone Consistency during Development Time}
+%%%%
+%%%%在这个讨论中，我们比较克隆和变化预测来解决最后一个研究问题。
+%%%%子问题3：
+%%%%他们应该采用哪种机器学习技术作为他们的偏好？而且，开发人员如何执行这些克隆预测来实现实践中的最佳效果？
+%%%%
+%%%%
+%%%%根本节将据上面两节的实验结果，并结合软件开发过程，帮助程序开发人员在实践中运用克隆代码一致性维护需求预测，从而回答本章提出的上面第三个研究问题。
+%%%%
+%%%%从机器学习方法的角度上来看，本文使用机器学习方法均取得了不错的预测能力，预测结果具有很大的相似性，表明本文所选择的属性可以很好的表示克隆代码创建实例和变化实例，并不依赖于某个具体的机器学习方法。因此，程序开发人员可以根据自己的喜好或者情况选择合适的机器学习方法。当程序开发人员无法决策使用何种机器学习方法，本文强烈建议使用SVM机器学习方法。因为上面的两个小节的实验结果表明，SVM在克隆创建时和变化时均取得了相对较好的预测能力。除此之外，本文还建议开发人员在克隆创建的时候选择使用于KNN和Tree模型，以及在克隆变化时使用BayesNet和Native Bayes方法，从而可以保证这些方法具有相同或更好的预测能力。对于属性集的选择，本文还建议开发人员应该选择并使用本文所提取的全部属性集，因为这些属性值在预测中起到了积极的作用。除此之外，本文还建议如果开发者能够保证获得有效的结果，开发人员可以探索更多属性和机器学习方法构建自己的预测。
+%%%%
+%%%%通过对比克隆创建实例和克隆变化时的预测结果（表~\ref{creatingallavg}~和~表\ref{changingallavg}），发现预测效果的好坏会依赖于具体的系统。具体来说，克隆创建实例的预测效果要好于克隆变化实例的预测效果，而在这两个预测中，系统jEdit就几乎都具有最差的预测结果。原因在于jEdit的克隆实例的规模太小，不能对其自身的预测模型进行较好的训练，从而导致预测效果最差。因此，本文建议开发人员在进行克隆创建和变化实例时，需要在软件演化一定版本后收集到足够的训练数据后再进行训练和预测。在软件开发初始阶段，由于系统中缺少训练数据，可以使用跨项目预测的方法解决该问题，但需要对跨项目预测做进一步的研究，从而达到较好的预测效果。
+%%%%
+%%%%为了结合软件开发过程，本文还从软件开发的不同角度给出相关的建议，让开发人员在实践中应用克隆代码一致性维护需求时实现最佳的预测效果。
+%%%%
+%%%%
+%%%%在软件开发的初始阶段，主要任务是快速的进行软件开发，并同时向系统中添加新的功能。这种特点可能会促使程序开发人员大量的进行复制粘贴操作，复用既有的代码进行快速开发。因此，本文建议开发人员在软件开发的初始阶段使用克隆代码创建时的一致性维护预测方法。进一步地，由于要向软件中引入新的功能，因此，建议使用该模型预测克隆代码的一致性维护自由的克隆，仅仅避免那些可能会引发一致性变化的克隆代码，进而快速的开发软件。但是，由于在最初始的阶段，软件系统可能仅仅具有几个版本，因此系统中的克隆创建实例不够多，导致预测数据不足的数据不足，无法完全的训练预测模型。为了解决这个问题，可以使用跨项目预测方法用于克隆代码创建时的预测，见本文第三章中的跨项目预测部分。
+%%%%
+%%%%在开发的中间阶段，主要任务是添加新功能并修复包括克隆一致性缺陷在内的暴露缺陷。因此，我们建议开发人员应该同时考虑两者来预测克隆创建实例和克隆变化实例。在大多数开发任务的软件演进之后，可能有足够的克隆克隆实例的培训数据和用于更改实例的训练数据不足。这些足够的数据可以训练克隆预测器，以帮助开发人员关心克隆一致性。对于变化的预测，开发人员应该在work \cite{zhang2016predicting}中描述的跨项目预测中建立和训练模型。
+%%%%
+%%%%在开发的最后阶段，主要任务是维护可能导致大量克隆更改一致性的软件。因此，我们建议开发人员对克隆更改实例执行克隆一致性预测。
+%%%%由于软件的不断发展，其项目克隆更改实例的数据将足以对预测器进行良好的训练。
+%%%%
+%%%%但是，这种方法只能预测变化的一致性要求，不能帮助开发人员维护克隆更改的一致性。为了实现克隆一致性的目标，我们还建议开发人员采取措施，通过一致性维护和管理技术（如\cite{cheng2016rule}和\cite{nguyen2012clone}）执行克隆一致的更改。
 
 \BiSection{结论}
 {Summary of this Chapter}
 
-在软件开发过程中，克隆创建实例（复制粘贴操作）和克隆变化实例（克隆修改操作）可能会导致克隆代码在演化过程中的一致性变化，从而可能增加软件维护的代价。因此，本章统一了克隆创建和变化时的一致性维护需求定义，并结合软件开发过程对克隆代码一致性维护需求预测进行了实证研究。为帮助程序开发人员在实际应用中预测克隆代码的一致性维护，本章结合软件开发过程提出了一个研究问题，并使用五种不同的机器学习方法预测克隆代码的一致性维护需求；同时设计和开发了了一个克隆代码一致性预测插件，可以帮助程序开发人员在实际的开发过程中预测克隆代码的一致性，切实的提高软件的可维护性和软件质量。 %对于每个克隆实例，我们提取不同的属性集以表示克隆创建和更改实例。具体来说，对于创建实例，我们提取了用于粘贴代码的复制代码和上下文属性的代码属性的两个变体属性集，并引入了一组{\ em演化属性}来捕获创建实例的演化历史的特征。因此，我们的属性{\ em从个人，环境和进化的角度提供关于代码更改的整体视图}。我们使用这些数据为使用WEKA实现的每个存储库构建一个贝叶斯网络
-在四个开源系统上分别在克隆代码创建时和变化时进行了实验分组，从三个不同的角度回答了本文所提出的研究问题。实验结果表明使用不同的机器学习方法所构建的预测模型在克隆一致性维护需求问题上具有相一致的预测效果，可以以高效地预测克隆创建实例一致性且有效地预测克隆变化的一致性问题。尽管如此，本文建议开发人员采用SVM方法进行预测，因为SVM在两种时刻均具最佳的预测能力。同时，为帮助软件开发人员在实际中对克隆一致性进行预测，本文结合软件开发过程在不同的软件开发阶段给出了不同的克隆一致性预测的建议。最后，本文结合实际的软件开发过程，基于eclipse实现了一个克隆代码一致性维护插件，可以在软件开发过程中帮助程序开发人员预测一致性，帮助降低软件维护代价，提高可维护性。
-
+在软件开发过程中，克隆代码的一致性变化会增加软件维护的代价。然而，软件开发初期由于克隆实例较少，无法训练机器学习模型进行一致性预测。本章在第三章和第四章研究的基础上，统一了克隆创建和变化时的一致性维护需求定义，并结合软件开发过程，对跨项目的克隆代码一致性维护需求预测进行了实证研究。在四个开源系统上进行了跨项目实验，从三个不同的角度回答了本章所提出的研究问题。跨项目的预测实验结果表明：在软件开发初期阶段，可以使用跨项目的训练数据训练机器学习模型，并应用于其它系统的克隆一致性需求预测中。同时，在选择合适的机器学习方法上，不推荐使用SVM模型进行跨项目预测。训练集规模对预测能力有积极的影响，但无法缩小项目之间的插件。最后，本章设计和开发了一个克隆代码一致性预测插件，可以帮助程序开发人员在实际的开发过程中预测克隆代码的一致性，帮助提高软件的可维护性和软件质量。
 
 %为了跟进，我们首先打算建立一个通用的跨项目预测器，以增强没有足够数据的新的软件存储库的能力来训练其模型。通过这个跨项目预测器，开发人员可以忽略开发人员的培训步骤，这可以真正节省克隆一致性预测的时间。此外，我们打算通过为变化预测引入新的属性或属性选择来增强预测变量的能力。
-%对于克隆更改实例，我们还打算在开发过程中构建一种新技术来支持克隆一致的更改以保存。此外，我们打算将此模型构建和预测过程集成到IDE中，如Eclipse。c我们认为，这种全面的方法可以大大提升软件可维护性，从而提高软件质量，因为开发人员现在可以更加了解当需要调查克隆组的一致性要求时，避免出现一致性缺陷的潜在风险。
-
-
