@@ -1,7 +1,7 @@
 % !Mode:: "TeX:UTF-8" 
 
-\BiChapter{基于聚类的克隆代码演化特征分析方法}
-{An Analysis for Clone Evolutionary Characteristic Based on Clustering Method}
+\BiChapter{基于X-means聚类的克隆代码演化特征分析方法}
+{An Analysis for Clone Evolutionary Characteristic Based on X-means Clustering}
 
 \BiSection{引言}
 {Introduction}
@@ -140,8 +140,8 @@
 
 本章所所采用的聚类分析方法为{\em X-Means}\cite{pelleg2000x}聚类，其原因在于：克隆实体所应聚类的数量具有不确定性，难以确定具体的聚类数量。如果采用人为给定的方式给出聚类的数量，则可能会引入不客观因素，对影响克隆代码演化特征的分析工作。因此，本章采用\em{ X-Means}聚类方法，不需要人为的指定聚类数量，\em{ X-Means}方法会自动地选择出最佳的聚类数量。
 
-\BiSection{预处理阶段}
-{ Pre-processing Step}
+\BiSection{预处理}
+{ Pre-processing}
 
 在预处理阶段，使用克隆检测工具所检测的连续版本软件中的所有克隆代码，并通过映射相邻版本的克隆代码构建系统的克隆家系。首先，从开源库中下载连续版本软件的所有源代码。然后，使用克隆检测工具NiCad检测克隆代码。最后，通过映射克隆代码构建克隆家系并识别克隆演化模式。
 
@@ -169,8 +169,8 @@ NiCad将检测到的克隆代码保存于XML文件中，并使用\em{ ``Filename
 
 %%%添加克隆演化模式识别的过程
 
-\BiSection{克隆表示阶段}
-{Clone Representation Step}
+\BiSection{克隆表示}
+{Clone Representation}
 
 为挖掘克隆代码的演化特征，本节将从三个不同角度分析克隆代码及其演化情况，即克隆片段、克隆组和克隆家系，并将之称为克隆代码实体(简称为克隆实体)。正如在机器学习中通常所做的那样，本节提取不同的度量值表示克隆代码实体。对克隆片段实体，重点关注克隆代码片段的变化情况。对克隆组实体，重点关注相邻版本间的克隆演化模式的情况。对于克隆家系实体，重点关注克隆组在整个演化过程中的演化情况。
 
@@ -280,8 +280,8 @@ NiCad将检测到的克隆代码保存于XML文件中，并使用\em{ ``Filename
 %\item Split Number: number of ``split'' pattern which all clone groups belonging to this genealogy have experienced in its life.
 \end{itemize}
 
-\BiSection{演化特征挖掘阶段}
-{Evolutionary Characteristics Mining Step}
+\BiSection{演化特征挖掘}
+{Evolutionary Characteristics Mining}
 
 为了从克隆代码及其演化过程中挖掘演化特征，本章使用不同的属性值分别描述克隆代码、克隆组和克隆家系实体。并使用WEKA（ “Waikato Environment for Knowledge Analysis” \cite{hall2009weka}）中提供的聚类方法来分析克隆代码，将从克隆片段、克隆组和克隆家系三个不同的角度进行分聚类析。
 
@@ -355,8 +355,8 @@ jEdit&22&3.0.0&5.0.0&6636&2256	&237\\
 
 在每个实验中，将这个挖掘任务分成两个子任务：第一，对获得的所有克隆实体进行统计分析，并且根据统计分析结果获取克隆代码的演化特征。第二，使用WEKA对克隆实体进行聚类分析，根据聚类结果获取克隆代码的演化特征。因此，使用均使用两种方法分析和挖掘克隆代码的演化特征：统计分析和聚类分析。第一种统计分析每种克隆实体的度量值，进而发现一些基本的演化特征。第二种是聚类分析方法，使用{X-means}分别聚类每一种克隆实体，并根据聚类结果深入挖掘克隆代码的演化特征。
 
-\BiSubsection{克隆片段实验}
-{Clone Fragment Experiment}
+\BiSubsection{克隆片段演化特征分析实验}
+{The Experiment for Clone Fragment Evolutionary Characteristics}
 
 克隆片段是软件中存在的真实的代码片段， 在其生命周期内，克隆片段可能会被开发人员修改。考虑克隆片段的三个度量值，分别是克隆寿命(Clone Life)、是否发生变化(Ischanged)和历史变化次数(Change Times)，将帮助挖掘克隆片段在其演化过程中的真实变化情况。
 
@@ -499,8 +499,8 @@ Cluster 3&	3441(66\%)	&1.175	&0.3780&1	&0	&0	&0	&0	&0	&0\\
 %%\end{tabular}
 %%\end{table}
 
-\BiSubsection{克隆组实验}
-{Clone Group Experiment} 
+\BiSubsection{克隆组演化特征分析实验}
+{The Experiment for Clone Group Evolutionary Characteristics}
 
 克隆片段实验仅提供了克隆片段本身的变化情况，而通过对克隆组进行实验分析，则可以提供了克隆代码以克隆组为单位的克隆变化情况。 在克隆组实验中，通过统计和聚类克隆组在演化过程中的克隆演化模式，从而揭示克隆代码的演化特征。
 
@@ -677,8 +677,8 @@ Cluster3	&Mean	&0.997&	0&	0	&0.003&0.036	&0	&0.039	&0.013\\
 %%\end{tabular}
 %%\end{table}
 
-\BiSubsection{克隆家系实验}
-{Clone Genealogy Experiment} 
+\BiSubsection{克隆家系演化特征分析实验}
+{The Experiment for Clone Genealogy Evolutionary Characteristics}
 
 克隆家系可以提供系统中克隆代码的全局视角，因此本节对克隆家系进行实验。在克隆家系实验中，依然先统计了克隆家系在其整个生命周期中的克隆演化模式数量，然后使用X-means对克隆家系进行聚类分析，从而挖掘和分析克隆代码的演化特征。
 
@@ -847,7 +847,7 @@ All&\multirow{3}{*}{110}&Mean	&9.072&7.523&	8.110&0.190&	0.152&	0.764	&0.173&	0.
 
 \newpage
 
-\BiSection{本章结论}
+\BiSection{本章小结}
 {Summary of  this Chapter}
  
 为挖掘克隆代码及其演化过程的克隆代码演化特征，本章提出一个方法可以分析多版本软件的演化情况，使用聚类分析(X-means)的方法挖掘和分析克隆代码演化特征，帮助程序开发人员理解和维护克隆代码，可帮助提高系统的可理解性。从三个不同角度分析和表示克隆代码及其演化情况，提取提取不同的度量值表示克隆片段、克隆组和克隆家系。克隆片段角度重点关注克隆的实际变化情况，克隆组角度关注克隆组的演化模式情况，克隆家系则提供了注系统中全部克隆代码的全局视角。在ArgoUML和jEdit两个软件系统上的实验结果表明：克隆代码通常在其演化过程中非常稳定，不会频繁的发生变化；同时，在克隆演化过程中，仍然存在相当数量的发生变化的克隆代码，需要引起开发人员的关注；最后，由于发生变化的克隆中，一致性变化的数量多于不一致性变化，因此建议开发人员应在修改克隆代码片段时需要考虑克隆代码的一致性问题。本章相信这些演化特性可以帮助开发人员更好地理解克隆，还可以提供一些指导来维护和管理软件开发中的克隆。
