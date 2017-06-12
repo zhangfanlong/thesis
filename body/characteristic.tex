@@ -582,8 +582,8 @@ Absent	&473	&334	&2211	&2220	&2116	&2215	&2237\\
 \footnotesize
 \begin{tabular}{cccccccccc}
 \toprule[1.5pt]
-\multirow{2}{*}{Cluster}&\multirow{2}{*}{Metric}&Group&Static &Same &Add &Subtract &Consistent &	Inconsistent &Split \\ 
-&&Life& Number& Number& Number& Number& Number&	 Number& Number\\ 
+{Cluster}&{Metric}&Life&Static &Same &Add &Subtract &Consistent &	Inconsistent &Split \\ 
+%&&Life& Number& Number& Number& Number& Number&	 Number& Number\\ 
 \midrule[1pt]
 Cluster0&Mean&	3.042	&0.587	&0.701	&1	&1	&0	&1	&0.080\\ 
 264&SD&2.251	&0.493	&0.459	&0	&0	&0	&0	&0.271\\ 
@@ -612,8 +612,8 @@ Cluster3&Mean	&0.608&0	&0	&0.003&0	&0	&0	&0.003\\
 \footnotesize
 \begin{tabular}{cccccccccc}
 \toprule[1.5pt]
-\multirow{2}{*}{Cluster}&\multirow{2}{*}{Metric}&Group&Static &Same &Add &Subtract &Consistent &	Inconsistent &Split \\ 
-&&Life& Number& Number& Number& Number& Number&	 Number& Number\\ 
+{*}{Cluster}&{Metric}&Life&Static &Same &Add &Subtract &Consistent &	Inconsistent &Split \\ 
+%&&Life& Number& Number& Number& Number& Number&	 Number& Number\\ 
 \midrule[1pt]
 Cluster0&	Mean	&6.88	&0.4	&0.76	&1	&1	&0	&1	&0.2\\
 25	&SD&4.438	&0.5	&0.436	&0	&0	&0	&0	&0.408\\ 
@@ -729,12 +729,12 @@ Cluster3	&Mean	&0.997&	0&	0	&0.003&0.036	&0	&0.039	&0.013\\
 
 综上所述，克隆家系在整个演化过程中大多是稳定的，而较短寿命的克隆家系相比寿命较长的克隆家系更为稳定。 同时，动态的演化模式通常发生在较长寿命的克隆家系中（即使其数量比较稀少），其中一致性变化模式比不一致性变化模式更为频繁。因此，本文建议开发人员应该更加注意寿命较长的克隆家系，并且当克隆代码发生变化时需要考虑同组克隆代码的一致性变化。
  
-\begin{sidewaystable} [htbp]
+\begin{table} [htbp]
 \bicaption[cgecluargouml]{}{ArgoUML中克隆家系的聚类结果}
 {Table$\!$}{Clustering results of clone genealogy for ArgoUML}
 \vspace{0.5em}
 \centering
-\wuhao
+\footnotesize
 \begin{tabular}{ccccccccccc}
 \toprule[1.5pt]
 Cluster&Death&Metric&Life&	Static&	Same&	Add	&Subtract&	Consistent&	Inconsistent&	Split\\ 
@@ -760,14 +760,14 @@ All&\multirow{3}{*}{579}&Mean	&6.359&4.936&5.234&0.333	&0.313&0.655	&0.318&0.035
 (100\%)&&Median&	5&	4&	4&	0&	0&	0&	0&	0\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{sidewaystable} 
+\end{table} 
 
-\begin{sidewaystable} [htbp]
+\begin{table} [htbp]
 \bicaption[cgeclujedit]{}{jEdit中克隆家系的聚类结果}
 {Table$\!$}{Clustering results of clone genealogy for jEdit}
 \vspace{0.5em}
 \centering
-\wuhao
+\footnotesize
 \begin{tabular}{ccccccccccc}
 \toprule[1.5pt]
 Cluster&Death&Metric&Life&	Static&	Same&	Add	&Subtract&	Consistent&	Inconsistent&	Split\\
@@ -791,7 +791,7 @@ All&\multirow{3}{*}{110}&Mean	&9.072&7.523&	8.110&0.190&	0.152&	0.764	&0.173&	0.
 (100\%)&&Median	&10	&9	&9	&0	&0	&0	&0	&0\\
 \bottomrule[1.5pt]
 \end{tabular}
-\end{sidewaystable} 
+\end{table} 
  
  %%%%%
 %%%begin{table}[htbp]
