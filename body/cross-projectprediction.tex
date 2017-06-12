@@ -1003,7 +1003,7 @@
 &Natvie&	0.496&	0.464&	0.541	&0.547&0.531	&0.538&0.398	&0.353\\
 &SVM&	0.343&	0.326&	0.491&	0.509&	0.503&	0.596&	0.581&	0.322\\
 &KNN&	0.533&	0.534&	0.512	&0.541&	0.498&	0.509&	0.449&	0.452\\
-&Tree	&0.387&	0.37&	0.501	0.604&	0.516&	0.567&	0.550&	0.387\\
+&Tree	&0.387&	0.37&	0.501	&0.604&	0.516&	0.567&	0.550&	0.387\\
 \hline
 \multirow{5}{*}{平均F-Measure}								
 &BayesNet&	0.491	&0.474&	0.456&	0.546	&0.501&	0.507&	0.383	&0.441\\
@@ -1118,8 +1118,59 @@
 当监测到具体的克隆实例产生时，调用已经训练好的机器学习模型进行预测。软件开发过程中，监测到克隆实例产生时，调用属性提取模块提取本次实例的属性，并使用训练好的一致性模型预测其一致性，根据预测结果通知程序开发人员采取相应措施。值得注意的是，在实际预测时，克隆变化实例预测需要项目的历史版本源代码，因为历史属性中包含克隆变化实例的历史变化过程。为了轻量化预测过程，程序开发人员可以将克隆变化实例中的历史变化属性移除。
 
 
-%%%\BiSubsection{插件使用视图}
-%%%{The Views for Using  Predictive plug-in }
+\BiSubsection{克隆一致性维护需求预测插件视图}
+{The Viewpoints for Using  Predictive plug-in}
+
+本文所设计插件的安装方式，和普通的eclipse插件安装方式一样。一个简单的安装方法为：将插件（Myplugin.CloneControl.jar）复制到eclipse的主目录下的plugins文件夹中。然后重启eclipse，克隆一致性维护需求预测插件可以在eclipse的工作窗口中可见。
+
+成功安装插件后，eclipse如图~\ref{pluginview1}~所示。插件会在eclipse由图中可以发现，菜单栏中会新增一个菜单项“Clones”。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 0.8\textwidth]{plugin1.jpg}
+\bicaption[pluginview1]{}{插件安装完成后Eclipse界面}{Fig.$\!$}
+{The screen-shot for eclipse with installed plug-in of clone consistency prediction}
+\vspace{-1em}
+\end{figure}
+
+在使用本文所设计的一致性维护需求预测插件时，需要提前加载已训练好的机器学习模型。为方便用户使用，该插件提供三种方式加载预测模型：（1）加载系统源代码及克隆检测工具的检测结果构建预测模型；（2）加载已有软件历史版本特征向量训练预测模型；（3）加载已有预测模型。其中特征文件目前仅支持ARFF格式文件。所需功能如图~\ref{pluginview2}~所示。%其中Show Clones 菜单项是显示当前通过复制粘贴形成的克隆代码、已经被程序开发人员修改的克隆代码。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 0.8\textwidth]{plugin2.jpg}
+\bicaption[pluginview2]{}{插件加载预测模型的截图}{Fig.$\!$}
+{The screen-shot for loading the models of clone consistency prediction}
+\vspace{-1em}
+\end{figure}
+
+
+预测模型加载成功后，该插件即可运行。可以监听开发过程中的克隆创建和变化实例，并预测克隆代码的一致性维护需求。图中~\ref{pluginview3}~是一个会导致额外维护代价的克隆创建操作。如图所示，本插件会警告软件开发人员。根据预测结果，开发人员可以采取相应的操作。
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 0.8\textwidth]{plugin3.jpg}
+\bicaption[pluginview3]{}{需要一致性维护的预测结果示例}{Fig.$\!$}
+{The screen-shot for a prediction example that meeting consistency}
+\vspace{-1em}
+\end{figure}
+
+%%%%%当通过软件源代码和克隆检测结果加载预测模型时，需要对克隆检测结果进行处理，提取表示克隆代码的特征，并生成特征文件作为训练集，训练预测模型。该部分最初设计成一个独立的Application， 最后将其打成Jar 包嵌入到Eclipse 开发环境中。
+%%%%%本节主要介绍最初的独立的Application， 以说明该模块功能。该Application的界面进行简单处理，运行界面如图2-1所示。
+
+%%%% 
+%%%% \begin{figure}[htbp]
+%%%%\centering
+%%%%\includegraphics[width = 0.4\textwidth]{plugin4.jpg}
+%%%%\bicaption[pluginview3]{}{插件安装完成后Eclipse界面}{Fig.$\!$}
+%%%%{The screen-shot of eclipse after install our plug-in}
+%%%%\vspace{-1em}
+%%%%\end{figure}
+%%%% 
+%%%%图2-1 Application运行界面
+%%%%主要包括五个功能，构建克隆区域描述符（CRD），构建相邻版本间克隆代码的映射关系（Map），生成克隆家系（CreateGenealogy），提取训练需要的各种特征形成特征文件（ExtractFeature），以及克隆表示的测试（WriteGroup，WriteMapping，WriteGenealogy），分别单击每一项，完成相应功能。Select Directory 项是加载软件系统源代码路径和克隆检测结果路径，其中源代码路径给到包括各种历史版本源代码的文件夹路径，如SubjectSys\_jEdit 文件夹下存放jEdit 系统的多版本源代码路径，则源代码路径给到SubjectSys\_jEdit 文件夹。克隆检测结果路径给到检测结果的上层路径，例如Nicad 的检测结果是按克隆粒度存放的，例如jEdit 系统使用Nicad 按块进行检测的结果存放形式是jEdit 文件夹下有block 文件夹，block 文件夹才存放克隆检测结果，因此路径给到jEdit文件夹 而不是block 文件夹。PreProcess 项是调用所有功能，从构建克隆代码的CRD 信息到生成特征文件。因为当系统中克隆代码过多时，调用PreProcess 结果较慢，因此将每个功能单独出来方便测试，观察结果。
+
+ 
 
 \BiSection{本章小结}
 {Summary of this Chapter}
