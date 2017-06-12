@@ -165,7 +165,19 @@
 
 在收集所有的克隆变化实例后，还需确认相关实例的一致性需求。根据定义~\ref{def-changingchange}~和~\ref{def-changingrequirement}~，通过遍历克隆变化实例所在的克隆家系$CGE$的演化情况，确定其一致性维护需求。如果克隆变化实例在其演化过程中发生了一致性变化模式（定义~\ref{def-changingpattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
 
-%%%%添加算法
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\label{alg-collectionchanging}
+\KwIn{all the source code for $N$ versions:}
+\KwOut{ all the clone genealogies $CGE$}
+%\begin{algorithmic}
+\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
+    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
+%\end{algorithmic}
+\end{algorithm}
+\end{minipage}
 
 \BiSection{克隆变化实例表示}
 {Representing Clone Changing Instance}
@@ -387,8 +399,22 @@ Halstead属性平均：
 
 在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆变化实例的一致性维护需求。首先，在软件开发环境中需监测程序员对克隆代码的修改，识别由此产生的克隆变化实例。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示该克隆变化实例。最后，使用训练好的预测器预测该克隆变化实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
 
-%%%\BiSection{算法描述}
-%%%{algorithm description}
+\BiSection{算法描述}
+{algorithm description}
+
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\label{alg-changingprediction}
+\KwIn{all the source code for $N$ versions:}
+\KwOut{ all the clone genealogies $CGE$}
+%\begin{algorithmic}
+\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
+    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
+%\end{algorithmic}
+\end{algorithm}
+\end{minipage}
 
 \BiSection{克隆变化一致性维护需求预测实验结果与分析}
 {Experimental Results and Analysis for Clone Changing Consistency Prediction}

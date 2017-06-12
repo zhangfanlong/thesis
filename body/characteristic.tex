@@ -166,9 +166,17 @@
 
 %%%添加相似度计算方法
 
-NiCad将检测到的克隆代码保存于XML文件中，并使用\em{ ``Filename + Start/End Line No.''}标记克隆克隆代码，并将彼此相似的克隆片段保存在同一克隆组内。由于NiCad仅仅使用代码行表示克隆代码，不仅无法描述克隆代码的语法和语义信息，也不利于映射不同版本之间的克隆代码。因此，为映射相邻版本之间的克隆代码，本文使用改进的克隆区域描述符表示克隆代码，并在此基础上实现克隆代码的映射和克隆家系的构建。克隆区域描述符最早由Duala-Ekoko等人提出，不仅可以反映出克隆代码本身的信息，还可以用于跟踪演化过程中的克隆代码\cite{duala2010clone}。为了进一步的帮助映射相邻版本之间的克隆代码，慈蒙等人改进了克隆区域描述符，并提出了基于克隆区域描述符的克隆群映射算法\cite{ci2013new}\cite{ci2013newD}。同时，为了映射两个相邻版本中的克隆代码和克隆组，新添加相对位置覆盖率和文本相似度两个额外的表示单元。使用相对位置覆盖率可以帮助定位源代码中的克隆片段，并计算版本$i$和版本$i+1$中克隆片段位置之间的重叠率。文本相似度可以用于比较映射的代码片段的相似性度。
+NiCad将检测到的克隆代码保存于XML文件中，并使用\em{ ``Filename + Start/End Line No.''}标记克隆克隆代码，并将彼此相似的克隆片段保存在同一克隆组内。由于NiCad仅仅使用代码行表示克隆代码，不仅无法描述克隆代码的语法和语义信息，也不利于映射不同版本之间的克隆代码。因此，为映射相邻版本之间的克隆代码，本文使用克隆区域描述符表示克隆代码，并在此基础上实现克隆代码的映射和克隆家系的构建。克隆区域描述符最早由Duala-Ekoko等人提出，不仅可以反映出克隆代码本身的信息，还可以用于跟踪演化过程中的克隆代码\cite{duala2010clone}。
 
-%%%添加克隆区域描述符示例
+CRD能够充分地反映出克隆代码本身的信息，还能够反映克隆代码区域的特征，CRD的描述如图~\ref{crd}~所示。CRD克服了使用文件行描述克隆代码的局限，不依赖于克隆区域的具体位置，同时也独立于具体文本。使用CRD可以映射相邻版本之间的克隆代码，慈蒙等人改进了克隆区域描述符，并提出了基于克隆区域描述符的克隆群映射算法\cite{ci2013new}\cite{ci2013newD}。同时，为了映射两个相邻版本中的克隆代码和克隆组，新添加相对位置覆盖率和文本相似度两个额外的表示单元。使用相对位置覆盖率可以帮助定位源代码中的克隆片段，并计算版本$i$和版本$i+1$中克隆片段位置之间的重叠率。文本相似度可以用于比较映射的代码片段的相似性度。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics [width=0.5 \textwidth ]{CRD.pdf}
+\bicaption [crd]{}{克隆区域描述符示意}
+{Fig.$\!$}{The Definition of Clone Region Description}
+\vspace{-1em}
+\end{figure}
 
 \BiSubsection{克隆家系构建与克隆模式识别}
 {Building Clone Genealogy and Identifying Clone Evolutionary Pattern}
@@ -179,7 +187,22 @@ NiCad将检测到的克隆代码保存于XML文件中，并使用\em{ ``Filename
 
 克隆演化模式可以用于描述克隆组在演化过程中的变化情况，对于揭示克隆演化特征具有重要的意义。克隆演化模式识别，可以通过对比映射的两个相邻版本之间的克隆组进行。假设克隆组$CG$是存在于相邻的两个软件版本{$(V_i,V_{i+1})$}中，且克隆组$CG$的映射关系可以使用{$(CG_i, CG_{i+1})$}描述，其中{$CG_i$}表示前一版本中的克隆组，{$CG_{i+1}$}表示后一版本中的克隆组。通过观察从{$CG_i$}到{$CG_{i+1}$}的克隆组变化情况，便可以识别该克隆组{$CG_{i+1}$}的克隆演化模式。
 
-%%%添加克隆演化模式识别的过程
+构建克隆家系的算法如~\ref{alg-building}~所示。
+
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\label{alg-building}
+\KwIn{all the source code for $N$ versions:}
+\KwOut{ all the clone genealogies $CGE$}
+%\begin{algorithmic}
+\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
+    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
+%\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+
 
 \BiSection{克隆表示}
 {Clone Representation}
@@ -323,8 +346,23 @@ X-means聚类是一种高效的聚类算法，可以通过自动搜索并确定�
 %%%描述X-means聚类
 %过程如下：算法从给定的$K$范围的最低值开始，并继续增加此值，直到范围的上限。在此过程中，X-means聚类使用模型选择标准计算每个$K$的分数。它选择$K$的最高分数输出。对于每个$K$，x-means聚类使用迭代细化技术。首先，它将每个向量分配给其平均值产生集群内最小平方和（WCSS）的集群。第二，它计算新的均值为新聚类中的向量的质心。当分配不再改变时，算法收敛。它使用后验概率用贝叶斯信息准则对这$j$进行评分。
 
-%%%\BiSection{算法描述}
-%%%{Algorithm Description}
+\BiSection{算法描述}
+{Algorithm Description}
+
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\label{alg-characteristic}
+\KwIn{all the source code for $N$ versions:}
+\KwOut{ all the clone genealogies $CGE$}
+%\begin{algorithmic}
+\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
+    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
+%\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+
 
 \BiSection{实验结果与分析}
 {The Results and Discussion}
