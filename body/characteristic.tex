@@ -187,19 +187,33 @@ CRD能够充分地反映出克隆代码本身的信息，还能够反映克隆�
 
 克隆演化模式可以用于描述克隆组在演化过程中的变化情况，对于揭示克隆演化特征具有重要的意义。克隆演化模式识别，可以通过对比映射的两个相邻版本之间的克隆组进行。假设克隆组$CG$是存在于相邻的两个软件版本{$(V_i,V_{i+1})$}中，且克隆组$CG$的映射关系可以使用{$(CG_i, CG_{i+1})$}描述，其中{$CG_i$}表示前一版本中的克隆组，{$CG_{i+1}$}表示后一版本中的克隆组。通过观察从{$CG_i$}到{$CG_{i+1}$}的克隆组变化情况，便可以识别该克隆组{$CG_{i+1}$}的克隆演化模式。
 
-构建克隆家系的算法如~\ref{alg-building}~所示。
+构建克隆家系的算法如~\ref{alg-building}~所示。算法中第1-4行为使用NiCad检测克隆代码过程。第5-8行为克隆代码生成CRD。第9-12行为使用CRD映射相邻版本的克隆代码，并根据克隆演化模式定义，识别克隆演化模式。第14行生成系统中全部的克隆家系。时间复杂度为。
 
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\AlgoBiCaption{克隆家系构建与演化模式识别算法} {The algorithm for building clone genealogies and identifying clone evolution patterns}
 \label{alg-building}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
+\KwIn{All source code from $N$ versions}
+\KwOut{All clone genealogies $CGEs$}
+\For{$i$=1 to $N$} 
+{
+ Detecting all code clones $CFs$ and $CGs$\;
+ Saving all results in {result\_i} files\;
+}
+\For{$i$=1 to $M$}
+{ 
+ Generating CRD to represent each code clone{CFs}\;
+ Saving all results in {result\_i} files\;
+}
+\For{$i$=1 to $N-1$}
+{ 
+ Mapping all the $CFs$ and $CGs$ between the adjacent versions {V\_i} and {V\_{i+1}}\;
+ Identify all clone patterns {CEPs} in thus two versions according to Definition~\ref{def-evolutionpattern}~\;
+ Saving all results in {mapping\_i} files\;
+}
+Generating all clone genealogies $CGEs$ through traversing mapping files\;
+\Return {$CGEs$\;}
 \end{algorithm}
 \end{minipage}
 
@@ -346,20 +360,36 @@ X-means聚类是一种高效的聚类算法，可以通过自动搜索并确定�
 %%%描述X-means聚类
 %过程如下：算法从给定的$K$范围的最低值开始，并继续增加此值，直到范围的上限。在此过程中，X-means聚类使用模型选择标准计算每个$K$的分数。它选择$K$的最高分数输出。对于每个$K$，x-means聚类使用迭代细化技术。首先，它将每个向量分配给其平均值产生集群内最小平方和（WCSS）的集群。第二，它计算新的均值为新聚类中的向量的质心。当分配不再改变时，算法收敛。它使用后验概率用贝叶斯信息准则对这$j$进行评分。
 
-\BiSection{算法描述}
-{Algorithm Description}
+克隆演化特征的聚类算法如~\ref{alg-characteristic}~所示。算法的第1-3行分别收集系统中全部的克隆实体。第4行初始化克隆实例的聚类空间。第5-8行、9-12行、13-16行分别使用上文描述的度量生成克隆聚类向量，并将其添加到聚类向量空间中。最后，第17行调用WEKA聚类克隆实体。算法复杂度为
 
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\AlgoBiCaption{克隆演化特征聚类算法} {The algorithm of  clustering for clone characteristics}
 \label{alg-characteristic}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
+\KwIn{All clone genealogy $CGEs$ and all source code}
+\KwOut{All the clusters for clone fragments, groups, and clone genealogies}
+Collecting all the entities of clone genealogy with number {$N\_cge$}\;
+Collecting all the entities of clone group with number{$N\_cg$}\;
+Collecting all the entities of clone fragment with number {$N\_cf$}\; 
+Initializing the clustering space of  $X_{CF}$, $X_{CG}$, and $X_{CGE}$\;
+\For {$i$ to $N\_cge$}
+{
+ Generating the Vector {$V\_i$} for {CGE\_i}\;
+ Appending Vector {$V\_i$} to $X_{CGE}$\;
+ }
+\For {$i$ to $N\_cg$}
+{ 
+ Generating the Vector for {CG\_i}\;
+ Appending Vector {$V\_i$} to $X_{CG}$\;
+}
+\For {$i$ to $N\_cf$}
+{ 
+ Generating the Vector for{CF\_i}\;
+ Appending Vector {$V\_i$} to $X_{CF}$\;
+}
+Calling WEKA to clustering $X_{CF}$, $X_{CG}$ and  $X_{CGE}$ with X-means method\;
+\Return {All the clusterings\;}
 \end{algorithm}
 \end{minipage}
 

@@ -158,17 +158,35 @@
 
 在收集克隆变化实例后，还需确认该实例中的被复制和被粘贴代码。由于被复制代码会较早地存在软件中，可将创建实例中的克隆代码向上一软件版本中进行映射。假定被复制代码会应存在于上一版本中，被粘贴代码不存在上版本中。根据映射结果，可能会存在两种情况：(a) 其中一个克隆代码可以映射，另一个未映射。认为映射代码为被复制代码，未映射为被粘贴代码。(b) 两者均没有映射。此情况下随机选取一个为被复制代码，另一个未未被粘贴代码。原因是两者互为克隆代码，彼此之间相似，故随机选取一个为被复制代码并不影响预测结果。注意不存在两者均可映射的情况，应在上一版本检测为克隆代码。\footnote{大多数克隆组只有两个克隆片段，所以这个决定不会影响我们的克隆预测。对于具有多个克隆片段的克隆组，则随机选取两个作为克隆创建实例。}
 
+克隆创建实例收集如算法~\ref{alg-collectioncreating}~所示。
+
+算法复杂度
+
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\AlgoBiCaption{克隆创建实例收集算法} {The algorithm for collecting clone creating instances}
 \label{alg-collectioncreating}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
+\KwIn{All source code from $N$ versions}
+\KwOut{All the clone creating instances}
+\For{$i$=1 to $N$} 
+{
+ Detecting all code clones $CFs$ and $CGs$\;
+}
+\For{$i$=1 to $N-1$}
+{ 
+ Generating CRD to represent each code clone{CFs}\;
+ Mapping all the $CFs$ and $CGs$ between the adjacent versions {V\_i} and {V\_{i+1}}\;
+ Identify all clone consistent change pattern in thus two versions according to Definition~\ref{def-creatingpattern}~\;
+}
+Generating all clone genealogies $CGEs$ with number $N\_cge$\;
+\For{$i$=1 to $N\_cge$}
+{ 
+ Collecting the clone creating instance from $CGE\_i$ according to Definition~\ref{def-creatinginstance}~\; 
+ Labeling the original and pasted code fragments by mapping this instances to its last version\;
+ Labeling its consistency-requirement according to Definition~\ref{def-creatingrequirement}~;
+}
+\Return {All clone creating instances\;}
 \end{algorithm}
 \end{minipage}
 
@@ -311,20 +329,22 @@ KNN方法是一种用于分类和回归的非参数统计方法。KNN是一种�
 
 在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆创建实例的一致性维护需求。首先，在软件开发环境中需监测程序员的复制和粘贴操作，识别由此产生的克隆创建实例。然后，根据上文描述的代码和上下文属性，提取相应的特征表示该克隆创建实例。最后，使用训练好的预测器预测该克隆创建实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
 
-\BiSection{算法描述}
-{algorithm description}
-
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
+\AlgoBiCaption{克隆创建一致性维护需求预测算法} {The algorithm for predicting clone creating consistency-requirement}
 \label{alg-collectionperdition}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
+\KwIn{All clone creating instances with number $N$}
+\KwOut{The predictive model}
+Initializing the training data set $Sets$ for clone creating instances\; 
+\For{$i$=1 to $N$} 
+{ 
+Generating all the code attributes for original code clones of clone instance\;
+Generating all the context attributes for pasted code clones of clone instance\;
+Appending all the attributes as one item to the $Sets$\;
+}
+Calling WEKA to train the model applying training set $Sets$ with machine learning method\;
+\Return {The predictive model\;}
 \end{algorithm}
 \end{minipage}
 

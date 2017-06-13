@@ -129,20 +129,6 @@
 
 在收集所有的克隆实例后，还需确认相关实例的一致性维护需求。根据定义~\ref{def-requirement}~，通过遍历克隆实例所在的克隆家系$CGE$的演化情况确定其一致性维护需求。如果克隆实例在其演化过程中发生了一致性变化模式（定义~\ref{def-pattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
 
-\begin{minipage}{0.8\textwidth}
-\centering
-\begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
-\label{alg-collectionall}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
-\end{algorithm}
-\end{minipage}
-
 \BiSubsection{克隆实例表示}
 {Representing Clone Instance}
 
@@ -152,6 +138,48 @@
 
 对于克隆变化实例，从克隆组的角度重新提取了代码属性和上下文属性，并从演化的角度新增演化属性。代码属性从代码自身的角度，描述了克隆变化实例中克隆代码特征，包括克隆粒度、代码行平均、Halstead属性平均、结构属性平均、总函数调用次数平均、本地函数调用次数平均、库函数调用次数平均、其它调用次数平均。上下文属性描述了克隆变化实例所在克隆组的克隆关系特征，包括代码相似度平均、文件名相似度平均、文件名相似度变量、方法名相似度平均、总参数名相似度平均、最大参数名相似度平均、总参数类型相似度平均、块信息标识。历史属性描述了克隆变化实例所在克隆组在克隆变化发生前的历史演化特征，包括变化实例寿命、历史演化模式统计、当前演化模式、历史变化统计。同时，还提供了克隆变化实例的变化属性。
 属性具体信息可以参考本文第二章相关属性值部分（第~\ref{lab-changingattribute}~节克隆变化实例表示）。
+
+
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{克隆实例收集算法} {The algorithm for collecting clone instances}
+\label{alg-collection}
+\KwIn{All source code from $N$ versions}
+\KwOut{All the clone instances}
+\For{$i$=1 to $N$} 
+{
+ Detecting all code clones $CFs$ and $CGs$\;
+}
+\For{$i$=1 to $N-1$}
+{ 
+ Generating CRD to represent each code clone{CFs}\;
+ Mapping all the $CFs$ and $CGs$ between the adjacent versions {V\_i} and {V\_{i+1}}\;
+ Identify all clone evolution pattern in thus two versions according to Definition~\ref{def-pattern}~\;
+ Identify all clone consistent change pattern in thus two versions according to Definition~\ref{}~\;
+}
+Generating all clone genealogies $CGEs$ with number $N\_cge$\;
+\For{$i$=1 to $N\_cge$}
+{ 
+ Collecting the clone instance that both including clone creating and changing instances from $CGE\_i$ according to Definition~\ref{def-instance}~\; 
+ Labeling all consistency-requirement according to Definition~\ref{def-def-requirement}~;
+}
+Initializing all training data set $Creating\_Sets$ for clone creating instances\; 
+\For{$i$=1 to $N$} 
+{ 
+Generating all attributes for clone creating instance\;
+Appending all the attributes as one item to the $Creating\_Sets$\;
+}
+Initializing all training data set $Changing\_Sets$ for clone changing instances\; 
+\For{$i$=1 to $N$} 
+{ 
+Generating all the attributes for clone changing instance\;
+Appending all the attributes as one item to the $Changing\_Sets$\;
+}
+\Return {The data set of clone instances\;}
+\end{algorithm}
+\end{minipage}
+
 
 %%%%%\BiSubsection{机器学习方法}
 %%%%%{The Employed Machine Learning Methods}
@@ -203,20 +231,22 @@
 
 在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆实例的一致性维护需求。首先，在软件开发环境中需监测和跟踪克隆代码，识别新产生的克隆实例(克隆创建实例和变化实例)。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示相应的克隆实例。最后，使用训练好的预测器预测相应克隆实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
 
-\BiSection{算法描述}
-{algorithm description}
-
 \begin{minipage}{0.8\textwidth}
+\footnotesize
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{这是一个算法的比较长的中文图题} {This is a long English caption of }
-\label{alg-crossprediction}
-\KwIn{all the source code for $N$ versions:}
-\KwOut{ all the clone genealogies $CGE$}
-%\begin{algorithmic}
-\For{$t$=1 to $T$} { $\lambda^{t+1}_n = \lambda^t_n +
-    \eta (f_n(q, c, d_i) - f_n(q, c, d_j))$ }
-%\end{algorithmic}
+\AlgoBiCaption{跨项目克隆一致性维护需求预测算法} {The algorithm for cross-project predicting clone consistency-requirement}
+\label{alg-crossperdition}
+\KwIn{All source code for different projects}
+\KwOut{The predictive model}
+\For {each projects}
+{
+Generating its data set for with\;
+}
+Dividing the projects into Training projects and Testing Projects\;
+Calling WEKA to train the model applying training set $Sets$ with machine learning method\;
+Testing this \;
+\Return {The predictive model\;}
 \end{algorithm}
 \end{minipage}
 
