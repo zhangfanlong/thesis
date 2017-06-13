@@ -165,26 +165,24 @@
 
 在收集所有的克隆变化实例后，还需确认相关实例的一致性需求。根据定义~\ref{def-changingchange}~和~\ref{def-changingrequirement}~，通过遍历克隆变化实例所在的克隆家系$CGE$的演化情况，确定其一致性维护需求。如果克隆变化实例在其演化过程中发生了一致性变化模式（定义~\ref{def-changingpattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
 
-克隆变化实例收集如算法~\ref{alg-collectionchanging}~所示。
-
-算法复杂度
+克隆创建实例收集算法如~\ref{alg-collectionchanging}~所示。算法中第1-6行是为克隆代码生成CRD，并使用CRD映射相邻版本的克隆代码，并根据克隆演化模式定义，识别克隆演化模式。假设一个版本中有$m$个克隆代码，生成CRD所需时间为$O(m)$，$n$个版本所需时间为$O(m*n)$。映射克隆相邻版本的克隆代码时间复杂度为$O(n^2)$。第7行为是生成系统的克隆家系。第8-11行，分别是收集克隆变化实例，并标记其一致性维护需求。算法复杂度为$O(n)$。所以，该算法的复杂度为$O(n^2)$。
 
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
 \AlgoBiCaption{克隆变化实例收集算法} {The algorithm for collecting clone changing instances}
 \label{alg-collectionchanging}
-\KwIn{All source code from $N$ versions}
+\KwIn{All source code and code clones from $N$ versions}
 \KwOut{All the clone changing instances}
-\For{$i$=1 to $N$} 
-{
- Detecting all code clones $CFs$ and $CGs$\;
-}
-\For{$i$=1 to $N-1$}
+%%\For{$i$=1 to $N$} 
+%%{
+%% Detecting all code clones $CFs$ and $CGs$\;
+%%}
+\For{$i$=1 to $N$}
 { 
- Generating CRD to represent each code clone{CFs}\;
- Mapping all the $CFs$ and $CGs$ between the adjacent versions {V\_i} and {V\_{i+1}}\;
-  Identify all clone evolution pattern in thus two versions according to Definition~\ref{def-evolutionpattern}~\;
+ Generating CRD to represent each code clone {CFs}\;
+ Mapping all the $CFs$ and $CGs$ between the adjacent versions {i} and {i+1}\;
+ Identifying all clone evolution pattern in thus two versions according to Definition~\ref{def-evolutionpattern}~\;
  Identify all clone consistent change pattern in thus two versions according to Definition~\ref{def-changingpattern}~\;
 }
 Generating all clone genealogies $CGEs$ with number $N\_cge$\;
@@ -417,15 +415,17 @@ Halstead属性平均：
 
 在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆变化实例的一致性维护需求。首先，在软件开发环境中需监测程序员对克隆代码的修改，识别由此产生的克隆变化实例。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示该克隆变化实例。最后，使用训练好的预测器预测该克隆变化实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
 
+克隆变化一致性维护需求预测算法如~\ref{alg-changingperdition}~所示。算法的第1行为初始化训练集。第2-8行提取相应的属性组表示克隆变化实例，并生成训练集。最后第9行，使用训练集调用WEKA训练机器学习模型。算法的主要时间消耗在表示克隆变化实例上，其时间复杂度为$O(m*n^2)$，其中m为克隆变化实例的数量。
+
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
 \AlgoBiCaption{克隆变化一致性维护需求预测算法} {The algorithm for predicting clone changing consistency-requirement}
 \label{alg-changingperdition}
-\KwIn{All clone changing instances with number $N$}
+\KwIn{All clone changing instances and source code}
 \KwOut{The predictive model}
 Initializing the training data set $Sets$ for clone changing instances\; 
-\For{$i$=1 to $N$} 
+\For{$i$=1 to $M$} 
 { 
 Generating all the code attributes for clone instance\;
 Generating all the context attributes for clone instance\;
