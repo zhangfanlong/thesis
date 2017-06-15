@@ -265,12 +265,11 @@ Halstead属性：
 
 本章将克隆代码创建的一致性维护需求问题，转化成了克隆创建实例的分类问题，即给定一个克隆创建实例，判别其是否满足克隆创建的一致性维护需求。本章使用五种机器学习方法对克隆创建实例进行分类，从而预测克隆一致性维护需求。
 
-
 \BiSubsection{所使用的机器学习方法}
 {The Employed Machine Learning Methods}
 \label{lab-machine}
 
-在本章的研究中，为解决本文所提出的研究问题，使用了五种不同的机器学习方法，即：贝叶斯网络方法（Bayesian Network，简称为BayesNet）\cite{friedman1997bayesian}、朴素贝叶斯方法（Native Bayesian，本文简称为Native）\cite{john1995estimating}，支持向量机方法（Support Vector Machine，简称为SVM）\cite{platt199912} 、K近邻方法(K-Nearest Neighbors，简称为KNN) \cite{aha1991instance}和决策树方法（Decision Tree，本文简写为Tree）\cite{quinlan2014c4}。
+在本章的研究中，使用五种不同的机器学习方法，即：贝叶斯网络方法（Bayesian Network，简称为BayesNet）\cite{friedman1997bayesian}、朴素贝叶斯方法（Native Bayesian，本文简称为Native）\cite{john1995estimating}，支持向量机方法（Support Vector Machine，简称为SVM）\cite{platt199912} 、K近邻方法(K-Nearest Neighbors，简称为KNN) \cite{aha1991instance}和决策树方法（Decision Tree，本文简写为Tree）\cite{quinlan2014c4}。
 
 （1）贝叶斯网络方法
 
@@ -303,15 +302,12 @@ KNN方法是一种用于分类和回归的非参数统计方法。KNN是一种�
  以克隆一致性需求预测为例，克隆实例所提取的属性即是决策树中的属性，最后的克隆一致性维护需求则是对象的类别。
 
 
-\BiSubsection{克隆创建一致性预测}
-{Predicting Clone Creating Consistency}
+\BiSubsection{模型的构建与预测}
+{Building Predictive Model and Predicting}
 
 本章没有对机器学习方法进行改进和研究，模型的构建和训练通过调用现有机器学习工具包WEKA完成。WEKA（Waikato Environment for Knowledge Analysis）全称是怀卡托智能分析环境，它是一个Java语言编写的，支持数据挖掘任务的工作平台。WEKA集成了大量能承担数据挖掘任务的机器学习算法，包括数据预处理，分类，聚类，关联规则，特征选择以及可视化功能。
 
-对于每个软件系统，首先，通过收集克隆创建实例并提取相应的属性，用于构建模型训练所需的数据集。然后，调用WEKA中的机器学习算法实现构建和训练克隆一致性预测模型。
-
-根据定义~\ref{def-creatingrequirement}~，克隆创建实例有两种不同的状态：需要一致性维护和不需要一致性维护。因此在进行一致性维护需求预测时，克隆创建实例也具有两种不同的预测结果：
-
+对于每个软件系统，首先，通过收集克隆创建实例并提取相应的属性，用于构建模型训练所需的数据集。然后，调用WEKA中的机器学习算法实现构建和训练克隆一致性预测模型。根据定义~\ref{def-creatingrequirement}~，克隆创建实例有两种不同的状态：需要一致性维护和不需要一致性维护：
 \begin{itemize}
 \item 
 不需要一致性维护：
@@ -321,33 +317,29 @@ KNN方法是一种用于分类和回归的非参数统计方法。KNN是一种�
 若克隆创建实例的预测结果为“需要”，软件开发人员需要谨慎的执行克隆创建操作（复制和粘贴）。因为，该克隆创建实例，在未来演化的过程中可能会引发一致性变化，从而向系统中引入额外的维护代价。
 \end{itemize}
 
-在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆创建实例的一致性维护需求。首先，在软件开发环境中需监测程序员的复制和粘贴操作，识别由此产生的克隆创建实例。然后，根据上文描述的代码和上下文属性，提取相应的特征表示该克隆创建实例。最后，使用训练好的预测器预测该克隆创建实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
-
-克隆创建一致性维护需求预测算法如~\ref{alg-creatingperdition}~所示。算法的第1行为初始化训练集。第2-6行提取相应的属性组表示克隆创建实例，并生成训练集。最后第7行，使用训练集调用WEKA训练机器学习模型。算法的主要时间消耗在表示克隆创建实例上，其时间复杂度为$O(m*n^2)$，其中m为克隆创建实例的数量。
+克隆创建一致性维护需求预测算法如~\ref{alg-creatingperdition}~所示。算法的第1行为初始化训练集。第2-6行提取相应的属性组表示克隆创建实例，并生成训练集。最后第7行，使用训练集调用WEKA训练机器学习模型。算法的主要时间消耗在表示克隆创建实例上，其时间复杂度为$O(m)$，其中m为复制粘贴操作的数量。
 
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
 \AlgoBiCaption{克隆创建一致性维护需求预测算法} {The algorithm for predicting clone creating consistency-requirement}
 \label{alg-creatingperdition}
-\KwIn{All clone creating instances and source code}
+\KwIn{All copy-and-paste operations and source code}
 \KwOut{The predictive model}
-Initializing the training data set $Sets$ for clone creating instances\; 
+Initializing the training data set $Sets$ for all the operations\; 
 \For{$i$=1 to $M$} 
 { 
-Generating all the code attributes for original code clones of clone instance\;
-Generating all the context attributes for pasted code clones of clone instance\;
+Generating all the code attributes for copied code clones\;
+Generating all the context attributes for pasted code clones\;
 Appending all the attributes as one item to the $Sets$\;
 }
-Calling WEKA to train the model applying training set $Sets$ with machine learning method\;
+Calling WEKA to train the model on training set $Sets$\;
 \Return {The predictive model\;}
 \end{algorithm}
 \end{minipage}
 
 \BiSection{克隆创建一致性维护需求实验结果与分析}
-{Experimental Results and Analysis  for Clone Creating Consistency Prediction}
-
-%%本节给出本章的实验结果与分析，首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
+{Experimental Results and Analysis for Clone Creating Consistency Prediction}
 
 \BiSubsection{实验系统与实验设置}
 {Experimental Projects and Methodology}
