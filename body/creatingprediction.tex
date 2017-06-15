@@ -112,7 +112,7 @@
 
 克隆创建所导致的克隆代码，会随着系统的演化而演化。在演化过程中，克隆代码片段之间的变化，会引发其所在克隆组的变化，本文使用克隆演化模式描述克隆组的变化。因此，根据克隆片段的一致性变化定义，可以将克隆组的一致性变化模式定义如下：
 
-\begin{definition}[克隆创建的一致性变化模式] 
+\begin{definition}[克隆创建一致性变化模式] 
 \label{def-creatingpattern}
 在软件版本 $j+1$中存在一个克隆组$CG'$ ，假设克隆组内至少存在两个克隆代码片段$CF'_1$ 和 $CF'_2$可以与映射到上一版本$j$的克隆组$CG$中，且 $CG$中与之对应的克隆代码片段的 $(CF_1,CF_2)$被修改为$(CF'_1,CF'_2)$。如果克隆片段之间的变化$(CF_1,CF_2)$变化至$(CF'_1,CF'_2)$满足克隆片段的“一致性变化(Consistent Change)”，则称克隆组$CG'$具有一致性变化模式(Consistent Change Pattern)。
 \end{definition}
@@ -138,53 +138,47 @@
 
 克隆创建实例只有两种状态：满足和不满足一致性维护需求。本章克隆创建的克隆一致性需求预测问题可转换为一个典型的分类问题，因此使用机器学习模型解决此分类问题。
 
-\BiSection{克隆创建实例收集}
-{Collecting Clone Creating Instance}
+\BiSection{收集复制粘贴操作}
+{Collecting Copy-and-Paste Operations}
 \label{lab-checkcopied}
 
-收集克隆创建实例的目的在于生成克隆一致性预测的训练集，并将其用于训练机器学习模型。通过构建系统的克隆家系并识别其中的克隆演化模式，可以从软件中收集所有的克隆创建实例。首先，使用NiCad来检测软件版本中的所有克隆；然后，通过在相邻版本的克隆组之间进行映射来构建克隆家系；最后，识别克隆一致性演化模式识别系统中的克隆创建实例。
+根据定义~\ref{def-creatinginstance}~，本文假定克隆家系$CGE$中第一次出现的克隆代码是克隆创建实例，即复制粘贴操作导致的克隆代码。因此，通过检测系统的克隆代码并构建克隆家系，可以收集系统中的复制和粘贴操作。本章将使用NiCad来检测软件版本中的所有克隆。通过在相邻版本的克隆组之间进行映射来构建克隆家系。
 
-根据定义~\ref{def-creatinginstance}~，本文假定克隆家系$CGE$中第一次出现的克隆代码即是克隆创建实例。因此，通过检测系统的克隆代码并构建克隆家系，可以完成对克隆创建实例的收集。
-
-（1）构建克隆家系
+（1）构建系统的克隆家系
 
 首先，下载系统所有版本的源代码，并使用NiCad的默认配置检测检测每一版本的中Type1-3的克隆代码。然后，通过映射所有相邻版本的克隆代码，构建系统中全部克隆家系。为完成版本间的映射，为每个克隆片段生成一个克隆区域描述符 $CRD$\cite{duala2010clone}，使用基于$CRD$的克隆映射算法映射两个连续版本之间的所有克隆片段和克隆组\cite{ci2013new}\cite{ci2013newD}。根据克隆映射结果，构建系统的克隆家系。
 
-（2）收集克隆创建实例并标识一致性维护需求
+（2）收集复制粘贴操作并标识一致性维护需求
 
-克隆家系是克隆演化的有向无环图，图中根节点是由复制粘贴操导致的克隆创建实例。因此，根据定义~\ref{def-creatinginstance}~通过遍历克隆家系的根节点，可收集系统中所有的克隆创建实例。在收集克隆创建实例的时候，同时根据定义~\ref{def-creatingchange}~和~\ref{def-creatingpattern}~识别克隆一致性变化模式，从而确定克隆创建实例在其未来演化过程发生的一致性变化。根据定义~\ref{def-creatingrequirement}~，如果克隆创建实例在其演化过程中发生了一致性变化模式（定义~\ref{def-creatingpattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
+克隆家系是一个克隆组演化的有向无环图，图中根节点是由复制粘贴操导致的克隆创建实例。因此，根据定义~\ref{def-creatinginstance}~通过遍历克隆家系的根节点，可收集系统中所有的克隆创建实例，即复制和粘贴操作。在收集克隆创建实例的时候，同时根据定义~\ref{def-creatingchange}~和~\ref{def-creatingpattern}~识别克隆一致性变化模式，从而确定克隆创建实例在其未来演化过程发生的一致性变化。根据定义~\ref{def-creatingrequirement}~，如果克隆创建实例在其演化过程中发生了一致性变化模式（定义~\ref{def-creatingpattern}~），则该实例满足一致性维护需求，否则不满足维护需求。
 
-（3）确认复制和粘贴代码
+（3）确认被复制和被粘贴的克隆代码
 
 在收集克隆变化实例后，还需确认该实例中的被复制和被粘贴代码。由于被复制代码会较早地存在软件中，可将创建实例中的克隆代码向上一软件版本中进行映射。假定被复制代码会应存在于上一版本中，被粘贴代码不存在上版本中。根据映射结果，可能会存在两种情况：(a) 其中一个克隆代码可以映射，另一个未映射。认为映射代码为被复制代码，未映射为被粘贴代码。(b) 两者均没有映射。此情况下随机选取一个为被复制代码，另一个未未被粘贴代码。原因是两者互为克隆代码，彼此之间相似，故随机选取一个为被复制代码并不影响预测结果。注意不存在两者均可映射的情况，应在上一版本检测为克隆代码。\footnote{大多数克隆组只有两个克隆片段，所以这个决定不会影响我们的克隆预测。对于具有多个克隆片段的克隆组，则随机选取两个作为克隆创建实例。}
 
-克隆创建实例收集算法如~\ref{alg-collectioncreating}~所示。算法中第1-5行是为克隆代码生成CRD，并使用CRD映射相邻版本的克隆代码，并根据克隆演化模式定义，识别克隆演化模式。假设一个版本中有$m$个克隆代码，生成CRD所需时间为$O(m)$，$n$个版本所需时间为$O(m*n)$。映射克隆相邻版本的克隆代码时间复杂度为$O(n^2)$。第6行为是生成系统的克隆家系。第7-11行，分别是收集克隆创建实例，并标记其一致性维护需求。算法复杂度为$O(n)$。所以，该算法的复杂度为$O(n^2)$。
+收集系统中复制和粘贴操作算法如~\ref{alg-collectioncreating}~所示。算法中第1-4行是为克隆代码生成CRD，并使用CRD映射相邻版本的克隆代码假设一个版本中有$m$个克隆代码，生成CRD所需时间为$O(m)$，$n$个版本所需时间为$O(m*n)$。映射克隆相邻版本的克隆代码时间复杂度为$O(m)$。算法的第5行为根据映射结果生成系统的克隆家系。第6-10行，先根据克隆创建实例定义，通过遍历克隆家系收集系统复制和粘贴操作。然后，根据克隆演化模式定义，识别克隆演化模式，并标记其一致性维护需求。最后，确认复制粘贴操作中被复制和被粘贴的克隆代码。算法复杂度为$O(n)$。所以，该算法的复杂度为$O(m*n)$。
 
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{克隆创建实例收集算法} {The algorithm for collecting clone creating instances}
+\AlgoBiCaption{复制粘贴操作收集算法} {The algorithm for collecting copy-and-pasted operations}
 \label{alg-collectioncreating}
 \KwIn{All source code and code clones from $N$ versions}
-\KwOut{All the clone creating instances}
-%%\For{$i$=1 to $N$} 
-%%{
-%% Detecting all code clones $CFs$ and $CGs$\;
-%%}
+\KwOut{All copy-and-paste operations}
 \For{$i$=1 to $N$}
 { 
  Generating CRD to represent each code clone{CFs}\;
- Mapping all the $CFs$ and $CGs$ between the adjacent versions {V\_i} and {V\_{i+1}}\;
- Identify all clone consistent change pattern in thus two versions according to Definition~\ref{def-creatingpattern}~\;
+ Mapping all the $CFs$ and $CGs$ between the adjacent versions {i} and {i+1}\;
 }
 Generating all clone genealogies $CGEs$ with number $N\_cge$\;
 \For{$i$=1 to $N\_cge$}
 { 
  Collecting the clone creating instance from $CGE\_i$ according to Definition~\ref{def-creatinginstance}~\; 
- Labeling the original and pasted code fragments by mapping this instances to its last version\;
- Labeling its consistency-requirement according to Definition~\ref{def-creatingrequirement}~;
+ Identify all clone consistent change pattern in thus two versions according to Definition~\ref{def-creatingpattern}~\;
+ Labeling its consistency-requirement according to Definition~\ref{def-creatingrequirement}~; 
+ Labeling the copied and pasted code fragments by mapping code clones to the last version\;
 }
-\Return {All clone creating instances\;}
+\Return {All copy-and-paste operations\;}
 \end{algorithm}
 \end{minipage}
 
@@ -194,7 +188,7 @@ Generating all clone genealogies $CGEs$ with number $N\_cge$\;
 
 本章使用机器学习中分类方法预测克隆代码创建的一致性维护需求，并使用软件中既有的克隆创建实例训练不同的机器学习模型。但是，实际的克隆创建实例无法直接应用于机器学习中。因此，本节将提取相应的属性值表示克隆创建实例。将分别提取代码属性、上下文属性两组属性代表克隆创建实例中的克隆代码。
 
-\BiSubsection{代码属性}
+\BiSubsection{被复制的克隆代码}
 {Code Attribute}
 
 代码属性表示了克隆创建实例中的初始克隆代码，从代码自身角度描述了被复制的克隆代码的特征。代码属性描述克隆代码的词法、语法、函数调用等信息。代码属性主要包括克隆代码粒度、Halstead属性、结构属性、调用属性等，具体的代码属性如下所示：
@@ -227,7 +221,7 @@ Halstead属性：
 被复制的克隆代码中，既不是库函数调用、也不是本地函数调用的其它调用次数统计，如同项目内其它包函数调用或同包内其它类中的函数调用。
 \end{itemize}
 
-\BiSubsection{上下文属性}
+\BiSubsection{被粘贴的克隆代码}
 {Context Attribute}
 
 上下文属性是代克隆创建实例中克隆代码之间的关系属性，描述了两者之间的克隆关系信息。上下文属性包括代码相似度、克隆分布、被复制和被粘贴代码之间的一些相似度等等。
