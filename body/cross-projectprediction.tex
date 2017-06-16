@@ -156,9 +156,27 @@ Appending all the attributes to the $Creating\_Set$\ or $Changing\_Set$\;
 \BiSection{跨项目克隆代码一致性维护需求预测}
 {Predicting Clone Cross-Project Consistency-Requirement}
 
-使用收集到的训练系统的克隆实例训练机器学习模型，并预测测试系统的克隆代码的一致性维护需求。从而验证跨项目的克隆一致性需求的预测能力。并对两种不同的时刻的克隆代码的一致性维护需求分别进行预测，即克隆创建时和克隆变化时，因此会训练两种不同的模型。
+使用收集到的训练系统的克隆实例训练机器学习模型，并预测测试系统的克隆代码的一致性维护需求。从而验证跨项目的克隆一致性需求的预测能力。值得注意的是，将对两种不同的时刻的克隆代码的一致性维护需求分别进行预测（即克隆创建时和克隆变化时），因此会训练两种不同的模型以适用于两个时刻。
 
 对于所测试的软件系统，首先，通过收集训练系统中所有的克隆实例(创建实例和变化实例)，并提取相应的属性，用于构建模型训练所需的数据集。然后，调用WEKA中的机器学习算法，分别构建克隆创建和变化的预测器，预测克隆代码的一致性维护需求。
+
+跨项目克隆一致性维护需求预测算法如~\ref{alg-crossperdiction}~所示。算法的第1行为划分训练集和测试集。第2-3行是生成跨项目的数据集。第4行是使用训练集训练机器学习模型。第5行是使用训练的模型在测试集上验证跨项目预测的有效性。
+
+\begin{minipage}{0.8\textwidth}
+\centering
+\begin{algorithm}[H]
+\AlgoBiCaption{跨项目克隆一致性维护需求预测算法} {The algorithm for cross-project predicting clone consistency-requirement}
+\label{alg-crossperdiction}
+\KwIn{All the projects}
+\KwOut{The predictive models}
+Dividing the projects into training projects and testing project\;
+Generating the $Training\_{Set}$ for training projects\;
+Generating the $Testing\_{Set}$ for testing project\;
+Calling WEKA to train the models applying training set $Training\_{Set}$\;
+Employed this trained model to predict on the $Testing\_{Set}$\;
+\Return {The predictive models\;}
+\end{algorithm}
+\end{minipage}
 
 与第三章和第四章相似，根据定义~\ref{def-requirement}~，克隆实例会有两种不同的状态：需要一致性维护和不需要一致性维护。如下所示：
 
@@ -171,29 +189,12 @@ Appending all the attributes to the $Creating\_Set$\ or $Changing\_Set$\;
 若克隆创建实例的预测结果为“不需要”，软件开发人员可以自由的执行克隆创建操作，从而节约开发时间提高开发效率。因为该克隆创建实例，在未来演化的过程中不会引发一致性变化，也不会导致额外的维护代价。若克隆创建实例的预测结果为“不需要”，软件开发人员可以自由的修改克隆变化实例所在克隆组的克隆片段。因为，该克隆变化实例，在未来演化的过程中不会引发一致性变化，也不会导致一致性缺陷。
 \end{itemize}
 
-在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆实例的一致性维护需求。首先，在软件开发环境中需监测和跟踪克隆代码，识别新产生的克隆实例(克隆创建实例和变化实例)。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示相应的克隆实例。最后，使用训练好的预测器预测相应克隆实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
-
-跨项目克隆一致性维护需求预测算法如~\ref{alg-crossperdition}~所示。算法的第1行为划分训练集和测试集。第2行是使用训练集训练机器学习模型。第3行是使用训练的模型在测试集上验证跨项目预测的有效性。
-
-\begin{minipage}{0.8\textwidth}
-\centering
-\begin{algorithm}[H]
-\AlgoBiCaption{跨项目克隆一致性维护需求预测算法} {The algorithm for cross-project predicting clone consistency-requirement}
-\label{alg-crossperdition}
-\KwIn{All data sets for different projects}
-\KwOut{The predictive model}
-Dividing the projects into Training projects and Testing Projects\;
-Calling WEKA to train the model applying training set $Sets$ with machine learning method\;
-Employed this trained model to predict the Testing projects\;
-\Return {The predictive model\;}
-\end{algorithm}
-\end{minipage}
+在使用已训练好的模型进行预测时，可以与软件开发过程相结合，将该模型嵌入到软件开发环境中，帮助程序开发人员实现边开发边预测克隆实例的一致性维护需求。首先，在软件开发环境中需监测和跟踪克隆代码，识别新产生的克隆实例（克隆创建实例和变化实例）。然后，根据上文描述的代码、上下文和演化属性，提取相应的特征表示相应的克隆实例。最后，使用训练好的预测器预测相应克隆实例的一致性维护需求，根据预测结果提醒程序开发人员采取进一步的操作。
 
 \BiSection{跨项目一致性维护需求预测实验结果与分析}
 {Experimental Results and Analysis for Clone Cross-Project Consistency Prediction}
 
 本节给出本章的实验结果与分析，使用五种不同的机器学习方法，对克隆代码创建时和变化时同时进行跨项目的一致性维护预测。首先简单介绍了实验所使用的实验系统和评估方法，然后详细给出每个实验的结果与分析。
-
 
 \BiSubsection{实验系统与实验设置}
 {Experimental Projects and Methodology}
