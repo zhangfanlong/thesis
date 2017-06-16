@@ -564,8 +564,8 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 通过对比同一个系统的“Average”和“All”列，在4个系统中全部的F值中，“All”列具有较好的预测效果（表中大多数“All”列的数值要大于“Average”列）。但是，通过比较“Average”和“All”列中数据，发现两列的数据相差不大。因此，在对于某一个具体的测试系统，在跨项目预测中，对于同一个测试系统而言，由于项目之间的差异，训练集规模的大小并不能起到决定性作用。因此，可以考虑在保证一定规模训练数据的基础上，对训练数据进行进一步的过滤，缩小项目之间的差异，从而提升跨项目的预测效果。但是，如何过滤和优选跨项目预测的训练数据，从而缩小项目之间的差异，仍需进一步的研究确认。
 
 \begin{table} [htbp]
-\bicaption[creatingcrosssizeaverage]{}{创建时跨项目预测数据集选择实验}
-{Table$\!$}{The effectiveness of cross-project for training size selection at creating time}
+\bicaption[creatingcrosssizeaverage]{}{创建时跨项目预测数据集规模实验}
+{Table$\!$}{The effectiveness of cross-project for training size at creating time}
 \vspace{0.5em}
 \centering
 \footnotesize
@@ -686,8 +686,8 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 通过对比每个项目的“Average”和“All”列，在4个系统中全部的F值中，“All”列具有较好的预测效果。具体地，对系统(To jEdit)和(To jFreeChart)，“All”列的预测效果均优于“Average”列。但是，通过比较“Average”和“All”列中数据，发现两列的数据相差不大。因此，在对于某一个具体的测试系统，在跨项目预测中，由于项目之间的差异，训练集的大小并不能起到决定性作用。因此，可以考虑在保证一定规模训练数据的基础上，对训练数据进行进一步的过滤，缩小项目之间的差异，从而提升跨项目的预测效果。但是，如何过滤和优选跨项目预测的训练数据，从而缩小项目之间的差异，仍需进一步的研究确认。
 
 \begin{table} [htbp]
-\bicaption[changingcrosssizeaverage]{}{克隆变化的跨项目预测数据集选择实验}
-{Table$\!$}{The effectiveness of cross-project for training size selection at changing time}
+\bicaption[changingcrosssizeaverage]{}{克隆变化的跨项目预测数据集规模实验}
+{Table$\!$}{The effectiveness of cross-project for training size at changing time}
 \vspace{0.5em}
 \centering
 \footnotesize
