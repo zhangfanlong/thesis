@@ -67,7 +67,7 @@
 
 （2）如何从不同的角度描述和表示克隆代码及其演化过程，即如何从克隆片段、克隆组和克隆家系三个不同的角度分析克隆代码的演化情况？
 
-（3）如何全面且客观地分析和挖掘克隆代码演化特征，并帮助开发人员理解和维护软件中克隆代码？（a）克隆代码在其演化过程中，是否是稳定的，是否容易发生变化？（b）软件中是否存在大量的发生变化的克隆代码，并且其在演化过程中是如何发生变化的？
+（3）如何全面且客观地分析和挖掘克隆代码演化特征，并帮助开发人员理解和维护软件中克隆代码？该问题可以划分为两个子问题：（a）克隆代码在其演化过程中，是否是稳定的，是否容易发生变化？（b）软件中是否存在大量的发生变化的克隆代码，并且其在演化过程中是如何发生变化的？
 
 \BiSection{克隆代码演化及其定义}
 {The Definitions for Clone Evolution}
@@ -215,7 +215,7 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 
 为挖掘克隆代码的演化特征，本节从三个不同的角度表示克隆代码及其演化情况，即克隆片段、克隆组和克隆家系，并将之称为克隆演化实体(简称为克隆实体)。正如在机器学习中通常所做的那样，本节还提取不同的属性特征表示克隆代码实体。对克隆片段实体，重点关注克隆代码片段的变化情况。对克隆组实体，重点关注克隆组的克隆演化模式分布情况。对于克隆家系实体，重点关注克隆组在整个演化过程中的演化情况。
 
-\BiSubsection{克隆片段实体的特征描述}
+\BiSubsection{克隆片段实体的特征}
 {The Attributes for Clone Fragment Entity}
 
 克隆代码片段是最小的克隆演化实体单元。克隆片段实体描述了克隆代码本身的一些特征。在克隆片段的生命期间，克隆片段可能被软件人员开发人员修改（特别是在软件维护期间）。因此，克隆片段在演化过程中可能会发生变化，甚至在其演化过程中可能发生不止一次的变化。
@@ -237,7 +237,7 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 %\item {Change Times}:	number of times the clone fragment changed so far (up till version i) in the evolution.  
 \end{itemize}
 
-\BiSubsection{克隆组实体的特征描述}
+\BiSubsection{克隆组实体的特征}
 {The Attributes for Clone Group Entity}
 
 克隆片段实体仅从单个克隆代码的角度描述了克隆演化中的被修改的情况。而克隆组实体可以提供一些克隆代码的区域性特征。克隆代码的变化往往会导致其所在克隆组的变化，可以使用克隆演化模式进行描述。克隆代码演化模式描述了相邻版本之间的克隆组的演化情况，因此，可以使用克隆组当前的演化模式描述克隆组实体的变化情况。
@@ -279,7 +279,7 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 %\item {Split}: clone group undergoes a ``split'' pattern change from last version.
 \end{itemize}
 
-\BiSubsection{克隆家系实体的特征描述}
+\BiSubsection{克隆家系实体的特征}
 {The Attributes for Clone Genealogy Entity }
 
 克隆家系实体是克隆代码演化的全局视角。该实体提供了某一克隆组在其整个演化过程中的演化情况，可以帮助捕获软件系统中全部克隆代码的演化情况。如前文所述，一个克隆组在所有的版本中的全部演化过程是一个克隆家系。因此，在其整个演化过程中，其所经历的所有的演化模式数量，可以描述克隆家系实体的在其整个演化过程中的整个变化历史演化过程。同时，对于一个克隆家系，克隆寿命是克隆家系的另一个重要的指标，描述了克隆代码在系统中存在的时间。
