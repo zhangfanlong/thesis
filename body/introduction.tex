@@ -59,7 +59,7 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.8\textwidth]{literaturedistribution1}
+\includegraphics[width = 0.8\textwidth]{literaturedistribution1.pdf}
 \bicaption[literaturedistribution1]{}{克隆代码研究领域文献分布情况}
 {Fig.$\!$}{Literature distribution of code clone research}
 \vspace{-1em}
@@ -69,19 +69,17 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.8\textwidth]{literaturedistribution2}
+\includegraphics[width = 0.8\textwidth]{literaturedistribution2.pdf}
 \bicaption[literaturedistribution2]{}{克隆领域每年发表的论文数量}
 {Fig.$\!$}{Annual number of published papers of code clone research}
-{Fig.$\!$}{Annual Number of Published Papers of Code Clone Research}
 \vspace{-1em}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.8\textwidth]{literaturedistribution3}
+\includegraphics[width = 0.8\textwidth]{literaturedistribution3.pdf}
 \bicaption[literaturedistribution3]{}{各个克隆研究活动每年发表的文献数量}
 {Fig.$\!$}{Annual number of published papers of each clone research activity}
-%{Fig.$\!$}{Annual Number of Published Papers of Each Clone Research Activity\vspace{-1em}
 \end{figure}
 
 为分析克隆代码研究领域的发展趋势，本文按照发表年份和研究方向进行了统计。统计分析结果如图~\ref{literaturedistribution2}~和~\ref{literaturedistribution3}~所示，其中图~\ref{literaturedistribution2}~是领域整体上每年发表文献数量的统计情况，图~\ref{literaturedistribution3}~是在不同研究方向上每年发表文献数量的统计情况。
@@ -284,18 +282,29 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 \BiSubsection{克隆代码维护研究}
 {Code Clone Maintenance Research}
 
+
 克隆维护是解决克隆代码问题的直接途径，主动地解决克隆代码可能或已经引发的问题。%克隆维护与软件开发过程结合得较为紧密，维护的方法主要包括克隆重构、克隆规避、克隆复用和克隆管理。
 
 \BiSubsubsection{克隆代码重构}
 {Code Clone Refactoring}
+\label{ref-clonerefactoring}
 
-重构作为一种常见的软件维护手段，是指在不改变软件外部行为的条件下改变软件的既有设计\cite{kerievsky2006重构与模式}。将重构应用于克隆维护中，指的是通过重构手段消除系统中的克隆代码。
+重构作为一种常见的软件维护手段，是指在不改变软件外部行为的条件下改变软件的既有设计\cite{kerievsky2006重构与模式}。将重构应用于克隆维护中，指的是通过重构手段消除系统中的克隆代码。克隆代码的重构研究是对克隆代码维护研究的一个主要的研究内容。
 
-由于重构所需的条件较为苛刻，同时重构的代价也较大。因此，在重构前对克隆代码进行可重构性分析和重构排序显得尤为重要。可重构性分析旨在识别适于重构的克隆代码候选集合，以提高克隆重构的效率\cite{lin2014detecting}\cite{mende2009evaluation}\cite{schulze2008towards}\cite{choi2011extracting}。Lin等人通过对克隆代码进行差异性分析，帮助开发人员决定是否进行重构操作和如何执行重构操作\cite{lin2014detecting}。Mende实现了一个工具支持可重构性分析，在软件中识别可以被重构的函数克隆\cite{mende2009evaluation}。Schulze提出了一个用于识别可重构的克隆代码的克隆分类方法，通过计算克隆代码的可重构指数识别可重构的克隆代码\cite{schulze2008towards}。Choi等人提出了基于度量值的可重构性分析方法，可以快速地识别可重构的克隆代码\cite{choi2011extracting}。识别可重构克隆后，为了节省重构时间，还可以对克隆代码进行重构排序或者调度。如Mandal先通过分析克隆演化模式来确定克隆候选，然后使用关联规则挖掘进行可重构排序、\cite{mandal2014automatic}。Lee采用遗传算法对重构进行调度，以确定重构顺序帮助改进软件质量\cite{lee2011automated}。Zibran提出一种极限编程方法对克隆代码进行重构调度\cite{zibran2011constraint}。另外，Liu等人提出了一个重构调度方法帮助优化调度过程\cite{liu2012schedule}。尽管该方法不是针对克隆重构的，但也可以考虑将其应用于克隆代码的重构调度上。此外，Radhika等人仅考虑重构代价对所有的克隆代码进行重构排序，未考虑克隆代码是否适合重构的问题\cite{venkatasubramanyam2013prioritizing}，应该结合可重构性分析指导克隆重构。Tsantalis也对克隆代码的可重构性进行分析，并获得一些有用的结论帮助人们重构克隆代码\cite{tsantalis2015assessing}。
+由于重构所需的条件较为苛刻，同时重构的代价也较大。因此，在重构前对克隆代码进行可重构性分析和重构排序显得尤为重要。可重构性分析旨在识别适于重构的克隆代码候选集合，以提高克隆重构的效率\cite{lin2014detecting}\cite{mende2009evaluation}\cite{schulze2008towards}\cite{choi2011extracting}。Lin等人通过对克隆代码进行差异性分析，帮助开发人员决定是否进行重构操作和如何执行重构操作\cite{lin2014detecting}。Mende实现了一个工具支持可重构性分析，在软件中识别可以被重构的函数克隆\cite{mende2009evaluation}。Schulze提出了一个用于识别可重构的克隆代码的克隆分类方法，通过计算克隆代码的可重构指数识别可重构的克隆代码\cite{schulze2008towards}。Choi等人提出了基于度量值的可重构性分析方法，可以快速地识别可重构的克隆代码\cite{choi2011extracting}。识别可重构克隆后，为了节省重构时间，还可以对克隆代码进行重构排序或者调度\cite{mandal2014automatic}\cite{lee2011automated}\cite{zibran2011constraint}。Mandal先通过分析克隆演化模式来确定克隆候选，然后使用关联规则挖掘进行可重构排序\cite{mandal2014automatic}。Lee采用遗传算法对重构进行调度，以确定重构顺序帮助改进软件质量\cite{lee2011automated}。Zibran提出一种极限编程方法对克隆代码进行重构调度\cite{zibran2011constraint}。另外，Liu等人提出了一个重构调度方法帮助优化调度过程\cite{liu2012schedule}。尽管该方法不是针对克隆重构的，但也可以考虑将其应用于克隆代码的重构调度上。此外，Radhika等人仅考虑重构代价对所有的克隆代码进行重构排序，未考虑克隆代码是否适合重构的问题\cite{venkatasubramanyam2013prioritizing}，应该结合可重构性分析指导克隆重构。Tsantalis也对克隆代码的可重构性进行分析，并获得一些有用的结论帮助人们重构克隆代码\cite{tsantalis2015assessing}。
 
-克隆重构最主要的目的是消除系统中的克隆代码。Higo等人开发了一个工具ARIES，根据克隆代码的结构信息识别可重构的克隆代码，然后通过计算不同的度量值来确定使用哪一种目前已有的重构方法移除克隆代码\cite{higo2008metric}。Krishnan通过分析克隆代码的程序依赖图，确定给定克隆代码能否被安全的重构，然后通过检测和参数化克隆代码的差异点对克隆代码进行重构，取得了较好的效果\cite{krishnan2014unification}。Barbosa使用四种规则重构克隆代码，并在开源软件JhotDraw上进行了实验，结果表明基于规则的重构方法可以有效地移除软件中的克隆代码\cite{barbosa2013removing}。Ettinger等人提出了一个高效的方法可以消除系统中的Type-3克隆代码\cite{ettinger2017efficient}。
+克隆重构最主要的目的是消除系统中的克隆代码，因此研究人员也提出了许多具体的重构方法\cite{higo2008metric}\cite{krishnan2014unification}\cite{barbosa2013removing}\cite{ettinger2017efficient}。Higo等人开发了一个工具ARIES，根据克隆代码的结构信息识别可重构的克隆代码，然后通过计算不同的度量值来确定使用哪一种目前已有的重构方法移除克隆代码\cite{higo2008metric}。Krishnan通过分析克隆代码的程序依赖图，确定给定克隆代码能否被安全的重构，然后通过检测和参数化克隆代码的差异点对克隆代码进行重构，取得了较好的效果\cite{krishnan2014unification}。Barbosa使用四种规则重构克隆代码，并在开源软件JhotDraw上进行了实验，结果表明基于规则的重构方法可以有效地移除软件中的克隆代码\cite{barbosa2013removing}。Ettinger等人提出了一个高效的方法可以消除系统中的Type-3克隆代码\cite{ettinger2017efficient}。
 
-在重构完成后，对重构后代码进行分析，还可以得出一些结论以进一步指导克隆重构。G{\"o}de通过对维护人员使用的重构方法和被重构的克隆代码进行实证研究，发现在不同的软件系统中都存在克隆重构的行为，并且克隆重构不是经常性地发生而是有选择性地发生\cite{gode2010clone}。Zibran等人通过克隆重构研究，回答了所提出的关于克隆重构的七个研究问题，并且研究发现克隆规模对克隆重构没有重要的影响，同时在软件早期的版本中重构会较为频繁地发生，发生重构的克隆在重构前往往是较为稳定的克隆代码\cite{zibran2013evaluating}。Choi通过对重构行为进行观测，识别出几种较为频繁的克隆重构模式，并且分析了每种重构模式的特征，这些都有助于进一步指导克隆代码的重构\cite{eunjong2014investigation}。Tairas通过对克隆代码的重构性分析，提出了子克隆的概念，并研究发现子克隆的重构行为更容易发生，因此建议在对克隆代码的维护过程中应重点考虑子克隆的重构\cite{tairas2010sub}。
+在重构完成后，对重构后代码进行分析，还可以得出一些结论以进一步指导克隆重构\cite{gode2010clone}\cite{zibran2013evaluating}\cite{eunjong2014investigation}\cite{eunjong2014investigation}。G{\"o}de通过对维护人员使用的重构方法和被重构的克隆代码进行实证研究，发现在不同的软件系统中都存在克隆重构的行为，并且克隆重构不是经常性地发生而是有选择性地发生\cite{gode2010clone}。Zibran等人通过克隆重构研究，回答了所提出的关于克隆重构的七个研究问题，并且研究发现克隆规模对克隆重构没有重要的影响，同时在软件早期的版本中重构会较为频繁地发生，发生重构的克隆在重构前往往是较为稳定的克隆代码\cite{zibran2013evaluating}。Choi通过对重构行为进行观测，识别出几种较为频繁的克隆重构模式，并且分析了每种重构模式的特征，这些都有助于进一步指导克隆代码的重构\cite{eunjong2014investigation}。Tairas通过对克隆代码的重构性分析，提出了子克隆的概念，并研究发现子克隆的重构行为更容易发生，因此建议在对克隆代码的维护过程中应重点考虑子克隆的重构\cite{tairas2010sub}。
+
+\BiSubsubsection{克隆代码复用}
+{Code Clone Reuse}
+
+近些年来，随着对克隆代码评价分析研究的深入，人们已经意识到复用健壮性好的克隆代码不仅有助于缩短软件开发周期，还有利于提高软件的健壮性和可维护性。因此，也出现了少量的克隆代码复用的研究。
+
+Krutz等人提出克隆数据库概念，将已有克隆代码组织为克隆数据库，并结合代码检索技术实现对克隆代码的复用\cite{krutz2014code}。Ishihara提出的方法也允许开发人员通过代码搜索技术搜索可以复用的克隆代码\cite{ishihara2013reusing}。Ohta通过对比软件开发过程中由复制粘贴操作产生的克隆代码和系统中已存在的克隆代码，并将该克隆代码划分为较差、较好、最好三种情况，辅助开发人员决定是否能够复用该克隆代码\cite{ohta2015source}。在软件开发过程中，向开发人员提供一个可复用的克隆代码库，是一种较为为主动的克隆代码复用形式。例如，Yang\cite{yang2015classification}等人使用机器学习模型对克隆代码进行分类，分类标准由开发人员动态地标记，通过标记可复用的克隆代码将该方法应用于克隆复用，辅助开发人员搜索可以复用的克隆代码。Ohtani从代码建议的视角辅助开发人员复用已有的代码，从不同粒度对可复用的代码提供搜索支持\cite{ohtani2015level}。Kintab实现了一个克隆代码的专家推荐系统，可以在线向软件开发人员提供复用克隆代码的相关咨询，从而决定如何复用和维护既有的克隆代码\cite{kintab2014recommending}。
+
+现有的克隆代码复用研究大都是针对单一项目的。如何实现对跨项目的克隆代码复用是克隆复用面临的另一个新问题。目前，在互联网环境下，大量的开源社区里也普遍存在代码复用的情况，由此产生了跨项目的克隆代码和对跨项目代码复用的应用需求。但目前对这种跨项目的克隆代码复用的研究依然较少。Ishihara对跨项目的软件进行函数克隆检测，试图建立一个公用函数库用于代码复用\cite{ishihara2012inter}。Cheng等人研究了跨项目的克隆代码检测技术\cite{cheng2016feasibility}。Tairas等人将信息检索技术与克隆代码分析相结合，以便快速有效地搜索可复用的克隆代码\cite{tairas2009information}。事实上，以上这些技术都可以用于跨项目的克隆代码搜索和复用中。
 
 \BiSubsubsection{克隆代码规避}
 {Code Clone Prevention}
@@ -306,14 +315,6 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 由于受软件复用的影响和编程语言的限制，大部分克隆代码是无法避免的。克隆规避可以作为一种辅助的手段，通过限制开发人员的复制粘贴操作帮助减少克隆代码的产生，但却无法规避全部的克隆代码。
 
-\BiSubsubsection{克隆代码复用}
-{Code Clone Reuse}
-
-近些年来，随着对克隆代码评价分析研究的深入，人们已经意识到复用健壮性好的克隆代码不仅有助于缩短软件开发周期，还有利于提高软件的健壮性和可维护性。
-
-Krutz等人提出克隆数据库概念，将已有克隆代码组织为克隆数据库，并结合代码检索技术实现对克隆代码的复用\cite{krutz2014code}。Ishihara提出的方法也允许开发人员通过代码搜索技术搜索可以复用的克隆代码\cite{ishihara2013reusing}。Ohta通过对比软件开发过程中由复制粘贴操作产生的克隆代码和系统中已存在的克隆代码，并将该克隆代码划分为较差、较好、最好三种情况，辅助开发人员决定是否能够复用该克隆代码\cite{ohta2015source}。在软件开发过程中，向开发人员提供一个可复用的克隆代码库，是一种较为为主动的克隆代码复用形式。例如，Yang\cite{yang2015classification}等人使用机器学习模型对克隆代码进行分类，分类标准由开发人员动态地标记，通过标记可复用的克隆代码将该方法应用于克隆复用，辅助开发人员搜索可以复用的克隆代码。Ohtani从代码建议的视角辅助开发人员复用已有的代码，从不同粒度对可复用的代码提供搜索支持\cite{ohtani2015level}。Kintab实现了一个克隆代码的专家推荐系统，可以在线向软件开发人员提供复用克隆代码的相关咨询，从而决定如何复用和维护既有的克隆代码\cite{kintab2014recommending}。
-
-现有的克隆代码复用研究大都是针对单一项目的。如何实现对跨项目的克隆代码复用是克隆复用面临的另一个新问题。目前，在互联网环境下，大量的开源社区里也普遍存在代码复用的情况，由此产生了跨项目的克隆代码和对跨项目代码复用的应用需求。但目前对这种跨项目的克隆代码复用的研究依然较少。Ishihara对跨项目的软件进行函数克隆检测，试图建立一个公用函数库用于代码复用\cite{ishihara2012inter}。Cheng等人研究了跨项目的克隆代码检测技术\cite{cheng2016feasibility}。Tairas等人将信息检索技术与克隆代码分析相结合，以便快速有效地搜索可复用的克隆代码\cite{tairas2009information}。事实上，以上这些技术都可以用于跨项目的克隆代码搜索和复用中。
 
 \BiSubsubsection{克隆代码管理}
 {Code Clone Management}
@@ -354,17 +355,18 @@ Krutz等人提出克隆数据库概念，将已有克隆代码组织为克隆数
 \BiSubsection{论文结构}
 {Structure of This Dissertation}
 
+基于软件演化的克隆代码分析与一致性维护方法，综合考虑软件演化过程、程序分析方法和机器学习方法，实现对克隆代码的分析和一致性维护。为了进一步说明本文的研究内容以及各个部分之间的关系，给出论文的主要研究内容及其关系示意图，如图~\ref{framework1}~所示。
+
+本文主要研究四个内容，首先研究克隆代码的演化特征分析方法，获取克隆代码演化特征，并用于指导后续的克隆代码一致性维护研究。然后，针对克隆代码的一致性变化会导致额外维护代价和一致性维护缺陷问题，分别在克隆代码创建时和变化时预测克隆代码的一致性维护需求，帮助降低软件维护代价。最后，针对软件开发初期软件缺乏自身历史数据的问题，研究跨项目的克隆代码一致性维护需求预测问题，并结合软件开过程，实现了一个克隆一致性预测插件，帮助软件开发人员边开发、边维护克隆代码。
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width = 0.7\textwidth]{framework1.pdf}
+\includegraphics[width = 0.9\textwidth]{framework1.pdf}
 \bicaption[framework1]{}{论文主要研究内容及其关系示意图}{Fig.$\!$}
 {Main research contents and their relationship in the thesis}
 \vspace{-1em}
 \end{figure}
 
-基于软件演化的克隆代码分析与一致性维护方法，综合考虑软件演化过程、程序分析方法和机器学习方法，实现对克隆代码的分析和一致性维护。为了进一步说明本文的研究内容以及各个部分之间的关系，给出论文的主要研究内容及其关系示意图，如图~\ref{framework1}~所示。
-
-本文主要研究四个内容，首先研究克隆代码的演化特征分析方法，获取克隆代码演化特征，并用于指导后续的克隆代码一致性维护研究。然后，针对克隆代码的一致性维护问题，分别在克隆代码创建时和变化时预测克隆代码的一致性维护需求，帮助降低额外的克隆维护代价和避免克隆一致性违背缺陷。最后，研究跨项目的克隆代码一致性维护需求预测问题，并结合软件开过程，实现了一个克隆一致性预测插件，帮助软件开发人员边开发、边维护克隆代码。
 
 各章节研究内容安排如下：
 
