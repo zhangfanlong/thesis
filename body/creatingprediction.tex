@@ -44,7 +44,7 @@
 
 如上一节图~\ref{creatingexamplea}~所示，复制和粘贴导致的克隆代码可能引发额外的维护代价。
 
-针对克隆代码的维护代价问题，当前最主流的解决方式是使用重构的方法消除系统中的克隆代码。拟通过重构的手段消除克隆代码，进而避免克隆代码维护代价。目前的重构研究主要集中在可重构分析\cite{lin2014detecting}\cite{mende2009evaluation}\cite{schulze2008towards}\cite{choi2011extracting}、重构调度\cite{mandal2014automatic}\cite{lee2011automated}\cite{zibran2011constraint}、重构方法\cite{higo2008metric}\cite{krishnan2014unification}\cite{barbosa2013removing}\cite{ettinger2017efficient}等方面（见本文第~\ref{ref-ref-clonerefactoring}~节克隆代码重构）。但是，由于重构的代价较大，仅有少数的克隆代码适合于重构，因此无法解决克隆代码所导致的额外维护代价问题。
+针对克隆代码的维护代价问题，当前最主流的解决方式是使用重构的方法消除系统中的克隆代码。拟通过重构的手段消除克隆代码，进而避免克隆代码维护代价。目前的重构研究主要集中在可重构分析\cite{lin2014detecting}\cite{mende2009evaluation}\cite{schulze2008towards}\cite{choi2011extracting}、重构调度\cite{mandal2014automatic}\cite{lee2011automated}\cite{zibran2011constraint}、重构方法\cite{higo2008metric}\cite{krishnan2014unification}\cite{barbosa2013removing}\cite{ettinger2017efficient}等方面（见本文第~\ref{ref-clonerefactoring}~节克隆代码重构）。但是，由于重构的代价较大，仅有少数的克隆代码适合于重构，因此无法解决克隆代码所导致的额外维护代价问题。
 
 此外，为了有效地管理克隆代码，也对克隆代码进行跟踪，如跟踪克隆代码的产生。由于复制粘贴操作是导致克隆产生的最主要原因，因此通过监测程序员的复制粘贴操作可以跟踪克隆代码的产生。例如，许多克隆跟踪工具CLONEBOARD\cite{de2009managing}、CnP\cite{hou2009cnp}、CPC\cite{weckerle2008cpc}、CReN\cite{jablonski2007cren}、CSeR\cite{jacob2010actively}等。但是，上述方法对新产生的克隆代码，并没有进行是否会导致额外维护代价的判断，而是将所有的克隆代码全部引入系统中。因此，也无法帮助降低克隆代码的额外维护代价。
 
