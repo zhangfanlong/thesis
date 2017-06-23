@@ -36,17 +36,17 @@
 \fi
 \cabstract{
 
-克隆代码是软件系统中存在的彼此相似的代码片段。在软件开发过程中，开发人员通过复用既有代码会向系统中引入大量的克隆代码。克隆代码会随着时间和软件系统更新而进行演化，使得软件系统变得越来越臃肿、难以维护，影响了软件的质量、可理解性和可维护性。这引发了一系列对克隆代码的研究，如克隆检测、克隆分析和克隆维护等。克隆检测可以帮助开发人员收集系统中的克隆代码，克隆分析可以开发人员帮助理解系统中存在的克隆代码，而克隆维护可以开发人员帮助解决克隆代码已经引发或者可能引发的问题。因此，克隆代码研究对于帮助提高软件系统的质量、增强软件系统的可理解性和可维护性，具有重要的科学理论意义和实际应用价值。
+克隆代码是软件系统中存在的彼此相似的代码片段。在软件开发过程中，开发人员通过复制粘贴既有代码会向系统中引入大量的克隆代码。克隆代码会随着时间和软件系统更新而进行演化，使软件系统变得越来越臃肿、难以维护，影响了软件的质量、可理解性和可维护性。这引发了一系列对克隆代码的研究，如克隆检测、克隆分析和克隆维护等。克隆检测帮助开发人员收集系统中的克隆代码，克隆分析帮助开发人员理解系统中存在的克隆代码，克隆维护帮助开发人员解决克隆代码已经引发或者可能引发的问题。因此，克隆代码研究对帮助提高软件系统的质量、增强软件系统的可理解性和可维护性，具有重要的科学理论意义和实际应用价值。
 
-在克隆代码的演化过程中，克隆代码可能会被开发人员修改而发生变化，因而进一步加剧了克隆代码问题。演化中的克隆代码变化使得克隆代码难以理解，降低了软件的可理解性。克隆代码的一致性变化还会导致额外维护代价和一致性违背缺陷，降低了软件质量和可维护性。因此，本文基于软件演化研究克隆代码分析与一致性维护方法，通过提取分析克隆代码的演化特征，帮助软件开发人员理解克隆代码及其演化过程，通过预测克隆代码的一致性维护需求解决克隆代码的一致性维护问题，并结合软件开发过程实现边开发、边维护克隆代码，从而提高软件质量，降低软件维护代价。
+在克隆代码的演化过程中，克隆代码可能会被开发人员修改而发生变化，而进一步加剧克隆代码问题。演化中克隆代码的变化使得克隆代码难以理解，降低了软件的可理解性。克隆代码的一致性变化会导致额外的维护代价，而遗忘这种变化会导致一致性违背缺陷，降低了软件质量和可维护性。因此，本文基于软件演化研究克隆代码分析与一致性维护方法，通过提取分析克隆代码的演化特征，帮助软件开发人员理解克隆代码及其演化过程，通过预测克隆代码的一致性维护需求解决克隆代码的一致性维护问题，并结合软件开发过程实现边开发、边维护克隆代码，提高软件质量、降低软件维护代价。
 
-针对演化中的克隆代码难于理解和分析的问题，研究并提出了基于聚类的克隆代码演化特征分析方法，为克隆一致性维护需求预测奠定了基础。首先，使用克隆检测工具检测系统中的克隆代码，并构建系统所有的克隆家系用于描述克隆代码的演化过程。然后，从三个不同维度提取相应的属性值描述克隆代码及其演化过程，即克隆片段、克隆组和克隆家系。最后，使用聚类方法聚类克隆代码并挖掘克隆代码演化特征。实验结果发现大部分的克隆代码在演化过程中是稳定的，但也存在相当数量发生变化的克隆代码，其中发生一致性变化的克隆代码比率高于发生不一致性变化的克隆代码。
+针对演化中的克隆代码难于理解和分析的问题，研究并提出了基于聚类的克隆代码演化特征分析方法，为克隆代码一致性维护需求研究奠定了基础。首先，使用克隆检测工具检测系统中的克隆代码，并构建克隆家系描述克隆代码的演化过程。然后，从克隆片段、克隆组和克隆家系三个不同维度提取相应的属性值描述克隆代码及其演化过程。最后，聚类系统中的克隆代码并挖掘克隆代码演化特征。实验结果发现大部分的克隆代码在演化过程中是稳定的，但也存在相当数量发生变化的克隆代码，其中发生一致性变化的克隆代码比率高于发生不一致性变化的克隆代码。
 
-针对新创建的克隆代码在其演化中的一致性变化往往会导致额外的维护代价问题，研究并提出了克隆代码创建一致性维护需求预测方法。将系统中最早出现的克隆代码称为克隆创建实例，并将其在未来演化过程中所发生的一致性变化称为克隆代码创建一致性维护需求。首先，通过检测软件系统的克隆代码并构建其克隆家系收集系统中的新创建的克隆代码。然后，提取代码属性表示被复制的克隆代码，提取上下文属性表示被粘贴的克隆代码。最后，使用机器学习方法训练预测模型，并在克隆代码创建时预测克隆代码的一致性维护需求。实验结果表明本文所提出的方法可以高效地预测克隆代码的一致性维护需求，可以帮助软件开发人员降低克隆代码的一致性维护代价。
+针对新创建的克隆代码在其演化中的一致性变化往往会导致额外的维护代价问题，研究并提出了克隆代码创建一致性维护需求预测方法。将系统中最早出现的克隆代码称为克隆创建实例，并将其在未来演化过程中所发生的一致性变化称为克隆代码创建一致性维护需求。首先，通过检测软件系统的克隆代码并构建其克隆家系，收集系统中新创建的克隆代码。然后，提取代码属性表示被复制的克隆代码，提取上下文属性表示被粘贴的克隆代码。最后，使用机器学习方法训练预测模型，并在克隆代码创建时预测克隆代码的一致性维护需求。实验结果表明本文所提出的方法可以高效地预测克隆代码的一致性维护需求，可以帮助软件开发人员降低克隆代码的一致性维护代价。
 
 针对演化中的克隆代码的一致性变化可能会导致克隆一致性违背缺陷问题，研究并提出了克隆代码变化一致性维护需求预测方法。本文将软件系统中发生变化的克隆代码称为克隆变化实例，并将由此变化引发的未来演化中的一致性变化称为克隆代码变化一致性维护需求。首先，通过检测系统的克隆代码并构建系统克隆家系收集系统中的克隆变化实例。然后，从克隆组的角度提取三组不同的属性值用于表示克隆变化实例，即代码属性、上下文属性和演化属性。最后，使用机器学习模型训练预测模型，并在克隆代码发生变化时预测克隆代码变化的一致性维护需求。实验结果表明本文所提出的方法可以有效地预测克隆代码的一致性维护需求，可以帮助软件开发人员避免克隆代码一致性违背缺陷。
 
-针对在软件开发初期软件系统中因数据不足而无法预测克隆一致性维护需求的问题，研究并提出了跨项目克隆代码一致性维护需求预测方法。将克隆代码创建、变化实例统称为克隆实例，并将相应的一致性维护需求统一为克隆代码一致性维护需求。首先，对不同的软件系统通过构建其克隆家系收集克隆实例，并使用不同的属性表示克隆实例。然后，将不同的软件系统划分为训练系统和测试系统，并使用训练系统的数据训练机器学习模型，并在测试系统上验证跨项目克隆一致性维护需求的预测效果。最后，结合软件开发过程，设计并实现了一个eclipse插件预测克隆代码一致性维护需求，可以边开发、边预测克隆代码的一致性维护需求。 实验结果表明跨项目的克隆一致性维护需求预测，可以在软件开发初期帮助预测其它系统的一致性维护需求，并且有助于实现代码的边开发、边维护，从而降低软件的维护代价。
+针对在软件开发初期软件系统中因数据不足而无法预测克隆一致性维护需求的问题，研究并提出了跨项目克隆代码一致性维护需求预测方法。将克隆代码创建、变化实例统称为克隆实例，并将相应的一致性维护需求统一为克隆代码一致性维护需求。首先，对不同的软件系统通过构建其克隆家系收集克隆实例，使用不同的属性表示克隆实例。然后，将不同的软件系统划分为训练系统和测试系统，使用训练系统的数据训练机器学习模型，在测试系统上验证跨项目克隆一致性维护需求的预测效果。实验结果表明跨项目的克隆一致性维护需求预测，可以在软件开发初期帮助预测克隆代码的一致性维护需求。最后，结合软件开发过程，设计并实现了一个eclipse插件预测克隆代码一致性维护需求，可以边开发、边预测克隆代码的一致性维护需求， 有助于降低软件的维护代价。
 
 综上所述，本文提出的基于软件演化的克隆代码分析与一致性维护方法，为在软件开发过程中解决克隆代码分析和理解、克隆代码一致性维护、避免克隆代码相关缺陷、降低克隆代码维护代价、提高软件质量和可维护性等问题提供了一种新思路和新方法。
 }
@@ -55,21 +55,21 @@
 
 \eabstract{
 Code clones are the similar code fragments to each other in software.
-During the software development, developer introduce a large number of code clones through reusing the existing code fragments from software.
-Code clone always evolving as the time and the update of software, that lead the software become more and more bloated and difficult to maintain, and that affect the quality, comprehensibility, and maintainability of the software. 
+During the software development, developers introduce a large number of code clones through reusing the existing code fragments from software.
+Code clone always evolving as the time and the update of software, and software become more and more bloated and difficult to maintain, and that affect the quality, comprehensibility, and maintainability of the software. 
 Hence, there are a variety of code clone research, such as clone detection, clone analysis, clone maintenance and etc. 
-Clone detection can help developers gather the code clones from software, and clone analysis can help developers understand the presence of code clones in software, and clone maintenance can help developers solve the issues caused by code clones.
-Consequently,  code clone research has great scientific theoretical significance and practical applicative value for improving the quality of the software and enhancing the comprehensibility and maintainability of the software.
+Clone detection help developers gather the code clones from software, and clone analysis help developers understand the presence of code clones in software, and clone maintenance help developers solve the issues caused by code clones.
+Consequently, code clone research has great scientific theoretical significance and practical applicative value for improving the quality of the software, enhancing the comprehensibility, and maintainability of the software.
 
-During the process of code clone evolution, code clones may be modified by developers resulting the changes to clones, that exacerbating the issue of code clones. 
+During the process of code clone evolution, code clones may be modified by developers that resulting the changes to clones, that will exacerbate the issue of code clones. 
 The changes to the evolving code clone make it difficult to understand, and decrease the comprehensibility of the software.
 The consistent changes of code clones give rise to additional maintenance costs and clone consistency-defects, that thereby reducing software quality and maintainability. 
 Therefore, this thesis studies on the code clone analysis and consistency maintenance based on software's evolution. 
-Analyzing and extracting the clone evolutionary characteristics of code clones can help the developers understand the code clones.
-Predicting the consistency-requirement of code clones can solve the issues of code clone consistency maintenance.
+Analyzing and extracting the clone evolutionary characteristics of code clones help the developers understand the code clones.
+Predicting the consistency-requirement of code clones solve the issues of code clone consistency maintenance.
 Our methods can help developers improve software quality, and reduce the cost of software maintenance through maintain the code clones at the development time.
 
-Aiming to address the difficulty of analyzing and understanding the evolving code clones, an approach for extracting code clone evolutionary characteristics based on clustering method is proposed in this thesis, which can lay the foundation for the prediction of clone consistency-requirement.
+Aiming to address the difficulty of analyzing and understanding the evolving code clones, an approach for extracting code clone evolutionary characteristics based on clustering method is proposed in this thesis, which lay the foundation for the prediction of clone consistency-requirement.
 We firstly detect all code clones with detection tool from software's repository, then build all the clone genealogies for software to describe the evolution of the code clones.
 After that, the corresponding attribute sets were extracted from three different perspectives of the code clones and their evolution, including clone fragment, clone group and clone genealogy. 
 Finally, the clustering method is employed for excavating and analyzing the clone evolutionary characteristics from all the code clones and their evolution. 
