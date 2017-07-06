@@ -242,7 +242,7 @@ Halstead属性：
 被复制及粘贴的克隆代码片段是否在同一个文件中。
 \item
 文件名相似度：
-被复制和被粘贴克隆代码所在文件的名相似度。假定文件名分别为$M_1$和$M_2$，则文件名相似度为$Sim(M_1,M_2)$，采用李氏距离\cite{levenshtein1966binary}计算(剩余度量中相似度采用相同方法计算)。
+被复制和被粘贴克隆代码所在文件的名相似度。假定文件名分别为$M_1$和$M_2$，则文件名相似度为$Sim(M_1,M_2)$，采用李氏距离\cite{levenshtein1966binary,navarro2001guided}计算(剩余度量中相似度采用相同方法计算)。
 \item
 文件名相似度标识：
 当克隆是局部克隆时，其文件名相似度为1，为非局部克隆时为0。该属性决定文件名相似度是否起效。
@@ -269,7 +269,7 @@ Halstead属性：
 
 本章将克隆代码创建的一致性维护需求问题，转化成了克隆创建实例的分类问题，即给定一个克隆创建实例，判别其是否满足克隆创建的一致性维护需求。本章使用五种机器学习方法对克隆创建实例进行分类，从而预测克隆一致性维护需求。
 
-在本章的研究中，使用五种不同的机器学习方法，即：贝叶斯网络方法（Bayesian Network，简称为BayesNet）\cite{friedman1997bayesian}、朴素贝叶斯方法（Naive Bayes，本文简称为Naive）\cite{john1995estimating}，支持向量机方法（Support Vector Machine，简称为SVM）\cite{platt199912} 、K近邻方法(K-Nearest Neighbors，简称为KNN) \cite{aha1991instance}和决策树方法（Decision Tree，本文简写为Tree）\cite{quinlan2014c4}。
+在本章的研究中，使用五种不同的机器学习方法，即：贝叶斯网络方法（Bayesian Network，简称为BayesNet）\cite{friedman1997bayesian,pearl1985bayesian}c、朴素贝叶斯方法（Naive Bayes，本文简称为Naive）\cite{john1995estimating}，支持向量机方法（Support Vector Machine，简称为SVM）\cite{platt199912} 、K近邻方法(K-Nearest Neighbors，简称为KNN) \cite{aha1991instance}和决策树方法（Decision Tree，本文简写为Tree）\cite{quinlan2014c4}。
 
 （1）贝叶斯网络方法
 
