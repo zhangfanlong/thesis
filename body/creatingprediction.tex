@@ -42,7 +42,7 @@
 
 在软件开发过程中，通过复制粘贴操作复用既有代码已经成为一种常见的软件开发手段\cite{koschke2007survey}。复用既有代码可以减少软件开发时间、提高软件开发效率，但同时也会向软件系统中引入大量的克隆代码。复制和粘贴导致的克隆代码可能引发额外的维护代价，如图~\ref{creatingexamplea}~所示。
 
-针对克隆代码的维护代价问题，当前最主流的解决方式是使用重构的方法消除系统中的克隆代码。拟通过重构的手段消除克隆代码，进而避免克隆代码维护代价。目前的重构研究主要集中在可重构分析\cite{lin2014detecting}\cite{mende2009evaluation}\cite{schulze2008towards}\cite{choi2011extracting}、重构调度\cite{mandal2014automatic}\cite{lee2011automated}\cite{zibran2011constraint}、重构方法\cite{higo2008metric}\cite{krishnan2014unification}\cite{barbosa2013removing}\cite{ettinger2017efficient}等方面（见本文第~\ref{ref-clonerefactoring}~节克隆代码重构）。%但是，由于重构的代价较大，仅有少数的克隆代码适合于重构，因此无法解决克隆代码所导致的额外维护代价问题。
+针对克隆代码的维护代价问题，当前最主流的解决方式是使用重构的方法消除系统中的克隆代码。拟通过重构的手段消除克隆代码，进而避免克隆代码维护代价。目前的重构研究主要集中在可重构分析\cite{lin2014detecting,mende2009evaluation,schulze2008towards,choi2011extracting}、重构调度\cite{mandal2014automatic,lee2011automated,zibran2011constraint}、重构方法\cite{higo2008metric,krishnan2014unification,barbosa2013removing,ettinger2017efficient}等方面（见本文第~\ref{ref-clonerefactoring}~节克隆代码重构）。%但是，由于重构的代价较大，仅有少数的克隆代码适合于重构，因此无法解决克隆代码所导致的额外维护代价问题。
 
 此外，为了有效地管理克隆代码，也对克隆代码进行跟踪，如跟踪克隆代码的产生。由于复制粘贴操作是导致克隆产生的最主要原因，因此通过监测程序员的复制粘贴操作可以跟踪克隆代码的产生。例如，许多克隆跟踪工具CLONEBOARD\cite{de2009managing}、CnP\cite{hou2009cnp}、CPC\cite{weckerle2008cpc}、CReN\cite{jablonski2007cren}、CSeR\cite{jacob2010actively}等。但是，上述方法对新产生的克隆代码，并没有进行是否会导致额外维护代价的判断，而是将所有的克隆代码全部引入系统中。因此，也无法帮助降低克隆代码的额外维护代价。
 
@@ -148,7 +148,7 @@
 
 （1）构建系统的克隆家系
 
-首先，下载系统所有版本的源代码，并使用NiCad的默认配置检测检测每一版本的中Type1-3的克隆代码。然后，通过映射所有相邻版本的克隆代码，构建系统中全部克隆家系。为完成版本间的映射，为每个克隆片段生成一个克隆区域描述符 $CRD$\cite{duala2010clone}，使用基于$CRD$的克隆映射算法映射两个连续版本之间的所有克隆片段和克隆组\cite{ci2013new}\cite{ci2013newD}。根据克隆映射结果，构建系统的克隆家系。
+首先，下载系统所有版本的源代码，并使用NiCad的默认配置检测检测每一版本的中Type1-3的克隆代码。然后，通过映射所有相邻版本的克隆代码，构建系统中全部克隆家系。为完成版本间的映射，为每个克隆片段生成一个克隆区域描述符 $CRD$\cite{duala2010clone}，使用基于$CRD$的克隆映射算法映射两个连续版本之间的所有克隆片段和克隆组\cite{ci2013new,ci2013newD}。根据克隆映射结果，构建系统的克隆家系。
 
 （2）收集复制粘贴操作并标识一致性维护需求
 
