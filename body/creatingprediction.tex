@@ -131,7 +131,7 @@
 
 给定一个由复制粘贴操作所创建的克隆组，在其演化过程中，可能会发生一致性变化，进而引发额外的维护代价。假设在创建该克隆代码时可以预测其是否可以发生一致性变化，可以避免额外的维护代价。因此，本文将由复制粘贴操作创建的克隆代码，其演化过程中发生的一致性变化，称为克隆创建一致性维护需求，定义如下：
 
-\begin{definition}[创建一致性维护需求] 
+\begin{definition}[克隆创建一致性维护需求] 
  \label{def-creatingrequirement}
 给定版本 $j$中一个克隆创建实例$CG$，如果在版本$k$中存在一个克隆组 $CG'$（$k>j$）满足以下条件： (1) 在$CG'$中至少存在两个克隆片段在其克隆家系$CGE$中可以映射到克隆实例 $CG$中， (2) $CG'$ 具有“一致性变化模式”(Consistent Change Pattern)，则称该克隆创建实例$CG$满足克隆创建的一致性维护需求(Consistency-Requirement)；反之，假如不存在满足上述条件的克隆组$CG'$，则称 该克隆创建实例$CG$不满足克隆一致性维护需求(Consistency-Requirement Free，或Consistency-Free，或Free)。
 \end{definition}
