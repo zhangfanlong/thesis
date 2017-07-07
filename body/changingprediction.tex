@@ -413,6 +413,7 @@ Calling WEKA to train the model on training set $Sets$\;
 \Return {The predictive model\;}
 \end{algorithm}
 \end{minipage}
+\vspace{1em}
 
 克隆变化一致性维护需求预测算法如~\ref{alg-changingperdition}~所示。算法的第1行为初始化训练集。第2-8行提取相应的属性组表示克隆变化实例，并生成训练集。最后第9行，使用训练集调用WEKA训练机器学习模型。算法的主要时间消耗在提取克隆变化实例的特征上，其时间复杂度为$O(m)$，其中$m$为克隆变化实例的数量。
 
