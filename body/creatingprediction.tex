@@ -16,7 +16,7 @@
 \BiSubsection{克隆代码的维护代价问题}
 {The Problem of Maintenance Cost for Code Clones}
 
-研究表明，复制粘贴操作是导致克隆代码产生的主要原因，但是所引入的克隆代码可能会导致额外的软件维护代价。图~\ref{creatingexamplea}~是会导致额外维护代价的克隆代码。开发人员复制了23行的代码片段(Clone Fragment 1)，然后粘贴至其它地方(Clone Fragment 2)。在通过此复制粘贴操作引入该克隆代码后，在其演化的第2、12、32和33个月，这两个克隆代码片段发生了如下4次修改：（1） 开发人员修改了变量{cockpitServers, cockPorts}和{collectionDirs}（图中Line 2、4、6），将其重命名为其它的变量(如{cockpitServers}变为{m\_cockpitServers})。由于这两个代码片段存在于同一个方法中，并且访问了局部变量，因此图中 Line 2、4、6也发生了相应的变化。（2）开发人员在Line 3后插入了一个函数调用{Config.GetParameter}获取额外的配置信息{m\_cockpitEnvs}。（3）为了遵守新的命名规则，开发人员对Clone Fragment 1的变量{PPE}新增加前缀{StaticRank3}，并且对Clone Fragment 2的变量{ PROD}做了相同的操作。（4）开发人员将Line 21的{LogLevel.Warning}更改为{LogLevel.Error}。上述操作要求开发人员同时修改两个克隆代码片段，从而会引发克隆代码的额外维护代价。
+研究表明，复制粘贴操作是导致克隆代码产生的主要原因，但是所引入的克隆代码可能会导致额外的软件维护代价。图~\ref{creatingexamplea}~是会导致额外维护代价的克隆代码。开发人员复制了23行的代码片段(Clone Fragment 1)，然后粘贴至其它地方(Clone Fragment 2)。在通过此复制粘贴操作引入该克隆代码后，在其演化的第2、12、32和33个月，这两个克隆代码片段发生了如下4次修改：（1） 开发人员修改了变量{cockpitServers, cockPorts}和{collectionDirs}（图中Line 2、4、6），将其重命名为其它的变量(如{cockpitServers}变为{m\_cockpitServers})。由于这两个代码片段存在于同一个方法中，并且访问了局部变量，因此被复制的代码片段也发生了相应的变化。（2）开发人员在Line 3后插入了一个函数调用{Config.GetParameter}获取额外的配置信息{m\_cockpitEnvs}。（3）为了遵守新的命名规则，开发人员对Clone Fragment 1的变量{PPE}新增加前缀{StaticRank3}，并且对Clone Fragment 2的变量{ PROD}做了相同的操作。（4）开发人员将Line 21的{LogLevel.Warning}更改为{LogLevel.Error}。上述操作要求开发人员同时修改两个克隆代码片段，从而会引发克隆代码的额外维护代价。
 
 \begin{figure}[htbp]
 \centering
@@ -44,13 +44,13 @@
 
 针对克隆代码的维护代价问题，当前最主流的解决方式是使用重构的方法消除系统中的克隆代码。拟通过重构的手段消除克隆代码，进而避免克隆代码维护代价。目前的重构研究主要集中在可重构分析\cite{lin2014detecting,mende2009evaluation,schulze2008towards,choi2011extracting}、重构调度\cite{mandal2014automatic,lee2011automated,zibran2011constraint}、重构方法\cite{higo2008metric,krishnan2014unification,barbosa2013removing,ettinger2017efficient}等方面（见本文第~\ref{ref-clonerefactoring}~节克隆代码重构）。%但是，由于重构的代价较大，仅有少数的克隆代码适合于重构，因此无法解决克隆代码所导致的额外维护代价问题。
 
-此外，为了有效地管理克隆代码，也对克隆代码进行跟踪，如跟踪克隆代码的产生。由于复制粘贴操作是导致克隆产生的最主要原因，因此通过监测程序员的复制粘贴操作可以跟踪克隆代码的产生。例如，许多克隆跟踪工具CLONEBOARD\cite{de2009managing}、CnP\cite{hou2009cnp}、CPC\cite{weckerle2008cpc}、CReN\cite{jablonski2007cren}、CSeR\cite{jacob2010actively}等。但是，上述方法对新产生的克隆代码，并没有进行是否会导致额外维护代价的判断，而是将所有的克隆代码全部引入系统中。因此，也无法帮助降低克隆代码的额外维护代价。
+此外，为了有效地管理克隆代码，也对克隆代码进行跟踪，如跟踪新产生的克隆代码。由于复制粘贴操作是导致克隆产生的最主要原因，因此通过监测程序员的复制粘贴操作可以跟踪克隆代码的产生。例如，许多克隆跟踪工具CLONEBOARD\cite{de2009managing}、CnP\cite{hou2009cnp}、CPC\cite{weckerle2008cpc}、CReN\cite{jablonski2007cren}、CSeR\cite{jacob2010actively}等。但是，上述方法对新产生的克隆代码，并没有进行是否会导致额外维护代价的判断，而是将所有的克隆代码全部引入系统中。因此，也无法帮助降低克隆代码的额外维护代价。
 
 目前对克隆代码研究无法有效地降低克隆代码的维护代价，依然存在以下两点不足：
 
 （1）现有的克隆代码维护方法主要采用先检测后重构的方法，目标是消除克隆代码，而不是规避克隆代码的产生。这种基于重构的克隆代码维护方法不利于实现边开发边维护克隆代码，不能从源头上规避克隆代码的产生进而降低软件维护代价，而且重构本身的代价也很高，并非所有的克隆代码都适合重构，重构无法从根本上解决克隆代码的维护问题。
 
-（2）在现有的克隆管理中的克隆代码跟踪研究中，通过跟踪复制粘贴操作跟踪克隆代码的产生，但是并未对复制粘贴操作加以控制，对这种操作是否需要一致性维护缺少必要分析和判断。
+（2）在现有的克隆管理中的克隆代码跟踪研究中，通过跟踪复制粘贴操作跟踪克隆代码的产生，但是并未对复制粘贴操作加以控制，对这种操作是否会导致额外的维护代价缺少必要分析和判断。
 
 综上，由于开发人员的复制粘贴操作会向系统中引入克隆代码，而克隆代码的一致性变化会导致额外的维护代价，这会降低软件系统的质量和可维护性。在软件开发过程中，帮助开发人员规避导致额外维护代价的克隆代码的产生，有助于降低克隆代码的额外的维护代价。因此，结合软件开发过程，在克隆代码创建时（复制和粘贴操作发生时），预测克隆代码的一致性维护需求是一个值得研究的问题，可以帮助规避会引入额外维护代价的克隆代码，从而降低软件的维护代价，提高软件质量和可维护性。%通过规避会导致额外维护代价的克隆代码产生，可以降低克隆代码的额外维护代价。通过允许不会导致额外维护代价的克隆代码的产生，可以提高软件开发效率。
 
@@ -163,7 +163,7 @@
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{复制粘贴操作收集算法} {The algorithm for collecting copy-and-pasted operations}
+\AlgoBiCaption{复制粘贴操作收集算法} {Algorithm for collecting copy-and-pasted operations}
 \label{alg-collectioncreating}
 \KwIn{All source code and code clones from $N$ versions}
 \KwOut{All copy-and-paste operations}
@@ -318,7 +318,7 @@ KNN方法是一种用于分类和回归的非参数统计方法。KNN是一种�
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{克隆创建一致性维护需求预测算法} {The algorithm for predicting clone creating consistency-requirement}
+\AlgoBiCaption{克隆创建一致性维护需求预测算法} {Algorithm for predicting clone creating consistency}
 \label{alg-creatingperdition}
 \KwIn{All copy-and-paste operations and source code}
 \KwOut{The predictive model}
@@ -464,6 +464,12 @@ F-Measure可如下计算：
 \BiSubsubsection{全属性实验结果}
 {The Results of Clone Creating Consistency for All Attributes}
 
+表~\ref{creatingallavg}~给出了克隆创建实例的使用全部属性组的预测结果。从表中可以看出，五种不同的机器学习方法均可以高效地预测克隆一致性要求，精确率从79.3\%到95.8\%，召回率从79.4\%到95.8\% ，F值从79.4\%到95.7\%。
+
+同时，对比不同机器学习方法的有效性，通过对比发现，SVM在这四个实验系统上具有最佳的预测能力。具体来说，SVM在系统 ArgoUML、jEdit和jFreeChart上有最好的结果。对于{Tuxguitar}系统来说，决策树具有最好的结果，SVM具有第二好的预测结果。与此同时，贝叶斯网络和朴素贝叶斯方法在这四个项目中几乎具有相对较差的预测结果，但是相差并不明显。
+
+因此，建议开发人员在需要预测克隆创建实例时首先考虑SVM，其它的机器学习方法也可以作为选择进行考虑。
+
 \begin{table}[htbp]
 \bicaption[creatingallavg]{}{克隆创建实例一致性维护需求预测效果}
 {Table$\!$}{The effectiveness of clone creating consistency for all attribute}
@@ -565,12 +571,6 @@ F-Measure可如下计算：
 %\bottomrule[1.5pt]
 %\end{tabular}
 %\end{table}
-
-表~\ref{creatingallavg}~给出了克隆创建实例的使用全部属性组的预测结果。从表中可以看出，五种不同的机器学习方法均可以高效地预测克隆一致性要求，精确率从79.3\%到95.8\%，召回率从79.4\%到95.8\% ，F值从79.4\%到95.7\%。
-
-同时，对比不同机器学习方法的有效性，通过对比发现，SVM在这四个实验系统上具有最佳的预测能力。具体来说，SVM在系统 ArgoUML、jEdit和jFreeChart上有最好的结果。对于{Tuxguitar}系统来说，决策树具有最好的结果，SVM具有第二好的预测结果。与此同时，贝叶斯网络和朴素贝叶斯方法在这四个项目中几乎具有相对较差的预测结果，但是相差并不明显。
-
-因此，建议开发人员在需要预测克隆创建实例时首先考虑SVM，其它的机器学习方法也可以作为选择进行考虑。
 
 \BiSubsubsection{属性组实验结果}
 {The Results of Clone Creating Consistency for Attribute Set}
