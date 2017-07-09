@@ -64,7 +64,9 @@
 
 （2）现有的克隆变化的预测方法中，仅预测哪些克隆代码会发生变化，既没有预测克隆代码发生变化的时刻，也没有预测其是否需要一致性的维护。因此，预测结果不能指导开发人员对发生变化的克隆代码进行一致性维护。
 
-综上，当软件中的克隆代码发生变化时，由于克隆组内的克隆片段的相似性可能会引发一致性变化。遗忘一致性变化会导致克隆代码的一致性违背缺陷（Consistency Defect），从而降低软件系统的质量和可维护性。因此，结合软件开发过程，在克隆代码发生变化时，预测克隆代码的一致性维护需求是一个值得研究的问题，可以帮助开发人员避免一致性违背缺陷，使得开发人员可以边开发、边维护克隆代码，提高软件质量和可维护性。
+综上，目前的研究中缺少在克隆代码变化时的一致性变化的预测研究，即当克隆组内某一克隆代码发生变化时，预测该变化是否会导致一致性变化。
+
+当软件中的克隆代码发生变化时，由于克隆组内的克隆片段的相似性可能会引发一致性变化，遗忘一致性变化会导致克隆代码的一致性违背缺陷。因此，预测克隆代码变化的一致性维护需求是一个值得研究的问题，可以帮助开发人员避免一致性违背缺陷，使得开发人员可以边开发、边维护克隆代码，提高软件质量和可维护性。
 %如果克隆代码的变化会引发一致性违背缺陷，警告软件开发人员对变化所在的克隆组进行一致性维护。如果克隆代码的变化不会引发一致性违背缺陷，则通知开发人员可以自信的且自由的修改克隆代码，可以更快地对软件开发和维护。
 
 \BiSubsection{本文的解决思路}
@@ -113,7 +115,7 @@
   \]
 \end{definition}
 
-该一致性变化包含两个约束条件。第一个约束条件要求 $CF_1 $和$CF_2 $同时被修改，第二个约束条要求$CF_1 $和$CF_2$发生相同的变化。在第二个约束条件中，一致性变化使用一个接近于0的阈值$\tau$描述，要求克隆片段发生了完全一致的修改。%本章中$\tau$取值为$0.003$，原因是本章使用。
+该定义包含两个约束条件：第一个约束条件要求 $CF_1 $和$CF_2 $同时被修改，第二个约束条要求$CF_1 $和$CF_2$发生相同的变化；在第二个约束条件中，一致性变化使用一个接近于0的阈值$\tau$描述，要求克隆片段发生了完全一致的修改。%本章中$\tau$取值为$0.003$，原因是本章使用。
 
 在克隆代码变化时，不仅要求克隆代码片段被同时修改，还要求发生相同的变化。原因在于：在克隆代码变化时，本章的目的是避免由于克隆变化可能导致的克隆一致性违背缺陷。因此， 不仅要求两个克隆代码片段同时变化，还需要发生相同的变化。假如软件开发人员遗忘该变化，将会引入克隆一致性违背缺陷。
 
@@ -181,7 +183,7 @@
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{克隆变化实例收集算法} {The algorithm for collecting clone changing instances}
+\AlgoBiCaption{克隆变化实例收集算法} {Algorithm for collecting clone changing instances}
 \label{alg-collectionchanging}
 \KwIn{All source code and code clones from $N$ versions}
 \KwOut{All the clone changing instances}
@@ -396,7 +398,7 @@ Halstead属性平均：
 \begin{minipage}{0.8\textwidth}
 \centering
 \begin{algorithm}[H]
-\AlgoBiCaption{克隆变化一致性维护需求预测算法} {The algorithm for predicting clone changing consistency-requirement}
+\AlgoBiCaption{克隆变化一致性维护需求预测算法} {Algorithm for predicting clone changing consistency}
 \label{alg-changingperdition}
 \KwIn{All clone changing instances and source code}
 \KwOut{The predictive model}
