@@ -39,7 +39,7 @@
 \vspace{-1em}
 \end{figure}
 
-图~\ref{changingexamplec}~是一个克隆代码一致性违背缺陷的示例。图中Clone A是一段代码，将数量为$nRegs$的内存数据转移值数组{ppTotal}中。程序开发人员将$Clone A$复制并粘贴至另一个位置成为Clone B。Clone B具有相似的功能，将数量为{nRegs}的内存数据转移值数组{ppTaken}中，并将代码中的{ppTotal}重命名为{ppTaken}。在随后的演化中，发现Clone A存在潜在的边界问题，并在第5行添加条件语句{if (i+1<nRegs)}，将其修改为 Clone A’。代码Clone B也需要添加相似的判断语句，然而遗憾的是开发人员遗忘了该一致性变化，导致Clone B’中存在一个一致性违背缺陷。因此，开发人员未上述两个克隆代码进行一致性维护，而导致了克隆代码的一致性违背缺陷，降低了软件的质量。
+图~\ref{changingexamplec}~是一个克隆代码一致性违背缺陷的示例。图中Clone A是一段代码，将数量为$nRegs$的内存数据转移值数组{ppTotal}中。程序开发人员将$Clone A$复制并粘贴至另一个位置成为Clone B。Clone B具有相似的功能，将数量为{nRegs}的内存数据转移值数组{ppTaken}中，并将代码中的{ppTotal}重命名为{ppTaken}。在随后的演化中，发现Clone A存在潜在的边界问题，并在第5行添加条件语句{if (i+1<nRegs)}，将其修改为 Clone A'。代码Clone B也需要添加相似的判断语句，然而遗憾的是开发人员遗忘了该一致性变化，导致Clone B'中存在一个一致性违背缺陷。因此，开发人员未上述两个克隆代码进行一致性维护，而导致了克隆代码的一致性违背缺陷，降低了软件的质量。
 
 \begin{figure}[htbp]
 \centering

@@ -76,13 +76,13 @@
 
 \begin{definition}[克隆片段]
 \label{defn-clonefragment}
-克隆片段(Clone Fragments, CFs)是彼此相似的代码片段，包括若干行连续的代码。给定两个代码片段F\_1和F\_2，如果F\_1和F\_2满足：
+克隆片段(Clone Fragments, CFs)是彼此相似的代码片段，包括若干行连续的代码。给定两个代码片段$F_1$和$F_2$，如果$F_1$和$F_2$满足：
 \[
   \begin{array}[t]{c}
-    \mathit{TextSim}(F\_1, F\_2) > \mathit{sim\_th} \\
+    \mathit{TextSim}(F_1, F_2) > \mathit{sim\_th} \\
   \end{array}
 \]
-则称代码片段F\_1和F\_2为克隆代码（CF），其中$TextSim$为相似性函数，$sim\_th$为相似性阈值。
+则称代码片段$F_1$和$F_2$为克隆代码（CFs），其中$TextSim$为相似性函数，$sim\_th$为相似性阈值。
 \end{definition}
 
 本文使用NiCad检测系统中存在的克隆代码，$TextSim$使用NiCad中的定义。同时，将克隆代码的相似性阈值设置为0.7，当两个代码片段相似性大于0.7时，被认定为是克隆代码。
@@ -140,7 +140,7 @@
 不一致性变化模式表示在两个连续版本的演化中该克隆组内的克隆片段发生了不一致地变化，并且发生变化的克隆片段仍然存在同一克隆组内。$CG_{i}$的克隆片段发生了变化，但是不满足一致性变化，称此克隆组$CG_{i}$发生了不一致性变化模式。
 
 \item 
-分裂模式(Split Pattern)：分裂模式表示连续的在两个连续版本的演化中克隆组内克隆片段发生剧烈变化，导致该克隆组分裂成为两个不同的克隆组。版本$V_i$中存在两个不同的克隆组$CG^p_i$和$CG^q_i$均是由上一版本$V_{i-i}$演化而来，对克隆组$CG^p_i$和$CG^q_i$中任意的$CF^p_i$和$CF^q_i$满足：$\mathit{TextSim}(CF^{p}_{i}, CF^{q}_{i}) < \mathit{sim\_th}$，版本$V_i$中的克隆组$CG_i$发生了分裂模式。
+分裂模式(Split Pattern)：分裂模式表示连续的在两个连续版本的演化中克隆组内克隆片段发生剧烈变化，导致该克隆组分裂成为两个不同的克隆组。版本$V_i$中存在两个不同的克隆组$CG^p_i$和$CG^q_i$均是由上一版本$V_{i-1}$演化而来，对克隆组$CG^p_i$和$CG^q_i$中任意的$CF^p_i$和$CF^q_i$满足：$\mathit{TextSim}(CF^{p}_{i}, CF^{q}_{i}) < \mathit{sim\_th}$，版本$V_i$中的克隆组$CG_i$发生了分裂模式。
 
 \end{itemize}
 \end{definition} 
