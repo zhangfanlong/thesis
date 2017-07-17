@@ -344,7 +344,29 @@ Calling WEKA to train the model on training set $Sets$\;
 \BiSubsubsection{实验系统}
 {Experimental Projects}
 
-本章选取了四个开源软件进行实验，表~\ref{copysta}~给出了实验系统的克隆创建实例信息。其中，第2列和第3列列出了克隆创建实例的数量和比例，其中第2列是不需要一致性维护的实例，第3列是需要一致性维护实例的数量和比例。对于需要一致性维护的克隆创建实例，在其演化过程中可能导致一致性变化，从而增加系统维护代价。
+本章选取了四个Java开源软件进行实验，其中ArgoUML和 jEdit与第二章中所使用的系统相同。ArgoUML是一个领先的开源UML建模工具，jEdit是程序员开发所使用的编辑器。同时，新增两个新的系统，分别为jFreeChart和Tuxguitar。jFreeChart是一个开源Java库，可以帮助程序人员显示高质量的图表。Tuxguitar是一个多轨的吉他指法编辑器，可以使用其创建自己的吉他六线谱。
+
+表~\ref{statisticsprojects}~给出了上述实验系统的基本信息，表中第2列给出了所使用系统的版本数量，第3-4列给出了系统的起始版本和结束版本。其中，选择14个版本的ArgoUML，22版本的jEdit，20个版本的jFreeChart和13个版本的Tuxguitar。
+
+\begin{table}[htbp]
+\bicaption [statisticsprojects]{}{四个开源软件实验系统信息}
+{Table$\!$}{The information of four open sources experimental projects }
+\vspace{0.5em}
+\centering 
+\wuhao
+\begin{tabular}{cccc}
+\toprule[1.5pt ]
+{实验系统}&{版本数}&Start Version&End Version\\ 
+\midrule[1pt]
+ArgoUML&14&0.20.0&0.34.0\\ 
+jEdit&22&3.0.0&5.0.0\\ 
+jFreeChart&20&1.0.0&1.0.19\\ 
+Tuxguitar&13&0.7.0&1.3.2\\ 
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+表~\ref{copysta}~给出了实验系统的克隆创建实例信息。其中，第2列和第3列列出了克隆创建实例的数量和比例，其中第2列是不需要一致性维护的实例，第3列是需要一致性维护实例的数量和比例。对于需要一致性维护的克隆创建实例，在其演化过程中可能导致一致性变化，从而增加系统维护代价。
 
 从表~\ref{copysta}~中可以得出两个发现。第一，软件系统中存在大量的克隆创建实例，数量从633到3366，其中项目 jEdit是含有最少的克隆变化实例。这说明复用既有代码引入克隆代码，已经成为了程序开发人员的一种常用开发手段。第二，软件系统中大部分的克隆创建实例在其演化过程中不满足一致性维护要求（比例从59.8\%到88.47\%）。这表明作为一种常用开发手段的复制粘贴操作并不会在演化中引入一致的变化，这意味着开发人员可以正常的使用这种技术。
 
