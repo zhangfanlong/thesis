@@ -78,6 +78,14 @@
 
 在预测步骤中，使用属性化的克隆创建实例构建和训练机器学习模型，并使用其预测克隆一致性维护需求。根据预测结果提醒程序开发人员采取进一步的操作。如果该复制和粘贴操作会导致一致性变化，程序开发人员可以据此拒绝此粘贴被复制的克隆代码，从而避免额外的维护代价。如果该复制粘贴操作不会导致一致性变化（不会引发额外的维护代价），程序开发人员可以放心的复用该克隆代码，从而提高软件开发的效率。
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 0.7\textwidth]{framework3.pdf}
+\bicaption[framwork3]{}{克隆创建一致性维护需求预测方法}
+{Fig.$\!$}{The approach for clone creating consistency prediction}
+\vspace{-1em}
+\end{figure}
+
 本章在克隆代码创建时，预测克隆代码的一致性维护需求，本章将重点分析和讨论如下问题：
 
 （1）在克隆代码创建时（复制和粘贴克隆代码时），结合其可能导致的额外维护代价，如何描述和定义其演化中的一致性变化与一致性维护需求？
@@ -87,13 +95,6 @@
 （3）在预测克隆创建一致性维护需求时，如何结合软件开发过程，帮助程序开发人员避免额外的维护代价？
 %该问题还可以划分为两个子问题：（a）不同的机器学习方法是否具有相似的预测能力？（b）并且所构建的模型对于两种不用的克隆创建实例，是否具有一致的预测能力？
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width = 0.7\textwidth]{framework3.pdf}
-\bicaption[framwork3]{}{克隆创建一致性维护需求预测方法}
-{Fig.$\!$}{The approach for clone creating consistency prediction}
-\vspace{-1em}
-\end{figure}
 
 
 \BiSection{克隆创建一致性维护需求的定义}
