@@ -99,14 +99,14 @@
 （3）在预测克隆变化一致性维护需求时，如何结合软件开发过程帮助程序开发人员避免可能导致的一致性违背缺陷？%该问题还可以划分为两个子问题：（a）不同的机器学习方法是否具有相似的预测能力？（b）且所构建预测模型对于两种不同状态的克隆变化实例，是否具有一致的预测能力？
 
 
-\BiSection{克隆变化一致性维护需求的定义}
+\BiSection{克隆代码变化时一致性维护需求的定义}
 {The Definitions for Clone Changing Consistency-Requirement}
 
 在第3章中，本文给出了一个克隆创建的一致性变化定义。但是，当预测克隆代码变化时的一致性维护需求时，该定义仅仅要求同一克隆组克隆代码片段发生变化，并没有限制发生什么样的变化。该定义无法应用于本章的研究问题中。因此，对克隆变化时的一致性变化进行了重新定义，如下所示：
 
-\begin{definition}[克隆变化一致性变化]  
+\begin{definition}[克隆片段的一致性变化]  
 \label{def-changingchange}
-克隆组中的两个克隆代码片段 $CF_1$和 $CF_2$，被分别地修改为$CF'_1$和$CF'_2$。  如果对于一个的接近于0的阈值$\tau$，克隆代码$CF_1$和$CF_2$的变化满足以下条件，称此变化为克隆变化的一致性变化(Changing Consistent Change)， 
+克隆组中的两个克隆代码片段 $CF_1$和 $CF_2$，被分别地修改为$CF'_1$和$CF'_2$。  如果对于一个的接近于0的阈值$\tau$，克隆代码$CF_1$和$CF_2$的变化满足以下条件，称此变化为变化时一致性变化(Changing Consistent Change)， 
   \[
   \begin{array}[t]{crl}
     \mathit{TextSim}(CF_i, CF'_i) < 1 & \forall i \in \{1,2\} &(1) \\
@@ -121,7 +121,7 @@
 
 克隆片段的变化必然也会导致克隆组的变化，而克隆组的一致性变化模式定义，如下所示：
 
-\begin{definition}[克隆变化一致性模式] 
+\begin{definition}[克隆变化时一致性变化模式] 
 \label{def-changingpattern}
 在软件版本 $j+1$中存在一个克隆组$CG'$ ，假设克隆组内至少存在两个克隆代码片段$CF'_1$ 和 $CF'_2$可以与映射到上一版本$j$的克隆组$CG$中，且 $CG$中与之对应的克隆代码片段的 $(CF_1,CF_2)$被修改为$(CF'_1,CF'_2)$。如果克隆片段之间的变化$(CF_1,CF_2)$变化至$(CF'_1,CF'_2)$满足克隆片段的“一致性变化(Consistent Change)”，则称克隆组$CG'$具有一致性变化模式(Consistent Change Pattern)。
 \end{definition}
@@ -147,7 +147,7 @@
 
 当演化中的克隆代码变化时，其所在的克隆组是一个克隆变化实例，该变化可能会导致克隆组的一致性变化，进而可能引发克隆一致性违背缺陷。假设在克隆代码变化时预测其是否会导致一致性变化，则帮助避免一致性违背缺陷。因此，本文将克隆变化所导致的一致性变化，称为克隆变化一致性维护需求，定义如下：
 
-\begin{definition}[克隆变化一致性维护需求] 
+\begin{definition}[克隆变化时一致性维护需求] 
  \label{def-changingrequirement}
 给定版本 $j$中一个克隆变化实例$CG$，如果在版本$k$中存在一个克隆实例 $CG'$（$k>j$）满足以下条件： (1) 在$CG'$中至少存在两个克隆片段在其克隆家系$CGE$中可以映射到克隆实例 $CG$中， (2) $CG'$ 具有“一致性变化模式”(Consistent Change Pattern)，则称克隆变化实例$CG$满足克隆一致性维护需求(Consistency-Requirement)；反之，如果不存在一个克隆实例 $CG'$，称该克隆变化实例$CG$不需要一致性维(Consistency-Requirement Free，或Consistency-Free，或Free)。
 \end{definition}
