@@ -37,9 +37,9 @@
 
 本章拟通过聚类的方法分析和提取克隆演化特征，先给出克隆演化特征的描述，如下所示：
 
-\begin{definition}[克隆代码演化特征]
+\begin{definition}[克隆演化特征]
 \label{defn-characteristics}
-克隆演化特征指的是克隆代码在演化过程中表现出来的特征，以及对软件所产生的影响。克隆演化特征不仅可以帮助软件开发人员理解系统中存在的克隆代码，还可以向软件开发人员提供一些如何维护克隆代码的建议。
+克隆演化特征指的是克隆代码在演化过程中表现出来的特征以及对软件所产生的影响，克隆演化特征不仅可以帮助软件开发人员理解系统中存在的克隆代码，还可以向软件开发人员提供一些如何维护克隆代码的建议。
 \end {definition}
 
 为帮助分析克隆代码及其演化特征，本章提出了一种探索和分析克隆代码演化特征的方法。克隆代码作为具体的代码片段，直接分析其演化过程和特征极为困难。因此，本章方法将克隆代码及其演化过程当做一种数据，然后借助机器学习领域中的聚类分析方法挖掘隐含的信息。为了使用机器学习方法，将克隆代码及其演化情况表示成为特征向量，从三个不同的角度分析克隆代码以及演化情况，即克隆片段、克隆组和克隆家系，定义描述见后文第~\ref{lab-evolution}~节。
@@ -70,33 +70,31 @@
 {Definitions for Code Clone and its Evolution}
 \label{lab-evolution}
 
-软件工程实践会产生大量的克隆代码，存在的克隆代码不仅使得系统变得更加臃肿，也使得系统越来越难以理解。为收集和检测系统中存在的克隆代码，在过去的20年中，提出了许多种克隆代码检测方法，并开发了大量的克隆检测工具，例如NiCad\cite{roy2008nicad}、CCFinder\cite{kamiya2002ccfinder}等（参见本文绪论第~\ref{ref-detection}~节克隆代码检测）。
+软件工程实践会产生大量的克隆代码，存在的克隆代码不仅使得系统变得更加臃肿，也使得系统越来越难以理解。为收集和检测系统中存在的克隆代码，在过去的20年中，提出了许多种克隆代码检测方法，并开发了大量的克隆检测工具，例如NiCad\cite{roy2008nicad}、CCFinder\cite{kamiya2002ccfinder}等（见本文绪论第~\ref{ref-detection}~节克隆代码检测）。
 
 目前，大多数的克隆检测工具仅可以检测单版本系统中克隆代码，并向程序开发人员报告检测结果。克隆检测结果以克隆片段和克隆组的形式进行组织。克隆片段是具体克隆代码，克隆组是彼此相似的克隆片段的集合。克隆片段和克隆组可以描述如下：
 
 \begin{definition}[克隆片段]
 \label{defn-clonefragment}
-克隆片段(Clone Fragments, CFs)是彼此相似的代码片段，包括若干行连续的代码。给定两个代码片段$F_1$和$F_2$，如果$F_1$和$F_2$满足：
-\[
+克隆片段(Clone Fragments, CFs)是彼此相似的代码片段，包括若干行连续的代码。给定两个代码片段$CF_1$和$CF_2$，如果$CF_1$和$CF_2$满足：
+\begin{equation} 
   \begin{array}[t]{c}
-    \mathit{TextSim}(F_1, F_2) > \mathit{sim\_th} \\
+    \mathit{TextSim}(CF_1, CF_2) > \mathit{sim\_th} \\
   \end{array}
-\]
-则称代码片段$F_1$和$F_2$为克隆代码（CFs），其中$TextSim$为相似性函数，$sim\_th$为相似性阈值。
+\end{equation} 
+则称代码片段$CF_1$和$CF_2$为克隆代码（CFs），其中$\mathit{TextSim}$为相似性函数，$\mathit{sim\_th}$为相似性阈值。
 \end{definition}
 
-本文使用NiCad检测系统中存在的克隆代码，$TextSim$使用NiCad中的定义。在该定义中，克隆代码的变化使用$\mathit{TextSim}(CF_i, CF'_i)= 1 - UPI(CF_i, CF'_i)$描述。其中，UPI（Unique Percentage Items\cite{roy2008nicad})表示两个代码片段之间不同的代码行数占总代码行的比例。假如给定两个代码片段$CF_1$和$CF_2$，其$UPI(CF_1,CF_2)=0.3$表示两者的差异程度为30\%。同时，其相似度可根据$UPI$计算：$SimText (CF_1,CF_2)=1-UPI=0.7$，表示两者的相似度为70\%。
-
-将克隆代码的相似性阈值设置为0.7，当两个代码片段相似性大于0.7时，被认定为是克隆代码。
+本文使用NiCad\cite{roy2008nicad}检测系统中存在的克隆代码，因此所采用的$\mathit{TextSim}$也使用NiCad中的定义方法。在该定义中，克隆代码相似性使用$\mathit{TextSim}(CF_1, CF_2)$ = $1 - \mathit{UPI}(CF_1, CF_2)$描述。其中，UPI（Unique Percentage Items）表示两个代码片段之间不同的代码行数占总代码行的比例。假如给定两个代码片段$CF_1$和$CF_2$，其$UPI(CF_1,CF_2)=0.3$，表示两者的差异程度为30\%。同时，其相似度可根据UPI计算：$\mathit{SimText} (CF_1,CF_2) = 1- UPI = 0.7$，表示两者的相似度为70\%。本章将克隆代码的相似性阈值设置为0.7，当两个代码片段相似性大于0.7时，被认定为是克隆代码。
 
 \begin{definition}[克隆组]
 \label {def-clonegroup}
 克隆组 (Clone Group, CG)是彼此相似的克隆代码片段的集合，包含若干个彼此相似的克隆片段。假定$CF_i$和$CF_j$是一个克隆组$CG$中的任意两个克隆代码片段，则$CF_i$和$CF_j$满足
-  \[
+\begin{equation} 
   \begin{array}[t]{c}
     \mathit{TextSim}(CF_i, CF_j) > \mathit{sim\_th} \\
   \end{array}
-  \]
+\end{equation}
 克隆组揭示了该克隆组内的克隆片段之间的克隆关系，即克隆组内的克隆片段互为克隆代码。
 \end {definition}
 
@@ -107,7 +105,7 @@
 克隆家系 (Clone Genealogy, CGE)是一个有向无环图，描述了一个克隆组($CG$)随着软件系统进行演化的过程。$CGE$图中的某一节点表示系统某一个版本($V_i$)中的该克隆组($CG_i$)。$CGE$图中的边表示该克隆组($CG$)在相邻的两个版本中$(V_{i-1},V_i )$的演化关系$(CG_{i-1},CG_{i})$，即该克隆组$CG$由上一版本$V_{i-1}$的$CG_{i-1}$演化至下一版本$V_{i}$中的$CG_{i}$。
 \end{definition} 
 
-在克隆代码的演化过程中，克隆代码可能会被开发人员修改而发生变化，因而也会导致两个相邻版本间的同一克隆组的变化。对于相邻版本之间的克隆组的演化情况，可以使用“克隆演化模式”进行描述。克隆组在两个相邻版本之间的克隆演化模式可以描述如下：
+在克隆代码的演化过程中，克隆代码可能会被开发人员修改而发生变化，因而也会导致两个相邻版本间的同一克隆组也会发生相应的变化。为了描述相邻版本之间的克隆组的演化情况，可以使用“克隆演化模式”进行描述。克隆组在两个相邻版本之间的克隆演化模式可以描述如下：
 
 \begin{definition}[克隆演化模式]
 \label{def-evolutionpattern}
@@ -116,36 +114,52 @@
 \begin{itemize}
 \item 
 静态模式 (Static Pattern)：
-静态模式表示在两个连续版本的演化中该克隆组是静止的，未发生任何变化，即克隆组内的克隆片段数量和内容均未发生变化。克隆组$CG_{i-1}$和$CG_{i}$是相邻版本的同一克隆组，克隆组内的克隆片段是一一对应的，且对组内任意的一个克隆片段$CF_{i-1}$和$CF_{i}$，满足$\mathit{TextSim}(CF_{i-1}, CF_i) =1$。
+静态模式表示在两个连续版本的演化中该克隆组是静止的，未发生任何变化，即克隆组内的克隆片段数量和内容均未发生变化。克隆组$CG_{i-1}$和$CG_{i}$是相邻版本的同一克隆组，克隆组内的克隆片段是一一对应的，且对组内任意的一个克隆片段$CF_{i-1}$和$CF_{i}$，满足
+\begin{equation} 
+\begin{array}[t]{c}
+  \mathit{TextSim}(CF_{i-1}, CF_i) = 1 \\
+\end{array}
+\end{equation}
 
 \item 
 相同模式(Same Pattern)：
 相同模式表示在两个连续版本的演化中该克隆组内克隆片段数量无变化，但克隆片段本身可能发生变化。克隆组$CG_{i-1}$和$CG_{i}$中的克隆片段数量分别为$N_{i-1}$和$N_{i}$，满足$N_{i-1} = N_{i}$。
+
 \item 
 增加模式(Add Pattern)：
 增加模式表示在两个连续版本的演化中该克隆组内的具有新增加的克隆片段。克隆组$CG_{i-1}$和$CG_{i}$中的克隆片段数量分别为$N_{i-1}$和$N_{i}$，克隆组内的映射的克隆片段的数量为$N_{i-1}$，增加模式满足$N < N_{i}$。
+
 \item 
 减少模式(Subtract Pattern)：
 减少模式表示在两个连续版本的演化中该克隆组内的克隆片段消失。克隆组$CG_{i-1}$和$CG_{i}$中的克隆片段数量分别为$N_{i-1}$和$N_{i}$，克隆组内的映射的克隆片段的数量为$N_{i-1}$，满足$N_{i-1} > N$。
+
 \item 
 一致性变化模式(Consistent Change Pattern)： 
 一致性变化模式表示在两个连续版本的演化中该克隆组内的克隆片段发生了一致地变化，并且发生变化的克隆片段仍然存在同一克隆组内。在从版本$V_{i-1}$演化到$V_{i}$的过程中，克隆组$CG_{i}$中的全部克隆片段发生了相同的变化（数量为$n$），即由$CF^{j}_{i-1}$变为$CF^{j}_i$（$\forall j \in \{n\}$）。  如果对于接近于0的阈值$\tau$，克隆片段$CF^{j}_i$的变化满足以下条件，称此克隆组$CG_{i}$发生了一致性变化模式， 
-  \[
-  \begin{array}[t]{crl}
-    \mathit{TextSim}(CF^{j}_{i-1}, CF^{j}_{i}) < 1 & \forall j \in \{n\} &(1) \\
-    {| ~\mathit{TextSim}(CF^{p}_{i-1},CF^{p}_{i})  ~-~ \mathit{TextSim}(CF^{q}_{i-1},CF^{q}_{i}) ~| ~< ~ \tau}  & \forall {p,q} \in \{n\}& (2)
-  \end{array}
-  \]
+\begin{equation}
+\begin{split}
+\begin{array}[t]{crl}
+    \mathit{TextSim}(CF^{j}_{i-1}, CF^{j}_{i}) < 1, & \forall j \in \{n\} &(1)  \\
+    {|~\mathit{TextSim}(CF^{p}_{i-1},CF^{p}_{i})-\mathit{TextSim}(CF^{q}_{i-1},CF^{q}_{i}) ~|~<~\tau},  & \forall {p,q} \in \{n\}& (2)
+\end{array}
+\end{split}
+\end{equation}
   
 \item 
 不一致性变化模式(Inconsistent Change Pattern)：
 不一致性变化模式表示在两个连续版本的演化中该克隆组内的克隆片段发生了不一致地变化，并且发生变化的克隆片段仍然存在同一克隆组内。$CG_{i}$的克隆片段发生了变化，但是不满足一致性变化，称此克隆组$CG_{i}$发生了不一致性变化模式。
 
 \item 
-分裂模式(Split Pattern)：分裂模式表示连续的在两个连续版本的演化中克隆组内克隆片段发生变化，导致在下一个版本中该克隆组分裂成为两个不同的克隆组。版本$V_i$中存在两个不同的克隆组$CG^p_i$和$CG^q_i$均是由上一版本$V_{i-1}$的克隆组$CG_{i-1}$演化而来，对克隆组$CG^p_i$和$CG^q_i$中任意的$CF^p_i$和$CF^q_i$满足：$\mathit{TextSim}(CF^{p}_{i}, CF^{q}_{i}) < \mathit{sim\_th}$，版本$V_i$中的克隆组$CG_i$发生了分裂模式。
+分裂模式(Split Pattern)：分裂模式表示连续的在两个连续版本的演化中克隆组内克隆片段发生变化，导致在下一个版本中该克隆组分裂成为两个不同的克隆组。版本$V_i$中存在两个不同的克隆组$CG^p_i$和$CG^q_i$均是由上一版本$V_{i-1}$的克隆组$CG_{i-1}$演化而来，对克隆组$CG^p_i$和$CG^q_i$中任意的$CF^p_i$和$CF^q_i$满足：
+\begin{equation}
+\mathit{TextSim}(CF^{p}_{i}, CF^{q}_{i}) < \mathit{sim\_th}
+\end{equation}
+则称版本$V_i$中的克隆组$CG_i$发生了分裂模式。
 
 \end{itemize}
 \end{definition} 
+
+为了更为形象的描述克隆家系及其演化模式，本文给出一个克隆家系的示意图，如图~\ref{genealogy1}~所示。从图中可以看出，克隆家系($CGE$)是克隆组($CG$)随着软件系统演化的一个有向无环图，图的节点表示克隆组$CG$，图中边表示克隆组的演化关系$(CG_{i-1},CG_{i})$，演化模式可以通过比较$CG_{i-1}$和$CG_{i}$中克隆代码片段获取。
 
 \begin{figure}[htbp]
 \centering
@@ -162,8 +176,6 @@
 %%%{Fig.$\!$}{An Example for Clone Genealogy}
 %%%\vspace{-1em}
 %%%\end{figure}
-
-为了更为形象的描述克隆家系及其演化模式，本文给出一个克隆家系的示意图，如图~\ref{genealogy1}~所示。从图中可以看出，克隆家系($CGE$)是克隆组($CG$)随着软件系统演化的一个有向无环图，图的节点表示克隆组$CG$，图中边表示克隆组的演化关系$(CG_{i-1},CG_{i})$，演化模式可以通过比较$CG_{i-1}$和$CG_{i}$中克隆代码片段获取。
 
 图~\ref{genealogy1}~同时也描述了一个克隆组$CG$在五个版本$(V_i, V_{i+4})$中的演化过程。从版本$V_i$到$V_{i+1}$，克隆组新增加了两个克隆片段，因此与之其关联的克隆模式是增加模式（Add Pattern）。从 $V_{i+1}$到 $V_{i+2}$中，克隆组发生了相一致的变化，其演化模式为一致性变化模式（Consistent Change Pattern）。从版本$V_{i+2}$到$V_{i+3}$中，演化模式是减少模式（Subtract Pattern）。 从版本$V_{i+3}$到$V_{i+4}$，克隆模式分别是增加模式（Add Pattern）和减少模式（Subtract Pattern）。
 
