@@ -273,7 +273,7 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 \begin{itemize}
 \item
 克隆片段寿命(Clone Fragment Life)：
-截止到当前版本$V_ i $，克隆片段$CF_i$所经历的所有的版本数量称之为克隆寿命。假定起始版本为$V_s$，克隆寿命为$i - s$。
+截止到当前版本$V_ i $，克隆片段$CF_i$所经历的所有的版本数量称之为克隆片段寿命。假定起始版本为$V_s$，克隆寿命为$i - s$。
 %\item {Clone Life}: number of versions which the clone fragment exists in software so far (until version i).
 \item
 是否发生变化(Ischanged)：
@@ -295,35 +295,35 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 \begin{itemize}
 \item
 克隆组寿命(Clone Group Life)：
-截止到当前版本$V_ i $，克隆组$CG_i$所经历的所有的版本数量称之为克隆寿命。
+截止到当前版本$V_ i $，克隆组$CG_i$所经历的所有的版本数量称之为克隆组寿命。
 %\item {Group Life}: number of versions which clone group exists in software till version $i$.
 \item
 当前静态模式(Current Static Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了静态模式(Static Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了静态模式(Static Pattern)，若发生取值为1，反之为0。
 %\item {Static}:	all clone fragments in group are static from last version.
 \item
 当前相同模式(Current Same Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了相同模式(Same Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了相同模式(Same Pattern)，若发生取值为1，反之为0。
 %\item {Same}:	clone group undergoes a ``same'' pattern change from  last version.
 \item
 当前增加模式(Current Add Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了增加模式(Add Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了增加模式(Add Pattern)，若发生取值为1，反之为0。
 %\item {Add}: clone group undergoes an ``add'' pattern change from last version.
 \item
 当前减少模式(Current Subtract Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了减少模式(Subtract Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了减少模式(Subtract Pattern)，若发生取值为1，反之为0。
 %\item {Subtract}: clone group undergoes a ``subtract'' pattern change from last version.
 \item
 当前一致性变化模式(Current Consistent Change Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了一致性变化模式(Consistent Change Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了一致性变化模式(Consistent Change Pattern)，若发生取值为1，反之为0。
 %\item {Consistent Change}: clone group undergoes a ``consistent change'' pattern from last version.
 \item
 当前不一致变化模式(Current Inconsistent Change Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_ i $时，是否发生了不一致变化模式（Inconsistent Change Pattern）。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_ i $时，是否发生了不一致变化模式（Inconsistent Change Pattern），若发生取值为1，反之为0。
 %\item {Inconsistent Change}: clone group undergoes an ``inconsistent change'' pattern from last version.
 \item
 当前分裂模式(Current Split Pattern)：
-克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了分裂模式(Split Pattern)。若发生取值为1，反之为0。
+克隆组$CG_i$从上一版本$V_{i-1} $演化到$V_i $时，是否发生了分裂模式(Split Pattern)，若发生取值为1，反之为0。
 %\item {Split}: clone group undergoes a ``split'' pattern change from last version.
 \end{itemize}
 
