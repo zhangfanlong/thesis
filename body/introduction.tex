@@ -67,24 +67,24 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 \vspace{-1em}
 \end{figure}
 
-为进一步分析克隆代码研究领域的发展趋势，也按照发表年份和研究方向进行了统计，如图~\ref{literaturedistribution2}~和~\ref{literaturedistribution3}~所示。其中，图~\ref{literaturedistribution2}~是领域整体上每年发表文献数量的统计情况，图~\ref{literaturedistribution3}~是在不同研究方向上每年发表文献数量的统计情况。
+为进一步分析克隆代码研究领域的发展趋势，也按照发表年份和研究方向进行了统计，如图~\ref{literaturedistribution2}~和~\ref{literaturedistribution3}~所示。
+
+图~\ref{literaturedistribution2}~是领域整体上每年发表文献数量的统计情况，图~\ref{literaturedistribution3}~是在不同研究方向上每年发表文献数量的统计情况。从图~\ref{literaturedistribution2}和图~\ref{literaturedistribution3}~可以看出，克隆代码的研究可以划分为两个阶段。在2003年以前，克隆代码研究领域的文献数量较少。而在2004年以后，克隆代码研究领域的文献数量快速增长，展现出了蓬勃的发展趋势。
 
 \begin{figure}[h]
 \centering
-\includegraphics[width = 0.8\textwidth]{literaturedistribution2.pdf}
+\includegraphics[width = 0.7\textwidth]{literaturedistribution2.pdf}
 \bicaption[literaturedistribution2]{}{克隆领域每年发表的论文数量}
 {Fig.$\!$}{Annual number of published papers of code clone research}
 \vspace{-1em}
 \end{figure}
-
 \begin{figure}[h]
 \centering
-\includegraphics[width = 0.8\textwidth]{literaturedistribution3.pdf}
+\includegraphics[width = 0.7\textwidth]{literaturedistribution3.pdf}
 \bicaption[literaturedistribution3]{}{各个克隆研究活动每年发表的文献数量}
 {Fig.$\!$}{Annual number of published papers of each clone research activity}
+\vspace{-1em}
 \end{figure}
-
-从图~\ref{literaturedistribution2}和图~\ref{literaturedistribution3}~可以看出，克隆代码的研究可以划分为两个阶段。在2003年以前，克隆代码研究领域的文献数量较少。而在2004年以后，克隆代码研究领域的文献数量快速增长，展现出了蓬勃的发展趋势。
 
 \BiSubsection{克隆代码检测研究}
 {Research on Code Clone Detection }
@@ -159,7 +159,15 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 本文对目前较为主流的克隆检测工具和方法支持的克隆类型和检测效果等进行了评估，评估结果如表~\ref{detectionevaluation}~所示。其中，检测效果采用“较好”、“一般”和“较差”三种级别来评估\cite{rattan2013software}：“较好”是指可以较好地支持该类型克隆代码；“一般”是指可以支持检测该类型克隆代码，但效果不佳；“较差”是指可以检测少部分的该类型克隆代码；对未支持的克隆类型没有列出。
 
-从表~\ref{detectionevaluation}~可以看出，基于Text的检测工具不支持Type-4克隆的检测。对Type-1克隆的检测效果最好，对Type-3克隆的检测效果一般。而对Type-2克隆支持较弱，仅有两个工具可以支持。原因是Type-2克隆是标识符重命名的克隆代码，基于Text的方法不能很好地处理标识符重命名问题。基于Token的检测工具同样不支持Type-4克隆的检测，但是可以较好地检测Type-1和Type-2克隆。支持Type-2克隆检测的原因是在将源程序转换成Token序列时进行了词法分析，因此可以解决标识符重命名的问题。基于Tree的检测工具，同样不支持Type-4克隆的检测，但是对Type-1克隆的检测效果较好，并且几乎都支持Type-2和Type-3克隆的检测。由于采用的匹配算法不同，对Type-3即近似克隆的检测效果不尽相同，有些可以较好地支持Type-2克隆的检测，有些则较好地支持Type 3克隆的检测。基于PDG的检测方法不仅可以较好地检测Type-1和Type-2克隆，还可以以不同的程度支持Type-3和Type-4克隆的检测。但因其复杂度相对较高，使其并没有太多的检测工具可以利用。基于度量值的检测方法目前仅有一些检测方法被提出\cite{kontogiannis1996pattern,mayrand1996experiment}，缺少相应的检测工具。
+从表~\ref{detectionevaluation}~可以看出，基于Text的检测工具不支持Type-4克隆的检测。对Type-1克隆的检测效果最好，对Type-3克隆的检测效果一般。而对Type-2克隆支持较弱，仅有两个工具可以支持。原因是Type-2克隆是标识符重命名的克隆代码，基于Text的方法不能很好地处理标识符重命名问题。
+
+基于Token的检测工具同样不支持Type-4克隆的检测，但是可以较好地检测Type-1和Type-2克隆。支持Type-2克隆检测的原因是在将源程序转换成Token序列时进行了词法分析，因此可以解决标识符重命名的问题。
+
+基于Tree的检测工具，同样不支持Type-4克隆的检测，但是对Type-1克隆的检测效果较好，并且几乎都支持Type-2和Type-3克隆的检测。由于采用的匹配算法不同，对Type-3即近似克隆的检测效果不尽相同，有些可以较好地支持Type-2克隆的检测，有些则较好地支持Type 3克隆的检测。
+
+基于PDG的检测方法不仅可以较好地检测Type-1和Type-2克隆，还可以以不同的程度支持Type-3和Type-4克隆的检测。但因其复杂度相对较高，使其并没有太多的检测工具可以利用。
+
+基于度量值的检测方法目前仅有一些检测方法被提出\cite{kontogiannis1996pattern,mayrand1996experiment}，缺少相应的检测工具。
 
 \BiSubsection{克隆代码分析研究}
 { Research on Code Clone Analysis}
@@ -171,7 +179,7 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 目前的很多克隆检测工具，如NiCad、CCFinder、iClone和Decard等，都使用检测报告的形式提供克隆代码的检测结果。由于不同的检测工具采用不同的技术检测克隆代码，因此不同的检测工具的克隆检测结果往往是不同的。
 
-为了实现各个检测工具的克隆检测结果的共享，克隆检测工具iClone使用Rich Clone Format(RCF)表示克隆代码\cite{harder2011efficiently}。RCF不仅可以表示克隆代码的基本位置信息，还允许用户对其进行扩展，表示克隆代码的扩展信息。RCF 还定义了多种函数接口，以方便用户和其它检测工具检索克隆代码\footnote{http://www.softwareclones.org/rcf.php，RCF格式文档。}。为表示克隆代码的上下文信息，Duala-Ekoko出了另一种克隆表示形式Clone Region Description(CRD)\cite{duala2010clone}。CRD不保存克隆代码的位置信息，仅使用克隆代码本身及其所在文件的的语法信息、结构信息等表示克隆代码，有助于辅助开发人员跟踪克隆代码。
+为了实现各个检测工具的克隆检测结果的共享，克隆检测工具iClone使用Rich Clone Format(RCF)表示克隆代码\cite{harder2011efficiently}。RCF不仅可以表示克隆代码的基本位置信息，还允许用户对其进行扩展，表示克隆代码的扩展信息。RCF 还定义了多种函数接口，以方便用户和其它检测工具检索克隆代码\footnote{RCF格式文档：http://www.softwareclones.org/rcf.php。}。为表示克隆代码的上下文信息，Duala-Ekoko出了另一种克隆表示形式Clone Region Description(CRD)\cite{duala2010clone}。CRD不保存克隆代码的位置信息，仅使用克隆代码本身及其所在文件的的语法信息、结构信息等表示克隆代码，有助于辅助开发人员跟踪克隆代码。
 
 各种检测工具的克隆检测结果缺乏统一的表示形式，Harder在文献\cite{harder2013limits}中分析了统一克隆表示的挑战和限制，并给出了一个克隆表示的概念模型。Kapser也认为需要对克隆代码进行统一的表示，并提出了Unified Clone Model(UCM)模型\cite{kapser2012common}。UCM不仅可以表示克隆代码的基本位置信息，还可以表示克隆代码的上下文信息、演化信息和度量值信息等，具有较强的理论和实际意义\footnote{ UCM格式文档：http://www.softwareclones.org/ucm/index.php/Main\_Page。}。
 
@@ -222,11 +230,11 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 
 克隆评价分析主要是分析克隆代码对系统产生的影响，以便辅助开发人员更好地维护克隆代码，克隆评价主要包括克隆相关的缺陷分析、克隆维护代价分析、克隆有害性分析等。
 
-在早期，有人认为克隆代码是一种最刺鼻的代码坏味，是因为它有可能会引发相关缺陷。因此，人们研究的关注点主要集中在克隆代码的缺陷分析上。例如，Juergens等人研究发现遗忘克隆代码的一致性变化容易引发相应的软件缺陷，从而降低了软件质量\cite{juergens2009code,inoue2012experience}。Gauthier通过对克隆代码进行安全性分析，在开源软件Joomla和Moodle中发现了几个潜在的影响软件质量的安全漏洞和缺陷\cite{gauthier2013uncovering}。但也有另外一些证据表明克隆代码的不一致性变化并不一定会引发缺陷，因此不会对软件质量产生显著的影响。例如，Bettenburg对不一致性变化是否引发缺陷的研究发现，仅有极少数的不一致性变化会引发缺陷\cite{bettenburg2009empirical}。文献\cite{wagner2016relationship}的研究则表明Type 3克隆代码中大约有17\%的代码含有缺陷，并且Type 3克隆不容易发生不一致性变化。文献\cite{elish2015fault}通过对缺陷密度的分析发现，面向对象程序中的克隆类含有更少的缺陷，并且Type 3克隆含有的缺陷最少。因此有人将克隆代码研究应用到缺陷检测中，但没有直接证据证明克隆代码与缺陷密切相关\cite{lo2012active,kamei2011empirical}。
+在早期，研究人员认为克隆代码是一种最刺鼻的代码坏味，是因为它有可能会引发相关缺陷。Juergens等人研究发现遗忘克隆代码的一致性变化容易引发相应的软件缺陷，从而降低了软件质量\cite{juergens2009code,inoue2012experience}。Gauthier在开源软件Joomla和Moodle中发现了几个潜在的影响软件质量的安全漏洞和缺陷\cite{gauthier2013uncovering}。但也有一些证据表明克隆代码并不一定会引发缺陷。例如，Bettenburg研究发现仅有极少数的不一致性变化会引发缺陷\cite{bettenburg2009empirical}。文献\cite{wagner2016relationship}的研究则表明Type-3克隆代码中大约有17\%的代码含有缺陷，且Type-3克隆不容易发生不一致性变化。文献\cite{elish2015fault}发现面向对象程序中的克隆类含有更少的缺陷，并且Type-3克隆含有的缺陷最少。因此，没有直接证据证明克隆代码与缺陷密切相关\cite{lo2012active,kamei2011empirical}。
 
-除了克隆相关的缺陷分析外，还可以从维护代价的角度去分析克隆代码对软件产生的影响\cite{bakota2007clone}。Harder通过实验发现克隆代码的存在并不会增加缺陷修复的时间，但是缺陷未被修复则可能导致维护代价的增加\cite{harder2012controlled}。Lozano通过研究克隆代码的可变性，也发现克隆代码的存在会增加软件维护的代价\cite{lozano2008assessing}。Juergens不仅认为克隆代码会增加维护代价，还提出了一个计算模型来计算克隆维护代价\cite{juergens2010much}。而Monden的研究则发现包含少量克隆代码的软件模块比不含克隆代码的软件模块更可靠，但含有大量克隆代码的软件模块则正相反，实验表明克隆代码与软件可靠性和维护代价有一定的关联，但这种关联关系并不十分明确\cite{monden2002software}。
+研究人员还从维护代价的角度去分析克隆代码对软件产生的影响\cite{bakota2007clone}。Harder发现克隆代码并不会增加缺陷修复的时间，但未被修复缺陷会导致维护代价的增加\cite{harder2012controlled}。Lozano研究克隆代码的可变性发现克隆代码会增加软件维护的代价\cite{lozano2008assessing}。Juergens不仅认为克隆代码会增加维护代价，还提出了一个模型计算克隆维护代价\cite{juergens2010much}。Monden发现尽管克隆代码与软件可靠性和维护代价有一定的关联，但这种关联关系并不十分明确\cite{monden2002software}。
 
-虽然缺陷分析和维护代价分析可用于评价克隆代码对软件产生的影响，但却不能作为评价克隆代码是否有害的直观证据。正因如此，近些年来，又展开了克隆代码有害性分析的研究。Kapser通过对比11种克隆模式在软件开发和维护过程中的优缺点，并在开源软件Apache和Gnumeric上进行实证研究，发现在Apache中大约有71\%的克隆代码被分类为有益克隆，对系统维护具有积极的影响，是一种合理的存在方式，因此人们应当正视在开发过程中克隆代码的长期存在\cite{kapser2006cloning,kapser2008cloning}。Kapser通过对Apache Web Server中的克隆代码进行分析，研究发现其中一个子系统中聚集了大量的克隆代码；该子系统的克隆代码增加了系统的功能性，对软件开发过程是有益的\cite{kapser2006supporting}。Selim使用风险模型判定克隆代码是否有害，研究结果发现克隆代码并不比非克隆代码具有更高的有害风险\cite{selim2010studying}。Wang提出利用贝叶斯网络对克隆代码进行有害性预测的方法\cite{wang2012can}，该方法可用于辅助开发人员决定是否可以通过复制粘贴的方式引入新的克隆代码。Higo则提出一种提取有问题的克隆代码（有害克隆）的方法，该方法先对程序进行标准化，然后利用检测工具检测克隆代码，最后对检测到的克隆代码进行过滤、合并等操作来提取有问题的克隆代码，在Linux内核2.6.6上的实验结果表明只有少数克隆代码是有问题的克隆代码\cite{higo2009problematic}。Hordijk提出了一个结构化的证据模型分析克隆代码的有害性，研究结果表明只有少部分的证据证明克隆代码是有害的，并且仍需更多的研究去支撑这一结论\cite{hordijk2009harmfulness}。
+近些年来，研究人员也展开了克隆代码有害性分析的研究。Kapser发现在Apache中大约有71\%的克隆代码是有益的，且Apache Web Server中的克隆代码增加了系统的功能性，对软件维护具有积极的影响\cite{kapser2006cloning,kapser2008cloning,kapser2006supporting}。Selim发现克隆代码并不比非克隆代码具有更高的风险\cite{selim2010studying}。Wang提出利用贝叶斯网络对克隆代码进行有害性预测的方法\cite{wang2012can}。Higo对克隆代码进行过滤、合并等操作来提取有问题的克隆代码，在Linux内核2.6.6上的实验结果表明只有少数克隆代码是有问题的克隆代码\cite{higo2009problematic}。Hordijk提出的一个结构化的证据模型发现只有少部分的证据证明克隆代码是有害的\cite{hordijk2009harmfulness}。
 
 表~\ref{evaluation}~对克隆评价分析研究进行了分类统计，使用“积极”、“中立”和“消极”三种评价标准对现有的克隆评价分析方法进行了总结。“积极”是指克隆代码的存在对系统有积极的影响；“中立”是指克隆代码不会对系统产生影响；“消极”是指克隆代码会对系统产生消极的影响。从表中可以看出，大部分研究对克隆代码持积极和中立的态度，仅有少数持消极态度。
 
@@ -241,12 +249,12 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 &\cite{juergens2009code}&消极&研究发现克隆代码的变化在克隆中发生较为频繁，同时也会导致相应的缺陷\\
 &\cite{gauthier2013uncovering}&消极&通过对不安全的克隆代码分析，发现了几个安全漏洞和缺陷\\
 &\cite{bettenburg2009empirical}&积极&克隆代码的变化并不会引入相关缺陷，不会对软件的质量产生影响\\
-&\cite{elish2015fault}&积极&克隆代码含有更少的缺陷，Type 3所含有的缺陷最少\\
+&\cite{elish2015fault}&积极&克隆代码含有更少的缺陷，Type-3所含有的缺陷最少\\
 &\cite{lo2012active}&中立&克隆代码研究应用到缺陷检测中，但没有直接证据证明与缺陷相关\\
 &\cite{kamei2011empirical}&中立	&通过实验发现并不会增加缺陷修复时间，但是缺陷未被修复，可能会产生维护代价的增加\\
 \midrule[1pt]
 \multirow{4}{*}{{维护代价}} 
-&\cite{wagner2016relationship}&中立	&Type 3克隆中有17\%含有缺陷，并且Type3克隆更容易发生一致性变化\\
+&\cite{wagner2016relationship}&中立	&Type-3克隆中有17\%含有缺陷，并且Type3克隆更容易发生一致性变化\\
 &\cite{harder2012controlled}&消极&通过对克隆代码的可变性研究发现克隆代码确实会增加其方法可变化的维护代价，但没有确切的证明会说明克隆会增加系统维护代价\\
 &\cite{juergens2010much}&消极&认为克隆会增加维护代价，并且提出了一个代价计算模型计算这次代价\\
 &\cite{monden2002software}&中立&Monden却发现包含克隆的模块比不含克隆的模块更可靠，同时含有大量克隆的模块却相反实验表明了克隆与系统可靠性和维护代价的关系，但是这种关系仍然不够明朗\\
@@ -272,8 +280,6 @@ Type-4克隆代码：执行相同的功能，但使用不同的语法结构实�
 树图是以二维矩形图的形式对克隆代码在软件中的分布情况和层次结构进行可视化，以树图形式可视化克隆代码的工具有VisCad\cite{asaduzzaman2011viscad,uddin2015comprehension}、SoftGUESS\cite{adar2007softguess}。
 
 克隆可视化的作用不仅仅是可视化克隆代码，更重要的作用是通过克隆代码的可视化辅助软件开发人员分析克隆代码对软件产生的影响。例如可视化工具Doppel-Code可以用于分析克隆代码对系统全局和局部产生的影响，并将不同克隆代码组对系统的影响进行排序\cite{forbes2012doppel}。Jiang提出一个克隆可视化框架，辅助开发人员分析系统内各模块间的耦合和内聚情况\cite{jiang2007framework,jiang2006visualizing}。Zhang等人通过对结构克隆进行过滤和可视化分析，帮助维护人员寻找对开发人员有用的克隆代码以便进行代码复用\cite{zhang2008query}。
-
-%%不同的可视化技术从不同的角度对克隆代码的分布情况或克隆关系进行可视化。但是，每种技术都各有其侧重点和局限性，而且可视化仅仅是辅助分析的一种手段，不是分析的目的，最终还是要靠人来分析这些可视化的结果。因此，如何解读克隆代码的可视化结果，辅助开发和维护人员分析或维护克隆代码是克隆可视化分析研究的一个难点问题。
 
 \BiSubsection{克隆代码维护研究}
 {Research on Code Clone Maintenance}
