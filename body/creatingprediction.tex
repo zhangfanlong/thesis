@@ -1101,8 +1101,6 @@ Wang等人也使用贝叶斯网络对克隆代码创建时的一致性维护需�
 
 表~\ref{comparecopysta}~是所收集到的克隆创建实例信息对比。由表中可以看出，本章所收集的克隆创建实例数量要多于Wang所收集的实例数量。
 
-表~\ref{comparecopyprediction}~是本章方法与Wang的方法的预测效果对比。表中使用平均精确度（Average Precision）和平均召回率（Average Recall）评估预测效果，即加权平均需要和不需要一致性维护的预测结果。由表中可以看出，本章所提出的方法具有更好的预测能力。具体地，对于jFreeChart系统，本章方法的平均精确率为88.3\%，平均召回率为88.2\%，然而Wang的方法仅为58.3\%和63.0\%。对于Tuxguitar系统，本章方法的平均精确率为83.1\%，平均召回率为83.6\%，然而Wang的方法仅为61.5\%和60.1\%。
-
 \begin{table}[htbp]
 \bicaption[comparecopysta]{}{实验系统的克隆创建实例信息统计对比}
 {Table$\!$}{The comparing statistics for clone creating instances in two projects}
@@ -1123,6 +1121,8 @@ Tuxguitar(Wang)&384(86.5\%)&	60(13.5\%)&	444\\
 \end{tabular}
 \end{table}
 
+表~\ref{comparecopyprediction}~是本章方法与Wang的方法的预测效果对比。表中使用平均精确度（Average Precision）和平均召回率（Average Recall）评估预测效果，即加权平均需要和不需要一致性维护的预测结果。由表中可以看出，本章所提出的方法具有更好的预测能力。具体地，对于jFreeChart系统，本章方法的平均精确率为88.3\%，平均召回率为88.2\%，然而Wang的方法仅为58.3\%和63.0\%。对于Tuxguitar系统，本章方法的平均精确率为83.1\%，平均召回率为83.6\%，然而Wang的方法仅为61.5\%和60.1\%。
+
 \begin{table}[htbp]
 \bicaption[comparecopyprediction]{}{克隆创建实例的预测效果对比}
 {Table$\!$}{The comparing effectiveness for clone creating instances in two projects}
@@ -1140,6 +1140,8 @@ Tuxguitar(Wang)&61.5&	60.1\\
 \bottomrule[1.5pt]
 \end{tabular}
 \end{table}
+
+本章方法之所以优于Wang方法主要有两个原因。第一个原因是本章方法改进了表示克隆创建实例的属性特征。首先，摒弃了与克隆创建实例中复制和粘贴操作关联较小的历史属性。然后，扩展了表示克隆创建实例的代码属性和上下文属性，提取了更多的属性描述克隆创建实例。第二个原因是本章方法所收集到的克隆创建实例要多于Wang的方法。本文使用经典的克隆检测工具NiCad检测系统存在的克隆代码，并用于收集克隆创建实例。在使用克隆创建实例进行训练机器学习模型时，本章使用更多的克隆创建实例使得所训练的机器学习模型更为完善，具有更好的预测效果。
 
 \BiSubsection{讨论}
 {Discussion}
