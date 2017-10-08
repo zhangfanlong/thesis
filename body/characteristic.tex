@@ -85,7 +85,8 @@
 则称代码片段$CF_1$和$CF_2$为克隆代码（CFs），其中$\mathit{TextSim}$为相似性度量，$\mathit{sim\_th}$为相似性阈值。
 \end{definition}
 
-本文使用NiCad\cite{roy2008nicad}检测系统中存在的克隆代码，因此$\mathit{TextSim}$采用NiCad中所的定义方法。在NiCad中，克隆代码相似性定义为$\mathit{TextSim}(CF_1, CF_2)$ = $1 - \mathit{UPI}(CF_1, CF_2)$。其中，UPI（Unique Percentage Items）表示两个代码片段之间不同的代码行数占总代码行的比例。假如给定两个代码片段$CF_1$和$CF_2$，其$\mathit{UPI}(CF_1,CF_2)=0.3$，表示两者的差异程度为30\%。同时，其相似度可根据UPI计算：$\mathit{SimText} (CF_1,CF_2) = 1- \mathit{UPI} = 0.7$，表示两者的相似度为70\%值得注意的是，本文将克隆代码的相似性阈值设置为0.7，当两个代码片段相似性大于0.7时，才被认定为是克隆代码。
+本文使用NiCad\cite{roy2008nicad}检测系统中存在的克隆代码，因此$\mathit{TextSim}$采用NiCad中所的定义方法。在NiCad中，克隆代码相似性定义为$\mathit{TextSim}(CF_1, CF_2)$ = $1 - \mathit{UPI}(CF_1, CF_2)$。其中，UPI（Unique Percentage Items）表示两个代码片段之间不同的代码行数占总代码行的比例。假如给定两个代码片段$CF_1$和$CF_2$，其$\mathit{UPI}(CF_1,CF_2)=0.3$，表示两者的差异程度为30\%。同时，其相似度可根据UPI计算：$\mathit{SimText} (CF_1,CF_2) = 1- \mathit{UPI} = 0.7$，表示两者的相似度为70\%。本文将克隆代码的相似性阈值设置为0.7，当两个代码片段相似性大于0.7时，才被认定为是克隆代码。
+与此同时，NiCad在检测克隆代码时会设定代码片段的长度范围为10 - 2500行，即代码行数在此范围内的代码片段会被检测为克隆代码。
 
 \begin{definition}[克隆组]
 \label {def-clonegroup}
