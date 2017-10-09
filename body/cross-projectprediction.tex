@@ -427,7 +427,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \BiSubsubsection{克隆创建实例的实验结果}
 {The Results for Clone Creating Instances}
 
-对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodaverage}~所示。
+对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodaverage}~所示。表中支持向量机方法（SVM）的预测结果使用{*}进行标记表。原因在于：在跨项目克隆创建实例的一致性维护需求预测中，支持向量机方法不具备相对应的预测能力，会将所有的克隆创建实例划分到一个类别中（数量规模较大的类中）。
 
 \begin{table}[h]
 \bicaption[creatingcrossmethodaverage]{}{克隆创建实例的跨项目预测效果}
@@ -466,11 +466,9 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \end{tabular}
 \end{table}
 
-表中支持向量机方法（SVM）的预测结果使用{*}进行标记表。原因在于：在跨项目克隆创建实例的一致性维护需求预测中，支持向量机方法不具备相对应的预测能力，会将所有的克隆创建实例划分到一个类别中（数量规模较大的类中）。
-
 从表\ref{creatingcrossmethodaverage}~中可以看出，除了支持向量机外，其它四种机器学习方法对四个不同的系统均具有不错的预测效果。对jEdit系统的预测效果最好，平均F值在76.2\% - 82.6\%之间。同时ArgoUML系统和Tuxguitar系统的预测结果也不错，平均F值分别介于65.3\% - 66.7\%和60.3\% - 68.3\%之间。jFreeChart最差，也达到了48.9\% - 60.9\%。
 
-不同机器学习方法的预测效果不存在显著的差异。尽管如此不同的机器学习方法对不同系统具有不同的预测能力。对系统ArgoUML和系统Tuxguitar来说，决策树具有最好的预测效果，其F值分别为66.7\%和68.3\%。贝叶斯网络对jEdit系统具有最好的预测效果，F值为82.6\%。而K近邻方法对于系统jFreeChart具有最好的预测效果，F值为60.9\%。
+尽管不同机器学习方法的预测效果不存在显著的差异，但不同的机器学习方法对不同系统具有不同的预测能力。对系统ArgoUML和系统Tuxguitar来说，决策树具有最好的预测效果，其F值分别为66.7\%和68.3\%。贝叶斯网络对jEdit系统具有最好的预测效果，F值为82.6\%。而K近邻方法对于系统jFreeChart具有最好的预测效果，F值为60.9\%。
 
 因此，本章不推荐程序开发人员选用支持向量机方法对克隆创建实例进行跨项目一致性维护需求预测，可以使用其它的机器学习方法进行跨项目预测；同时，针对不同的软件系统，程序开发人员可以根据预测结果选择最为合适的机器学习方法。
 
@@ -696,7 +694,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 
 （1）一致性维护自由实验
 
-对不需要一致性维护的克隆创建实例进行跨项目预测，其预测结果如图~\ref{creatingcrossfree}~所示。
+对不需要一致性维护的克隆创建实例进行跨项目预测，其预测结果如图~\ref{creatingcrossfree}~所示。从图中可以看出，四个系统的精确率和召回率可以达到较高的水平，其中精确率在60.01\% - 91.20\%之间，召回率56.06\% - 94.84\%之间。将实验结果与第3章的全属性实验进行对比（图~\ref{creatingallfree}~），可以发现尽管四个系统的预测效果都有了不同程度的下降，但跨项目预测效果依然是可以接受的。
 
 \begin{figure}[h]
 \centering
@@ -705,8 +703,6 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 {Fig.$\!$}{The effectiveness of cross-project for usage on meeting creating consistency-free}
 \vspace{-1em}
 \end{figure}
-
-从图中可以看出，四个系统的精确率和召回率可以达到较高的水平，其中精确率在60.01\% - 91.20\%之间，召回率56.06\% - 94.84\%之间。将实验结果与第3章的全属性实验进行对比（图~\ref{creatingallfree}~），可以发现尽管四个系统的预测效果都有了不同程度的下降，但跨项目预测效果依然是可以接受的。
 
 通过对比四个实验系统的实验结果，不同系统的预测效果不是一致的。发现jEdit系统的预测效果最好，其精确率在89.1\% - 91.2\%之间，召回率在81.4\% - 93.8\%之间。而对jFreeChart系统的预测效果最差，其精确率仅在60\%左右，召回率可以达到90\%以上。而系统ArgoUML和Tuxguitar的预测效果差不多，精确率在75\%左右，召回率最高分别可达76.6\%和90.84\%。分析原因可能是由于jEdit系统的训练集规模最大，模型训练最充分，而jFreeChart则与之相反。
 
@@ -766,8 +762,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 
 （2）一致性维护需求实验
 
-对于需要一致性维护的克隆创建实例，其跨项目的实验结果如图~\ref{creatingcrossmeeting}所示。
-%由统计结果可以看出（~表\ref{instancesta}~），系统中仅有少量的实例满足一致性维护需求，其比例为11.53\% -- 40.20\%。
+对于需要一致性维护的克隆创建实例，其跨项目的实验结果如图~\ref{creatingcrossmeeting}所示。从图中可以看出，四个系统的预测效果都比较差。其中，系统ArgoUML的精确率在7.9\% - 20.7\%之间，jEdit的精确率略好，在20.5\% - 75.0\%之间，系统jFreeChart在33.3\% - 52.6\%之间，系统Tuxguitar为44.3\% - 51.9\%。而所有系统的召回率均低于18\%。分析原因是需要维护的克隆创建实例往往会依赖于具体的系统，同时克隆创建实例的样本也不平衡，由统计结果可以看出（~表\ref{instancesta}~），系统中仅有少量的实例满足一致性维护需求，其比例为11.5\% - 40.2\%。因此，所训练的跨项目模型，无法实际的预测需要一致性维护的克隆创建实例。
 
 \begin{figure}[h]
 \centering
@@ -776,8 +771,6 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 {Fig.$\!$}{The effectiveness of cross-project for usage on meeting creating consistency}
 \vspace{-1em}
 \end{figure}
-
-从图中可以看出，四个系统的预测效果都比较差。其中，系统ArgoUML的精确率在7.9\% - 20.7\%之间，jEdit的精确率略好，在20.5\% - 75.0\%之间，系统jFreeChart在33.3\% - 52.6\%之间，系统Tuxguitar为44.3\% - 51.9\%。而所有系统的召回率均低于18\%。分析原因是需要维护的克隆创建实例往往会依赖于具体的系统，同时克隆创建实例的样本也不平衡，由统计结果可以看出（~表\ref{instancesta}~），系统中仅有少量的实例满足一致性维护需求，其比例为11.5\% - 40.2\%。因此，所训练的跨项目模型，无法实际的预测需要一致性维护的克隆创建实例。
 
 同时，与第3章全属性实验进行对比（图~\ref{creatingallmeeting}~），发现四个系统的跨项目预测效果下降得十分严重。因此，对需要一致性维护的克隆创建实例，强烈的依赖于具体的系统，不建议使用跨项目的方式对其进行一致性维护需求预测。
 
@@ -856,7 +849,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \vspace{-1em}
 \end{figure}
 
-从图中可以看出，跨项目预测在四个系统上预测效果较为一般。ArgoUML系统的精确率最好，达到了70.3\%以上，系统jEdit和jFreeChart的精确率在50\%左右，而系统Tuxguitar的预测效果最差，仅在25\%左右。同时，四个系统的召回率并不能令人满意。其中，系统ArgoUML的召回率最低（低于36.46\%），其它系统的召回率最高可以达到60\%左右。分析原因可能是克隆代码的变化情况较高的依赖于具体的系统。
+从图中可以看出，跨项目预测在四个系统上预测效果较为一般。ArgoUML系统的精确率最好，达到了70.3\%以上，系统jEdit和jFreeChart的精确率在50\%左右，而系统Tuxguitar的预测效果最差，仅在25\%左右。同时，四个系统的召回率并不能令人满意。其中，系统ArgoUML的召回率最低（低于36.46\%），其它系统的召回率最高可以达到60\%左右。分析原因可能是克隆代码的变化情况较高的依赖于具体的系统的数据分布情况。
 
 结合第4章项目内的预测结果（图~\ref{changingallfree}~），可以发现当使用自身系统的数据作为训练集且训练集足够大时，预测模型有效的。因此，本文建议使用系统自身的数据进行一致性维护需求预测。采用跨项目预测的情况下，所构建的模型无法较好地预测不需要一致性维护的克隆变化实例。
 
@@ -1006,9 +999,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 
 在五种机器学习方法上进行了跨项目的数据集规模实验，并使用平均精确率（Average Precision）、平均召回率（Average Recall）和平均F值（Average F-measure）进行评价（见本文第~\ref{ref-creatingmetrics}~节和第~\ref{ref-changingmetrics}~节）。
 
-首先，进行“一对一”跨项目预测。“一对一”跨项目预测是指每次仅使用一个系统的数据作为训练集，在目标系统上进行跨项目预测，并对多个训练系统的预测结果进行平均，得出“一对一”的预测结果（使用“Average”表示，简写为Ave）。然后，进行“多对一”跨项目预测。“多对一”跨项目预测是指使用三个系统的数据集共同作为训练集，并在目标系统上进行跨项目预测，得出多对一预测结果（使用“All”表示）。最后，进行“数据集扩大”实验，新增三个不同实验系统扩大跨项目预测的训练集（使用“Expansion”表示，简写为Exp）。
-
-扩大训练集所采用的系统为DNSjava、Carol和JabRef三个实验系统。其中，选择了34个软件版本的DNSjava系统，11个版本的Carol系统和19个版本的JabRef系统。
+首先，进行“一对一”跨项目预测。“一对一”跨项目预测是指每次仅使用一个系统的数据作为训练集，在目标系统上进行跨项目预测，并对多个训练系统的预测结果进行平均，得出“一对一”的预测结果（使用“Average”表示，简写为Ave）。然后，进行“多对一”跨项目预测。“多对一”跨项目预测是指使用三个系统的数据集共同作为训练集，并在目标系统上进行跨项目预测，得出多对一预测结果（使用“All”表示）。最后，进行“数据集扩大”实验，新增三个不同实验系统扩大跨项目预测的训练集（使用“Expansion”表示，简写为Exp）。扩大训练集所采用的系统为DNSjava、Carol和JabRef三个实验系统。其中，选择了34个软件版本的DNSjava系统，11个版本的Carol系统和19个版本的JabRef系统。
 
 对克隆创建实例和变化实例进行了实验评估，实验结果如表~\ref{creatingcrosssizeaverage}~和表~\ref{changingcrosssizeaverage}~所示。表中“Precision”、“Recall”、“F-measure”分别指平均精确率、平均召回率和平均F值。
 
