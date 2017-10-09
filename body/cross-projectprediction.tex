@@ -227,16 +227,16 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 
 本文所设计的插件是基于eclipse的插件环境实现的，因此可以嵌入到软件开发环境中（eclipse），帮助软件开发人员实现边开发、边预测、边维护克隆代码的一致性维护需求。在软件开发过程中，基于eclipse的预测插件可以帮助程序开发人员避免克隆变化导致的一致性维护代价及一致性违背缺陷，从而提高软件质量和可维护性。
 
-\BiSubsection{克隆一致性维护需求预测插件的总体框架}
-{The Framework for the Plug-in of Clone Consistency Prediction}
+\BiSubsection{克隆一致性维护需求预测插件的体系结构}
+{The Architecture for the Plug-in of Clone Consistency Prediction}
 
-本文所设计的克隆代码一致性维护需求预测插件的体系结构如图~\ref{pluginframework}~所示，从上到下依次分为交互层、控制层、功能层、传输层、数据层。
+本文所设计的克隆代码一致性维护需求预测插件的体系结构如图~\ref{pluginarchitecture}~所示，从上到下依次分为交互层、控制层、功能层、传输层、数据层。
 
 \begin{figure}[h]
 \centering
-\includegraphics[width = 0.7\textwidth]{pluginframework.pdf}
-\bicaption[pluginframework]{}{克隆一致性维护需求预测插件的体系结构}{Fig.$\!$}
-{The framework for the plug-in of clone consistency-requirement prediction}
+\includegraphics[width = 0.7\textwidth]{pluginarchitecture.pdf}
+\bicaption[pluginarchitecture]{}{克隆一致性维护需求预测插件的体系结构}{Fig.$\!$}
+{The architecture for the plug-in of clone consistency-requirement prediction}
 \vspace{-1em}
 \end{figure}
 
@@ -292,6 +292,19 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 （5）预测模块
 
 当监测到具体的克隆实例产生时，调用已经训练好的机器学习模型进行预测。软件开发过程中，监测到克隆实例产生时，调用属性提取模块提取本次实例的属性，并使用训练好的一致性模型预测其一致性维护需求。根据预测结果通知程序开发人员采取相应措施。值得注意的是，在实际预测时，克隆变化实例预测需要项目的历史版本源代码，因为历史属性中包含克隆变化实例的历史变化过程。为了轻量化预测过程，程序开发人员可以将当前版本中所有的克隆组的演化属性均提取出来。当克隆变化实例产生时，直接使用其作为属性，从而降低属性提取的时间。
+
+%%%\BiSubsection{克隆一致性维护需求预测插件的总体框架}
+%%%{The Framework for Plug-in of Clone Consistency Prediction}
+%%%
+%%%本文的克隆代码一致性维护需求预测插件的系统整体框架如图\ref{pluginframework}所示。
+
+%%\begin{figure}[h]
+%%\centering
+%%\includegraphics[width = 0.7\textwidth]{pluginframework.pdf}
+%%\bicaption[pluginframework]{}{克隆一致性维护需求预测插件的体系结构}{Fig.$\!$}
+%%{The framework for the plug-in of clone consistency-requirement prediction}
+%%\vspace{-1em}
+%%\end{figure}
 
 \BiSubsection{克隆一致性维护需求预测插件的实现}
 {The Implementation for Plug-in of Clone Consistency Prediction}
