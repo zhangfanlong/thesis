@@ -380,7 +380,7 @@ Generating all clone genealogies $CGEs$ through traversing all mapping files\;
 
 使用X-means方法聚类所有的克隆实体向量（$X_{CF}$、$X_{CG}$和$X_{CGE}$），并根据聚类结果分析和提取克隆代码演化特征。
 
-本章将使用WEKA中实现的聚类方法，实现对克隆实体的聚类。WEKA是由新西兰怀卡托大学开发的机器学习工具，WEKA中实现了许多方法来分析数据，例如聚类，分类，关联规则等\footnote{WEKA网站为：http://www.cs.waikato.ac.nz/ml/weka/}。 由于上一节所生成克隆代码的向量空间为$X_{CF}$、$X_{CG}$和$X_{CGE}$，分别代表了系统中全部的克隆片段实体、克隆组实体和克隆家系实体。因此，也将使用X-means方法聚类这三个不同的向量空间，并分析得到克隆代码的演化特征。
+本章将使用WEKA中实现的聚类方法，实现对克隆实体的聚类。WEKA是由新西兰怀卡托大学开发的机器学习工具，WEKA中实现了许多方法来分析数据，例如聚类，分类，关联规则等\footnote{WEKA网站为：http://www.cs.waikato.ac.nz/ml/weka/。}。 由于上一节所生成克隆代码的向量空间为$X_{CF}$、$X_{CG}$和$X_{CGE}$，分别代表了系统中全部的克隆片段实体、克隆组实体和克隆家系实体。因此，也将使用X-means方法聚类这三个不同的向量空间，并分析得到克隆代码的演化特征。
 
 本文使用的聚类方法是X-means聚类\cite{pelleg2000x}， X-means聚类是K-means聚类\cite{arthur2007k}的改进方法。K-means方法可以将向量空间$X$聚类为事前指定的$K$个Cluster中，并将彼此相似的向量分配到同一个Cluster中。但是，K-means聚类方法必须指定所需要聚类的Cluster的数量。然而，对于克隆代码实体的聚类而言，由于缺少必要的基本信息，难以确定所需的Cluster的数目。同时，人为的指定聚类的个数也会引入主观的因素。因此，本章选择使用X-means聚类方法。X-means聚类改进了K-means聚类方法，聚类时并不需要指定具体的Cluster数量。X-means聚类会自动的搜索最佳的Cluster数量，因此更为适合于克隆代码演化特征的聚类分析。
 
