@@ -16,7 +16,7 @@
 \BiSubsection{克隆变化对软件质量影响的问题}
 {The Clone Change Effect for Software Quality}
 
-克隆代码不仅可能会导致额外的维护代价，更重要的是还有可能引发相关缺陷。首先，发生一致性变化的克隆代码会增加了软件的额外维护代价；其次，如果忘记对需要一致性变化的克隆代码进行一致性维护，会向系统中引入克隆一致性违背缺陷（Consistency Defect）\cite{bettenburg2009empirical,juergens2009code}。
+克隆代码不仅可能会导致额外的维护代价，更重要的是还有可能引发相关缺陷。首先，发生一致性变化的克隆代码会增加软件的额外维护代价；其次，如果忘记对需要一致性变化的克隆代码进行一致性维护，会向系统中引入克隆一致性违背缺陷（Consistency Defect）\cite{bettenburg2009empirical,juergens2009code}。
 
 给出系统jEdit中存在的克隆代码一致性变化示例，如图~\ref{changingexamplea}~和~\ref{changingexampleb}~所示。图~\ref{changingexamplea}~中给出了$ 3.1.0 $版本中的两个克隆代码片段。在随着系统演化至$3.2.0$版本时，上述两个克隆代码发生了一致性变化。如图~\ref{changingexampleb}~所示，$ 3.1.0 $版本中的第9 - 12行和第15行代码在版本$ 3.2.0$中被开发人员修改。第9 - 12行，开发人员将{selectionEnd}更改为$0$，并删除了一对花括号。在第15行，开发人员删除了声明语句。开发人员对上述两个克隆代码进行了一致性维护，从而避免了克隆代码的一致性违背缺陷。
 
@@ -36,7 +36,7 @@
 \vspace{-1em}
 \end{figure}
 
-图~\ref{changingexamplec}~是会导致一致性违背缺陷的克隆代码示例。图中Clone A是一段代码，将数量为nRegs的内存数据转移值数组ppTotal中。程序开发人员将Clone A复制并粘贴至另一个位置成为Clone B。Clone B具有相似的功能，将数量为nRegs的内存数据转移值数组ppTaken中，并将代码中的ppTotal重命名为ppTaken。在随后的演化中，发现Clone A存在潜在的边界问题，并在第5行添加条件语句{if (i+1<nRegs)}，将其修改为 Clone A'。代码Clone B也需要添加相似的判断语句，然而遗憾的是开发人员遗忘了该一致性变化，导致Clone B'中存在一个一致性违背缺陷。因此，开发人员未能在需要时对克隆代码进行一致性维护，会导致了克隆代码的一致性违背缺陷，并降低软件的质量、增大其维护代价。
+图~\ref{changingexamplec}~是会导致一致性违背缺陷的克隆代码示例。图中Clone A是一段代码，将数量为nRegs的内存数据转移至数组ppTotal中。程序开发人员将Clone A复制并粘贴至另一个位置成为Clone B。Clone B具有相似的功能，将数量为nRegs的内存数据转移值数组ppTaken中，并将代码中的ppTotal重命名为ppTaken。在随后的演化中，发现Clone A存在潜在的边界问题，并在第5行添加条件语句{if (i+1<nRegs)}，将其修改为 Clone A'。代码Clone B也需要添加相似的判断语句，然而遗憾的是开发人员遗忘了该一致性变化，导致Clone B'中存在一个一致性违背缺陷。因此，开发人员未能在需要时对克隆代码进行一致性维护，会导致了克隆代码的一致性违背缺陷，并降低软件的质量、增大其维护代价。
 
 \begin{figure}[htbp]
 \centering
