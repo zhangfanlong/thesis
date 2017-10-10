@@ -180,8 +180,8 @@ Appending all the attributes to the $Creating\_Set$\ or $Changing\_Set$\;
 
 %%%%数据集生成算法如~\ref{alg-collection}~所示。算法中第1-5行是为克隆代码生成CRD，并使用CRD映射相邻版本的克隆代码，并根据克隆演化模式定义，识别克隆演化模式。第6行是生成系统的克隆家系。第7-10行，分别是收集克隆实例，并标记其一致性维护需求。第11行是初始化数据集。第12-15行是提取相应的属性值表示克隆实例，并且生成数据集。在表示克隆实例时，算法将消耗大量的时间，其时间复杂度为$O(m*n)$，其中m为克隆变化实例的数量。因此，该算法的时间复杂度为$O(m*n)$。
 
-\BiSection{跨项目模型的构建与预测}
-{Building the Cross-Project Models and Predicting}
+\BiSection{跨项目预测模型的训练与预测}
+{Training the Cross-Project Models and Predicting}
 
 使用收集到的训练系统的克隆实例训练机器学习模型，并预测测试系统的克隆代码的一致性维护需求。从而验证跨项目的克隆一致性需求的预测能力。值得注意的是，将对两种不同的时刻的克隆代码的一致性维护需求分别进行预测（即克隆创建时和克隆变化时），因此会训练两种不同的模型以适用于两个时刻。
 
