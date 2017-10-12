@@ -349,7 +349,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \BiSubsection{实验设置}
 {Experimental Methodology}
 
-本章在四个Java开源系统上进行实验评估，所收集的克隆实例的统计信息如表~\ref{instancesta}~所示。从该表可以看出，系统中克隆创建实例的数据集的规模要大于克隆变化实例的数据集。克隆创建实例数据集规模为633到3666个，克隆变化实例的数量范围在159到1040个。
+本章在四个Java开源系统上进行实验评估，所收集的克隆实例的统计信息如表~\ref{instancesta}~所示。表中第1列给出不同的克隆实例，即克隆创建实例和克隆变化实例。第2列给出了测试系统，第3 - 5列给出了测试集的数据分布情况。从该表可以看出，系统中克隆创建实例的数据集的规模要大于克隆变化实例的数据集。克隆创建实例数据集规模为633到3666个，克隆变化实例的数量范围在159到1040个。
 
 \begin{table}[h]
 \bicaption[instancesta]{}{跨项目的测试集信息统计}
@@ -360,7 +360,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 ~\multirow{2}{*}{类型}&\multirow{2}{*}{测试系统}&\multicolumn{3}{c}{测试集规模}\\
-\cline{3-5}
+%\cline{3-5}
 ~&~&{不需要维护}&{需要维护}&{总数}~\\
 \midrule[1pt]
 \multirow{4}{*}{克隆创建实例}
@@ -368,7 +368,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &jEdit&560(88.47\%)&	73(11.53\%)&	633\\
 &jFreeChart&	2013(59.80\%)&	1353(40.20\%)&	3366\\
 &Tuxguitar&	1016(71.10\%)&	413(28.90\%)&	1429\\
-\hline
+%\hline
 \multirow{4}{*}{克隆变化实例}
 &ArgoUML&288(67.45\%)&139(32.55\%)&427\\
 &jEdit&78(49.06\%)&81(50.94\%)&159\\
@@ -378,7 +378,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \end{tabular}
 \end{table}
 
-在进行跨项目的预测实验时，使用三个系统的数据作为训练集，使用第四个系统作为测试集。跨项目预测的训练集如表~\ref{crosssta}~所示。表中使用（To Project）表示被测试的系统为“Project”，并使用除“Project”系统外其它的系统作为训练集。从表中发现克隆创建的训练集规模要远远大于克隆变化的训练集规模，其中克隆创建的训练集规模为5402 - 8135，克隆变化的训练集规模为940 - 1821。
+在进行跨项目的预测实验时，使用三个系统的数据作为训练集，使用第四个系统作为测试集。跨项目预测的训练集如表~\ref{crosssta}~所示。表中第1列给出不同的克隆实例。第2列给出了训练系统，使用（To Project）表示被测试的系统为“Project”，并使用除“Project”系统外其它的系统作为训练系统。第3 - 5列给出了训练集的数据分布情况。从表中发现克隆创建的训练集规模要远远大于克隆变化的训练集规模，其中克隆创建的训练集规模为5402 - 8135，克隆变化的训练集规模为940 - 1821。
 
 \begin{table}[h]
 \bicaption[crosssta]{}{跨项目的训练集信息统计}
@@ -389,7 +389,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \begin{tabular}{ccccc}
 \toprule[1.5pt]
 ~\multirow{2}{*}{类型}&\multirow{2}{*}{训练系统}&\multicolumn{3}{c}{训练集规模}\\
-\cline{3-5}
+%\cline{3-5}
 ~&~&{不需要维护}&{需要维护}&{总数}~\\
 \midrule[1pt]
 \multirow{4}{*}{克隆创建实例}
@@ -397,7 +397,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &(To jEdit)&5603(68.88\%)&2532(31.12\%)&8135\\
 &(To jFreeChart)&4150(76.82\%)&1252(23.18\%)&5402\\
 &(To Tuxguitar)&	5147(70.13\%)&2192(29.87\%)&	7339\\
-\hline
+%\hline
 \multirow{4}{*}{克隆变化实例}
 &(To ArgoUML)&621(39.99\%)&932(60.01\%)&1553\\
 &(To jEdit)&831(45.63\%)&990(54.37\%)&1821\\
@@ -427,7 +427,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \BiSubsubsection{克隆创建实例的实验结果}
 {The Results for Clone Creating Instances}
 
-对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodaverage}~所示。表中支持向量机方法（SVM）的预测结果使用{*}进行标记表。原因在于：在跨项目克隆创建实例的一致性维护需求预测中，支持向量机方法不具备相对应的预测能力，会将所有的克隆创建实例划分到一个类别中（数量规模较大的类中）。
+对克隆代码创建实例，使用不同的机器学习方法进行跨项目预测，实验结果如~\ref{creatingcrossmethodaverage}~所示。表中第1列为评估指标，第2列为五种不同的机器学习方法，第3 - 6列为在四个实验系统上的实验结果。同时，表中支持向量机方法（SVM）的预测结果使用{*}进行标记表。原因在于：在跨项目克隆创建实例的一致性维护需求预测中，支持向量机方法不具备相对应的预测能力，会将所有的克隆创建实例划分到一个类别中（数量规模较大的类中）。
 
 \begin{table}[h]
 \bicaption[creatingcrossmethodaverage]{}{克隆创建实例的跨项目预测效果}
@@ -437,7 +437,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \wuhao
 \begin{tabular}{cccccc}
 \toprule[1.5pt]
-{指标}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+{评估指标}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
 \midrule[1pt]
 \multirow{5}{*}{平均Precision(\%)}
 &BN&	63.8	&81.2	&57.5	&64.8\\
@@ -446,7 +446,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&	59.4*&	78.3*&	35.8*&	50.6*\\
 &KNN&	62.9&	78.6&	64.8&	58.1\\
 &DT&	62.9&	79.6&	56.6&	70.4\\
-\hline
+%\hline
 \multirow{5}{*}{平均Recall(\%)}				
 &BN&	67.5&	84.4&	60.2&	69.8\\
 &NB&	69.3&	74.7&	54&	64.7\\
@@ -454,7 +454,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&	77.1*&	88.5*&	59.8*&	71.1*\\
 &KNN&	68.7	&74.1&	64.9&	66.3\\
 &DT&	74&	84.4&	59.9&	73.1\\
-\hline
+%\hline
 \multirow{5}{*}{平均F-measure(\%)}			
 &BN&	65.4&	82.6&	50.8&	65\\
 &NB&	65.6&	76.4&	48.9&	62.7\\
@@ -561,7 +561,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \wuhao
 \begin{tabular}{cccccc}
 \toprule[1.5pt]
-{度量}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
+{评估指标}&{方法}&{To ArgoUML}&{To jEdit}&{To jFreechart}&{To  Tuxguitar}\\
 \midrule[1pt]
 \multirow{5}{*}{平均Precision(\%)}
 &BN&59.1&54.9&53.7&60.2\\
@@ -570,7 +570,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&10.6*&26*&61.1&52.4\\
 &KNN&62.4&54.2&53.3&62.3\\
 &DT&62.9&64.8&54.6&63.8\\
-\hline
+%\hline
 \multirow{5}{*}{平均Recall(\%)}					
 &BN&47.1&54.7&51.2&41.8\\
 &NB&46.4&54.7	&53.8&	35.3\\
@@ -578,7 +578,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&32.6*&50.9*&59.6&32.2\\
 &KNN&53.4&54.1&50.9&45.2\\
 &DT&37&	60.4&56.7&38.7\\
-\hline
+%\hline
 \multirow{5}{*}{平均F-measure(\%)}				
 &BN&47.4&54.6	&50.7&	44.1\\
 &NB&	45&	54.5&	{53.3}&36.1\\
@@ -674,10 +674,12 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \BiSubsubsection{讨论}
 {Discussion}
 
-综上所述，可以回答第一个研究子问题：
-首先，克隆创建时的跨项目预测取得了相对较好的预测效果；在选择合适的机器学习模式前提下，克隆变化时的预测效果也可达到相对不错的预测效果。因此，在软件开发初期，可以使用跨项目的数据进行跨项目的克隆一致性维护需求预测。
-然后，在进行跨项目预测时，不建议选择支持向量机方法进行预测。不同机器学习方法的预测能力不同，可以根据不同的系统选取合适的机器学习方法。
-最后，相比于克隆创建时的一致性维护需求跨项目预测，克隆变化实例的预测效果一般。结合第4章项目内的预测结果，建议最好在收集到项目自身足够的数据时进行项目内预测。针对项目初期数据不足的情况，建议开发人员在克隆代码创建时预测其一致性维护需求，避免可能会发生一致性变化的克隆代码。
+综上所述，可以回答第一个研究子问题。首先，克隆创建时的跨项目预测取得了相对较好的预测效果；而在选择合适的机器学习模型的前提下，克隆变化时的预测效果也可达到相对不错的预测效果。因此，在软件开发初期，可以使用跨项目的数据进行跨项目的克隆一致性维护需求预测。
+
+然后，在进行跨项目预测时，不建议选择支持向量机方法进行预测。同时，不同机器学习方法的预测能力不同，可以根据不同的系统选取合适的机器学习方法进行预测。
+
+最后，相比于克隆创建时的一致性维护需求跨项目预测，克隆变化实例的预测效果一般。
+结合第4章项目内的预测结果，建议最好在收集到项目自身足够的数据时进行项目内预测。针对项目初期数据不足的情况，建议开发人员在克隆代码创建时预测其一致性维护需求，避免可能会发生一致性变化的克隆代码。
 
 \BiSubsection{跨项目使用模式实验}
 {The Experiment of Cross-Project Prediction for Usage Scenarios}
@@ -1008,7 +1010,7 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \BiSubsubsection{克隆创建实例的实验结果}
 {The Results for Clone Creating Instances}
 
-对克隆创建实例进行跨项目预测，实验结果如表~\ref{creatingcrosssizeaverage}~所示，其中“All”列表示“多对一”实验结果，“Ave”列表示“一对一”实验结果，“Exp”列表示扩大数据集实验结果。
+对克隆创建实例进行跨项目预测，实验结果如表~\ref{creatingcrosssizeaverage}~所示。表中第1列和第2列分别为评估指标和机器学习方法，第3 - 14列为四个实验系统的实验结果。其中，“Ave”列表示“一对一”实验结果，“All”列表示“多对一”实验结果，“Exp”列表示扩大数据集实验结果。
 
 \begin{table} [h]
 \bicaption[creatingcrosssizeaverage]{}{克隆创建实例的跨项目数据集规模实验结果}
@@ -1018,8 +1020,8 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \footnotesize
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
-~\multirow{2}{*}{指标}&\multirow{2}{*}{方法}&\multicolumn{3}{c}{To ArgoUML}&\multicolumn{3}{c}{To jEdit}&\multicolumn{3}{c}{To jFreeChart}&\multicolumn{3}{c}{To  Tuxguitar}\\
-\cline{3-14}
+~\multirow{2}{*}{评估指标}&\multirow{2}{*}{方法}&\multicolumn{3}{c}{To ArgoUML}&\multicolumn{3}{c}{To jEdit}&\multicolumn{3}{c}{To jFreeChart}&\multicolumn{3}{c}{To  Tuxguitar}\\
+%\cline{3-14}
 ~&~&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}\\
 \midrule[1pt]
 \multirow{5}{*}{Precision(\%)}
@@ -1028,14 +1030,14 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&65.7&59.4&62.8&78.3&78.3&78.2&35.8&35.8&41.0&50.6&50.6&60.0\\
 &KNN&62.9&62.9&60.1&81.5&78.6&78.0&	61.7&64.8&49.6&58.7&58.1&56.7\\
 &DT&68.6&62.9&62.1&78.2&79.6&81.6&	53.0&56.6&42.1&59.4&70.4&54.1\\
-\hline
+%\hline
 \multirow{5}{*}{Recall(\%)}															
 &BN&67.0&67.5&68.7&75.2&84.4&80.3&60.6&60.2&60.0&67.4&69.8&64.2\\
 &NB&66.9&69.3&57.7&75.4&74.7&49.1&56.4&54.0&44.5&64.3&64.7&48.6\\
 &SVM&80.9&77.1&72.1&88.5&88.5&88.2&59.8&59.8&59.2&71.1&71.1&70.2\\
 &KNN&68.1&68.7&62.2&76.2&74.1&71.7&63.5&64.9&55.2&65.5&66.3&62.8\\
 &DT	&76.4&74.0&66.7&80.3&84.4&70.8&59.5&59.9&50.2&68.8&73.1&56.8\\
-\hline
+%\hline
 \multirow{5}{*}{F-measure(\%)}					
 &BN&64.5&65.4&64.7&76.8&82.6&79.9&51.6&50.8&51.5&63.1&65.0&62.0\\
 &NB&64.5&65.6&60.7&77.4&76.4&58.0&48.8&48.9&40.0&61.7&62.7&50.8\\
@@ -1174,8 +1176,8 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 \footnotesize
 \begin{tabular}{cccccccccccccc}
 \toprule[1.5pt]
-~\multirow{2}{*}{指标}&\multirow{2}{*}{方法}&\multicolumn{3}{c}{To ArgoUML}&\multicolumn{3}{c}{To jEdit}&\multicolumn{3}{c}{To jFreeChart}&\multicolumn{3}{c}{To  Tuxguitar}\\
-\cline{3-14}
+~\multirow{2}{*}{评估指标}&\multirow{2}{*}{方法}&\multicolumn{3}{c}{To ArgoUML}&\multicolumn{3}{c}{To jEdit}&\multicolumn{3}{c}{To jFreeChart}&\multicolumn{3}{c}{To  Tuxguitar}\\
+%\cline{3-14}
 ~&~&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}&{Ave}&{All}&{Exp}\\
 \midrule[1pt]
 \multirow{5}{*}{Precision(\%)}
@@ -1184,14 +1186,14 @@ Employed this trained model to predict on the $Testing\_{Set}$\;
 &SVM&10.6&10.6&62.7&25.4&26.0&55.8&	27.6&61.1&59.7&	39.0&52.4&56.2\\
 &KNN&60.5&62.4&58.6&51.7&54.2&52.2&51.5&53.3&52.9&61.7&62.3&66.1\\
 &DT	&61.6&	62.9&60.1&49.0&64.8&54.0&48.5&54.6&52.0&61.6&63.8&64.6\\
-\hline
+%\hline
 \multirow{5}{*}{Recall(\%)}								
 &BN&51.3&47.1&43.8&48.2&54.7&58.5&52.2&51.2&54.9&38.9&41.8&45.2\\
 &NB&49.6&46.4&35.3&54.1&54.7&47.8&53.1&53.8&50.4&39.8&35.3&39.3\\
 &SVM&34.3&32.6&42.4&49.1&50.9&54.1&50.3&59.6&58.7&58.1&32.2&38.4\\
 &KNN&53.3&53.4&49.4&51.2&54.1&52.2&49.8&50.9&51.3&44.9&45.2&51.7\\
 &DT	&38.7&37.0&52.9&50.1&60.4&54.1&51.6&	56.7&49.6&	55.0&	38.7&49.4\\
-\hline
+%\hline
 \multirow{5}{*}{F-measure(\%)}								
 &BN&	49.1&47.4&39.8&	45.6&	54.6&58.4&50.1&50.7&54.9&38.3&44.1&48.2\\
 &NB&	48.1&	45.0&36.1&53.3&54.5&47.8&52.6&53.3&50.5&40.7&36.1&42.1\\
